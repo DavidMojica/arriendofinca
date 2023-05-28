@@ -1,0 +1,96 @@
+USE arriendofinca
+--Pais
+CREATE TABLE tbl_pais(
+id_pais INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+nombre_pais varchar(60) NOT NULL
+)
+--inser pais
+INSERT INTO tbl_pais (nombre_pais) VALUES('colombia')
+--Estado
+CREATE TABLE tbl_estado(
+id_estado INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+nombre_estado varchar(50) NOT NULL,
+id_pais INT NOT NULL,
+CONSTRAINT fk_estado_pais FOREIGN KEY (id_pais) REFERENCES tbl_pais(id_pais) ON DELETE CASCADE ON UPDATE CASCADE
+)
+--Municipio
+CREATE TABLE tbl_municipio(
+id_municipio INT NOT NULL PRIMARY KEY AUTO_INCREMENT,	
+nombre_municipio VARCHAR(50) NOT NULL,
+id_estado INT NOT NULL,
+CONSTRAINT fk_municipio_estado FOREIGN KEY(id_municipio) REFERENCES tbl_estado(id_estado) ON DELETE CASCADE ON UPDATE CASCADE
+)
+--Tabla Usuario
+CREATE TABLE tbl_usuario(
+cedula BIGINT NOT NULL PRIMARY KEY,
+id_municipio_residencia INT NOT NULL,
+contraseña VARCHAR(20) NOT NULL,
+cantidad_propiedades INT NOT NULL,
+indice_confianza INT NOT NULL,
+CONSTRAINT fk_id_municipio FOREIGN KEY (id_municipio_residencia) REFERENCES tbl_municipio(id_municipio) ON DELETE CASCADE ON UPDATE CASCADE
+)
+--Tipo inmueble
+CREATE TABLE tbl_tipo_inmueble(
+id_tipo_inmueble INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+tipo_inmueble VARCHAR(25) NOT NULL
+)
+--Insert tipo inmueble
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('fincas')
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('cabañas')
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('lotes')
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('casas')
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('apartamentos')
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('oficinas')
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('consultorios')
+INSERT INTO tbl_tipo_inmueble(tipo_inmueble) VALUES('hotel')
+--tbl arriendo o venta
+CREATE TABLE tbl_arriendo_o_venta(
+id_aov INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+descripcion_aov varchar(10) NOT NULL,
+CONSTRAINT chk_descripcion_aov CHECK (descripcion_aov IN('arriendo','venta'))
+)
+--insert arriendo o venta
+insert into tbl_arriendo_o_venta (descripcion_aov) VALUES('arriendo')
+insert into tbl_arriendo_o_venta (descripcion_aov) VALUES('venta')
+
+--Certificaiones
+CREATE TABLE tbl_certificaciones(
+id_certificacion INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+id_inmueble INT NOT NULL,
+CONSTRAINT uq_id_inmueble UNIQUE (id_inmueble)
+)
+--INMUEBLE
+CREATE TABLE tbl_inmueble(
+id_inmueble INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id_tipo_inmueble INT NOT NULL,
+arriendo_o_venta INT NOT NULL,
+precio BIGINT NOT NULL,
+id_municipio_ubicacion INT NOT NULL,
+direccion VARCHAR(60) NOT NULL,
+cedula_dueño BIGINT NOT NULL,
+descuento int null,
+id_certificado int null,
+    
+CONSTRAINT fk_id_tipo_inmueble FOREIGN KEY (id_tipo_inmueble) REFERENCES tbl_tipo_inmueble(id_tipo_inmueble) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT fk_arriendo_o_venta FOREIGN KEY (arriendo_o_venta) REFERENCES tbl_arriendo_o_venta(id_aov) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT fk_id_municipio_ubicacion FOREIGN KEY (id_municipio_ubicacion) REFERENCES tbl_municipio (id_municipio) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT fk_cedula_dueño FOREIGN KEY (cedula_dueño) REFERENCES tbl_usuario(cedula) ON UPDATE CASCADE ON DELETE CASCADE,
+CONSTRAINT fk_id_certificado FOREIGN KEY (id_certificado) REFERENCES tbl_certificaciones(id_certificacion) ON UPDATE CASCADE ON DELETE CASCADE
+)
+--imagenes
+CREATE TABLE tbl_imagenes(
+id_inmueble INT NOT NULL,
+imagen MEDIUMBLOB,
+CONSTRAINT fk_id_inmueble FOREIGN KEY (id_inmueble) REFERENCES tbl_inmueble(id_inmueble)
+)
+--tipo_documento
+CREATE TABLE tbl_tipo_documento(
+id_tipo_documento INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+nombre_tipo_documento varchar (25) NOT NULL
+)
+INSERT INTO tbl_tipo_documento(nombre_tipo_documento) values('cedula')
+INSERT INTO tbl_tipo_documento(nombre_tipo_documento) values('cedula de extranjeria')
+
+ALTER TABLE tbl_usuario
+ADD CONSTRAINT fk_tipo_documento FOREIGN KEY (tipo_documento)
+REFERENCES tbl_tipo_documento(id_tipo_documento);
