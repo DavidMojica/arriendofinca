@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Backup 1.1 - Solo trabajo de backend.
 
 ----Implementamos jQuery AJAX para validar la información del registro desde el lado del servidor-----
