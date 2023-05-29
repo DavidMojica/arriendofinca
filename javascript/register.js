@@ -5,6 +5,7 @@ const btn_register        = document.getElementById("reg_btn_registrarme");
 const reg_nombre          = document.getElementById("reg_nombre");
 const reg_documento       = document.getElementById("reg_documento");
 const reg_tipo_documento  = document.getElementById("reg_tipo_documento");
+const reg_fecha           = document.getElementById("reg_fecha");
 const reg_email           = document.getElementById("reg_email");
 const reg_contraseña      = document.getElementById("reg_contraseña");
 const reg_conf_contraseña = document.getElementById("reg_conf_contraseña");
@@ -18,6 +19,65 @@ var paises_value   = [];
 var deptos_value   = [];
 var ciudades_value = [];
 var pais_activo = null;
+
+function mandar_servidor(){
+    let check_wsp = 0;
+    check_whatsapp.checked == true ? check_wsp = 1 : check_wsp = 0;
+    $.ajax({
+        url: '../php/register.php',
+        type: 'POST',
+        data: {
+            nombre          : reg_nombre.value,
+            documento       : reg_documento.value,
+            tipo_documento  : reg_tipo_documento.value,
+            fecha_nacimiento: reg_fecha.value,
+            email           : reg_email.value,
+            contraseña      : reg_contraseña.value,
+            celular         : reg_celular.value,
+            auth_whatsapp   : check_wsp,
+            pais            : reg_pais.value,
+            departamento    : reg_estado_departamento.value,
+            ciudad          : reg_ciudad.value
+        },
+        success: function(response){
+            
+            let jsonString = JSON.stringify(response);
+            let data = JSON.parse(jsonString);
+            if(data.success){
+                createToastNotify(0,"Completado con exito", data.mensaje);
+            }else{
+                if(data.state == 0){
+                    let error_text = "";
+                    for(let error of data.mensaje){
+                        error_text += error;
+                    }
+                    createToastNotify(1,"Error desde el servidor", error_text);
+                }
+                else if(data.state == 1){
+                    let msg_warning = "";
+                    for(let warning of data.mensaje){
+                        msg_warning += warning;
+                    }
+                    createToastNotify(3,"Cuidado",msg_warning)
+                }
+                else if(data.state == 2){
+                    createToastNotify(1,"Error desde el servidor", data.mensaje);
+                }
+                else{
+                    createToastNotify(1,"Error desde el cliente", "Error desconocido");
+                }
+            }
+
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            // Error en la solicitud AJAX
+            console.log('Error en la solicitud');
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
+    
+}
 
 /*-------------------------------------------------------------------
 #De archivos JSON a listas y DOM.
@@ -41,7 +101,6 @@ fetch('../json/paises.json').then(Response => Response.json()).then(data=>{
         reg_pais.appendChild(nueva_opcion2);
 
         paises_value.push(nombre);
-        console.log(paises_value)
       });
 }).catch(error =>{
     console.log(error)
@@ -138,11 +197,9 @@ btn_register.addEventListener('click', function(){
 function validar(){
     //Mensaje que usaremos en caso de que algún campo sea inválido.
     let msg = "";
-    let msg_warning = "";
     let ban = true;
-    let ban_warning = true;
-    let expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+    let expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //expresion para verificar que el email tenga la estructura: xxxxxxxx@xxxx.xxx
+    var regex = /^[0-9]+$/; //Expresión regular para validar que la cadena solo contenga números - documento y numero de celular
     //Validaciones
     //nombre
     if(reg_nombre.value.trim() === ""){
@@ -163,10 +220,29 @@ function validar(){
         msg += "Documento demasiado corto. <br>";
         ban = false;
     }
+    else if(!regex.test(reg_documento.value.trim())){
+        msg += "Documento inválido. Solo debe de contener numeros. <br>";
+        ban = false;
+    }
 
     //Tipo_documento
     if(reg_tipo_documento.value.trim() != "cc" && reg_tipo_documento.value.trim() != "ce"){
         msg += "Tipo de documento desconocido. <br>";
+        ban = false;
+    }
+
+    //Fecha de nacimiento y que tenga mas de 18 años.
+    let fechaInput      = reg_fecha.value;
+    let fechaNacimiento = new Date(fechaInput);
+    let hoy             = new Date();
+     //Calcula la diferencia en milisegundos entre la fecha actual y la fecha de nacimiento
+     var diferenciaMilisegundos = hoy.getTime() - fechaNacimiento.getTime();
+     //Calcula la edad dividiendo la diferencia de milisegundos por el número de milisegundos en un año
+     var edad = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24 * 365.25));
+
+     if (edad >= 18) {} 
+     else {
+        msg += "Debes tener más de 18 para poder publicar en arriendofinca.com <br>";
         ban = false;
     }
 
@@ -206,13 +282,17 @@ function validar(){
             msg += "Escoja el país de su número. <br>";
             ban = false;
         }  
+        else if(!regex.test(reg_celular.value.trim())){
+            msg += "Ingrese un número válido. Se coló un caracter no numérico. <br>";
+            ban = false;
+        }
     }
 
-    //check_whatsapp
-    if(check_whatsapp.checked && reg_celular.value.trim().length == 0){
-        msg_warning += "Marcaste la casilla de contactar al WhatsApp sin haber proporcionado un número. <br>Pulsa X para regresar e ingresar un número. <br>Pulsa continuar para ignorar este mensaje.";
-        ban_warning = false;
-    }
+    //check_whatsapp Hecho en php. Y funcionando.
+    // if(check_whatsapp.checked && reg_celular.value.trim().length == 0){
+    //     msg_warning += "Marcaste la casilla de contactar al WhatsApp sin haber proporcionado un número. <br>Pulsa X para regresar e ingresar un número. <br>Pulsa continuar para ignorar este mensaje.";
+    //     ban_warning = false;
+    // }
     //pais
     if(reg_pais.value.trim() == "default" || reg_estado_departamento.value.trim() == "default" || reg_ciudad.value.trim() == "default"){
         msg += "Indique su lugar de residencia. <br>";
@@ -220,13 +300,11 @@ function validar(){
     }
     //Verificar que el valor del país proveniente de html exista en nuestro archivo json.
     else if(!paises_value.includes(reg_pais.value.trim())){
-        console.log(paises_value)
         ban = false;
         msg += "Error en el valor del país. <br>";
     }
     else if(!deptos_value.includes(reg_estado_departamento.value.trim())){
         //Verificar que el valor del departamento proveniente de html exista en nuestro archivo json.
-        console.log(deptos_value)
         ban = false;
         msg += "Error en el valor del departamento <br>";
     }
@@ -239,18 +317,15 @@ function validar(){
     if(!ban){
         createToastNotify(1,"Revise el formulario",msg)
     }
-    if(ban && !ban_warning){
-        createToastNotify(3,"Cuidado",msg_warning)
-    }
-    if(ban && ban_warning){
+    // if(ban && !ban_warning){
+        
+    // }
+    if(ban){
         mandar_servidor();
     }
 }
 
-function mandar_servidor(){
-    $.ajax
-    createToastNotify(0,"Completado con exito","Campos verificados correctamente");
-}
+
 /*-------------------------------------------------------------------
 #Toast Notify
 --------------------------------------------------------------------*/
