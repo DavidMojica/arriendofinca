@@ -1,29 +1,37 @@
 <?php
-    //Conexiona la bd
-    include('dbconn.php');
-    //verifica si el método de solicitud es "POST"
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+    #Importar el archivo de conexion a la bd
+    include('PDOconn.php');
+    require 'mailer/Exception.php';
+    require 'mailer/PHPMailer.php';
+    require 'mailer/SMTP.php';
+
+    #verifica si el método de solicitud es "POST"
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        //Variables provenientes de JQuery Ajax en register.js
+        #Variables provenientes de JQuery Ajax en register.js
         $nombre           = trim($_POST['nombre']);
         $documento        = trim($_POST['documento']);
         $tipo_documento   = trim($_POST['tipo_documento']);
         $fecha_nacimiento = trim($_POST['fecha_nacimiento']);
         $email            = trim($_POST['email']);
-        $contraseña       = trim($_POST['contraseña']);
+        $pass             = trim($_POST['contraseña']);
         $celular          = trim($_POST['celular']);
         $auth_whatsapp    = trim($_POST['auth_whatsapp']);
         $pais             = trim($_POST['pais']);
         $departamento     = trim($_POST['departamento']);
         $ciudad           = trim($_POST['ciudad']);
-        //Variables de php
+        #Variables de php
         $errors           = [];
         $warnings         = [];
+        #
+        $id_municipio = 0;
 
 
-        //-------------Validaciones para cada campo--------------//
+        #-------------Validaciones para cada campo--------------#
         #Campos vacíos: Todos
-        #Longitud: Nombre, doc, tipo_doc
-        #Que no exista en la base de datos: cedula
+        #Longitud.
+        #Que no exista en la base de datos: cedula, celular, correo.
 
         #Nombre 
         if(empty($nombre)){
@@ -44,9 +52,12 @@
             $errors[] = "Documento no valido. Se incrustó una letra. <br>";
         }
         else{
-            $query = "SELECT * FROM tbl_usuario where documento = $documento";
-            $result = mysqli_query($conex, $query);
-            if(mysqli_num_rows($result) > 0){
+            $query = "SELECT * FROM tbl_usuario where documento = :valor";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam('valor',$documento, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if(count($result) > 0){
                 $errors[] = "Ya hay un usuario con su cédula registrado.<br>"; 
             }
         }
@@ -55,28 +66,37 @@
         if(empty($tipo_documento)){
             $errors[] = "Tipo de documento obligatorio. <br>";
         }
-        else if(strlen($tipo_documento) != 2){
+        else if(strlen($tipo_documento) != 1){
             $errors[] = "Longitud de tipo de documento no prevista. <br>";
         }
-        else if($tipo_documento != "cc" && $tipo_documento != "ce"){
+        else if($tipo_documento != 1 && $tipo_documento != 2){
             $errors[] = "Tipo de documento desconocido<br>";
         }
 
-        #email - no hay que hacer validaciones con el codigo de verificacion
-        $query = "SELECT email FROM tbl_usuario WHERE email = '$email'";
-        $result = mysqli_query($conex, $query);
-        if(mysqli_num_rows($result) > 0){
-            $errors[] = "Ya hay un usuario con este e-mail registrado."; 
+        #email -Si la expresión regular coincide con el formato del correo electrónico, se considera válido
+        if(!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/i", $email)){
+            // Return Error - Invalid Email 
+            $errors[] = "Email no valido";
+        }else{
+            $query = "SELECT email FROM tbl_usuario WHERE email = :valor";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam('valor', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if(count($result) > 0){
+                $errors[] = "Ya hay un usuario con este e-mail registrado. <br>"; 
+            }
         }
 
         #Contraseña
-        if(empty($contraseña)){
-            $errors[] = "La contraseña es obligatoria. <br>";
+        if(empty($pass)){
+            $errors[] = "La pass es obligatoria. <br>";
         }
-        else if(strlen($contraseña) <= 7){
-            $errors[] = "La contraseña es demasiado corta. <br>";
+        else if(strlen($pass) <= 7){
+            $errors[] = "La pass es demasiado corta. <br>";
         }
-        else if(strlen($contraseña) >= 21){
+        else if(strlen($pass) >= 21){
             $errors[] = "La contraseña es demasiado larga. <br>";
         }
 
@@ -93,9 +113,13 @@
             }
             #Verificar si el celular ingresado ya está en la base de datos
             else{
-                $query = "SELECT celular FROM tbl_usuario WHERE celular = $celular";
-                $result = mysqli_query($conex, $query);
-                if(mysqli_num_rows($result) > 0){
+                $query = "SELECT celular FROM tbl_usuario WHERE celular = :valor";
+                $stmt = $pdo->prepare($query);
+                $stmt->bindParam('valor', $celular, PDO::PARAM_STR);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if(count($result) > 0){
                     $errors[] = "Ya hay un usuario con este celular registrado. <br>"; 
                 }
             }
@@ -106,42 +130,150 @@
                 $warnings[] = "Marcó la casilla de whatsApp sin haber proporcionado un número <br>Pulsa X para regresar e ingresar un número. <br>Pulsa continuar para ignorar este mensaje.";
         }
 
+        #Parse fecha de nacimiento
+        $fecha_nacimiento = date('Y-m-d', strtotime($fecha_nacimiento));
+
         # País - Verificar que el país existe en la base de datos
-        $query = "SELECT id_pais FROM tbl_pais WHERE nombre_pais = '$pais'";
-        $result = mysqli_query($conex, $query);
-        if(mysqli_num_rows($result) == 0){
+        $query = "SELECT id_pais FROM tbl_pais WHERE nombre_pais = :valor";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam('valor', $pais, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(count($result) == 0){
             $errors[] = "Su país no se encuentra registrado.<br>"; 
         }
         else{
-            $row = mysqli_fetch_assoc($result); // Obtener el resultado como una fila
+            $row = $result[0]; # Obtener el resultado como una fila
             $id_pais   = $row['id_pais'];
             # Departamento - Verificar que el estado existe en la base de datos
-            $query = "SELECT id_estado FROM tbl_estado WHERE nombre_estado = '$departamento' AND id_pais = $id_pais";
-            $result = mysqli_query($conex, $query);
-            if(mysqli_num_rows($result) == 0){
+            $query = "SELECT id_estado FROM tbl_estado WHERE nombre_estado = :valor AND id_pais = :valor2";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam('valor', $departamento, PDO::PARAM_STR);
+            $stmt->bindParam('valor2', $id_pais, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);     
+            if(count($result) == 0){
                 $errors[] = "Su departamento/estado no se encuentra registrado.<br>"; 
             }
             else{
-                $row = mysqli_fetch_assoc($result); // Obtener el resultado como una fila
-
+                $row = $result[0]; # Obtener el resultado como una fila
                 $id_estado = $row['id_estado'];
              
                 # Verificar que la ciudad sí existe en la base de datos
-                $query = "SELECT * FROM tbl_municipio WHERE nombre_municipio = '$ciudad' AND id_estado = $id_estado AND id_pais = $id_pais";
-                $result = mysqli_query($conex, $query);
-                if(mysqli_num_rows($result) == 0){
+                $query = "SELECT id_municipio FROM tbl_municipio WHERE nombre_municipio = :valor AND id_estado = :valor2 AND id_pais = :valor3";
+                $stmt = $pdo->prepare($query);
+                $stmt->bindParam('valor', $ciudad, PDO::PARAM_STR);
+                $stmt->bindParam('valor2', $id_estado, PDO::PARAM_INT);
+                $stmt->bindParam('valor3', $id_pais, PDO::PARAM_INT);
+                $stmt->execute();
+                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);   
+
+                if(count($result) == 0){
                     $errors[] = "Su municipio no se encuentra registrado.<br>"; 
+                }
+                else{
+                    $row = $result[0]; # Obtener el resultado como una fila
+                    $id_municipio = $row['id_municipio'];
                 }
             }
         }
 
         $response = array();
-        if(empty($errors) && empty($warnings)){
-            $response['success'] = true;
-            $response['mensaje'] = "Validaciones completadas con éxito.";
-            $jsonResponse = json_encode($response);
-            header('Content-Type: application/json');
-            exit($jsonResponse);
+        if(empty($errors) && empty($warnings)){            
+            $hash = md5(rand(0,1000));
+            $pass_hash = rand(1000,5000);
+            $hash = md5($pass_hash);
+            $cantidad_propiedades = 0;
+            $indice_confianza = 0;
+            $active = 0;
+            
+            
+            
+            try{
+                // utilizamos consultas preparadas con marcadores de posición (:nombre) en lugar de incrustar directamente los val ores en la cadena de consulta. 
+                // Luego, vinculamos los valores a los marcadores de posición utilizando el método bindParam() para asegurarnos de que los valores se pasen de manera segura 
+                // y se eviten problemas de seguridad como la inyección de SQL.
+                    
+                
+                
+                //----Creacion del email de confirmacion-----//
+                $para    = $email;
+                $asunto  = "Registro | Verificacion | arriendofinca.com";
+                $mensaje = '
+                Gracias por registrarte! 
+                Su cuenta ha sido creada, puede iniciar sesión con las siguientes credenciales después de haber activado su cuenta presionando la URL a continuación.
+
+                ------------------------ 
+                Email: '.$email.' 
+                Password: '.$pass.' 
+                ------------------------ 
+                Tenga en cuenta que también podra ingresar con su documento.
+
+                Haga clic en este enlace para activar su cuenta:
+                http://localhost/arriendofinca/php/verify.php?email='.$email.'&hash='.$hash.'
+                
+                ';
+
+                $mail = new PHPMailer(true);
+                //Server settings
+                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'localhost';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = false;                                   //Enable SMTP authentication
+                $mail->Port       = 25;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                $mail->SMTPSecure = '';                                     //Leave this empty
+
+                //Recipients
+                $mail->setFrom('noresponder@arriendofinca.com', 'arriendofinca');
+                $mail->addAddress($email);     //Add a recipient
+                $mail->addReplyTo('noresponder@arriendofinca.com', 'Información');
+                $mail->addCC('noresponder@arriendofinca.com');
+                $mail->addBCC('noresponder@arriendofinca.com');
+
+                //Content
+                $mail->isHTML(true);                                  //Set email format to HTML
+                $mail->Subject = $asunto;
+                $mail->Body    = $mensaje;
+                $mail->AltBody = $mensaje;
+
+                try{
+                    $mail->send();
+                 
+                    $query = "INSERT INTO tbl_usuario(documento, nombre, tipo_documento, id_municipio_residencia, pass, email, celular, whatsapp, fecha_nacimiento, cantidad_propiedades, indice_confianza, hash, active) VALUES (:documento, :nombre, :tipo_documento, :id_municipio, :pass, :email, :celular, :whatsapp, :fecha_nacimiento, :cantidad_propiedades, :indice_confianza, :hashx, :active)";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->bindParam(':documento', $documento, PDO::PARAM_INT);
+                    $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+                    $stmt->bindParam(':tipo_documento', $tipo_documento, PDO::PARAM_INT);
+                    $stmt->bindParam(':id_municipio', $id_municipio, PDO::PARAM_INT);
+                    $stmt->bindParam(':pass', $pass, PDO::PARAM_STR);
+                    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                    $stmt->bindParam(':celular', $celular, PDO::PARAM_STR);
+                    $stmt->bindParam(':whatsapp', $auth_whatsapp, PDO::PARAM_INT);
+                    $stmt->bindParam(':fecha_nacimiento', $fecha_nacimiento, PDO::PARAM_STR);
+                    $stmt->bindParam(':cantidad_propiedades', $cantidad_propiedades, PDO::PARAM_INT);
+                    $stmt->bindParam(':indice_confianza', $indice_confianza, PDO::PARAM_INT);
+                    $stmt->bindParam(':hashx',$hash , PDO::PARAM_STR);
+                    $stmt->bindParam(':active',$active , PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $response['success'] = true;
+                    $response['mensaje'] = "Su cuenta ha sido creada. Por favor verifíquela haciendo click en el enlace de activación que fue enviado a su correo. Las cuentas no verificadas se borran en 1 día.";
+                }
+                catch(Exception $e){
+                    $response['success'] = false;
+                    $response['mensaje'] = "Hubo un error al enviar el correo de verificación. Por favor, verifique su correo o inténtelo de nuevo más tarde.".$e;
+                }
+
+                $jsonResponse = json_encode($response);
+                exit($jsonResponse);
+            }
+            catch(Exception $e){
+                $response['success'] = false;
+                $response['mensaje'] = 'Error al crear la cuenta: ' . $e->getMessage();
+                $jsonResponse = json_encode($response);
+                exit($jsonResponse);
+            }           
         }
         #Con errores
         else if(!empty($errors)){
@@ -149,7 +281,6 @@
             $response['mensaje'] = $errors;
             $response['state']   = 0;
             $jsonResponse = json_encode($response);
-            header('Content-Type: application/json');
             exit($jsonResponse);
         }
         else if(!empty($warnings)){
@@ -157,7 +288,6 @@
             $response['mensaje'] = $warnings;
             $response['state']   = 1;
             $jsonResponse = json_encode($response);
-            header('Content-Type: application/json');
             exit($jsonResponse);
         }
         else{
@@ -165,10 +295,7 @@
             $response['mensaje'] = "Error desconocido del servidor.";
             $response['state']   = 2;
             $jsonResponse = json_encode($response);
-            header('Content-Type: application/json');
             exit($jsonResponse);
         }
     }
-    
-
 ?>

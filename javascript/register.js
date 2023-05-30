@@ -20,65 +20,6 @@ var deptos_value   = [];
 var ciudades_value = [];
 var pais_activo = null;
 
-function mandar_servidor(){
-    let check_wsp = 0;
-    check_whatsapp.checked == true ? check_wsp = 1 : check_wsp = 0;
-    $.ajax({
-        url: '../php/register.php',
-        type: 'POST',
-        data: {
-            nombre          : reg_nombre.value,
-            documento       : reg_documento.value,
-            tipo_documento  : reg_tipo_documento.value,
-            fecha_nacimiento: reg_fecha.value,
-            email           : reg_email.value,
-            contraseña      : reg_contraseña.value,
-            celular         : reg_celular.value,
-            auth_whatsapp   : check_wsp,
-            pais            : reg_pais.value,
-            departamento    : reg_estado_departamento.value,
-            ciudad          : reg_ciudad.value
-        },
-        success: function(response){
-            
-            let jsonString = JSON.stringify(response);
-            let data = JSON.parse(jsonString);
-            if(data.success){
-                createToastNotify(0,"Completado con exito", data.mensaje);
-            }else{
-                if(data.state == 0){
-                    let error_text = "";
-                    for(let error of data.mensaje){
-                        error_text += error;
-                    }
-                    createToastNotify(1,"Error desde el servidor", error_text);
-                }
-                else if(data.state == 1){
-                    let msg_warning = "";
-                    for(let warning of data.mensaje){
-                        msg_warning += warning;
-                    }
-                    createToastNotify(3,"Cuidado",msg_warning)
-                }
-                else if(data.state == 2){
-                    createToastNotify(1,"Error desde el servidor", data.mensaje);
-                }
-                else{
-                    createToastNotify(1,"Error desde el cliente", "Error desconocido");
-                }
-            }
-
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            // Error en la solicitud AJAX
-            console.log('Error en la solicitud');
-            console.log(textStatus);
-            console.log(errorThrown);
-        }
-    });
-    
-}
-
 /*-------------------------------------------------------------------
 #De archivos JSON a listas y DOM.
 --------------------------------------------------------------------*/
@@ -226,7 +167,7 @@ function validar(){
     }
 
     //Tipo_documento
-    if(reg_tipo_documento.value.trim() != "cc" && reg_tipo_documento.value.trim() != "ce"){
+    if(reg_tipo_documento.value.trim() != 1 && reg_tipo_documento.value.trim() != 2){
         msg += "Tipo de documento desconocido. <br>";
         ban = false;
     }
@@ -325,48 +266,69 @@ function validar(){
     }
 }
 
-
 /*-------------------------------------------------------------------
-#Toast Notify
+#Validaciones al servidor
 --------------------------------------------------------------------*/
-function createToastNotify(opc,head,msg){
-    switch(opc){
-        case 0:{
-            new ToastNotify('success', {
-                head: head,
-                msg: msg,
-                timer: 3000
-            });
-            break;
-        };
-        case 1:{
-            new ToastNotify('error', {
-                head: head,
-                msg: msg,
-                timer: 3000
-            });
-            break;
-        };
-        case 2:{
-            new ToastNotify('info', {
-                head: head,
-                msg: msg,
-                timer: 7000
-            });
-            break;
-        };
-        case 3:{
-            new ToastNotify('warning', {
-                head: head,
-                msg: `${msg}
-                <div class="row">
-                    <div class="col d-flex justify-content-end">
-                      <button class="btn btn-light border btn-sm" onclick="mandar_servidor()">acepto</button>
-                    </div>
-                </div>          
-                `
-            });
-            break;
-        };
-    };
+function mandar_servidor(){
+    let check_wsp = 0;
+    check_whatsapp.checked == true ? check_wsp = 1 : check_wsp = 0;
+    $.ajax({
+        url: '../php/register.php',
+        type: 'POST',
+        data: {
+            nombre          : reg_nombre.value,
+            documento       : reg_documento.value,
+            tipo_documento  : reg_tipo_documento.value,
+            fecha_nacimiento: reg_fecha.value,
+            email           : reg_email.value,
+            contraseña      : reg_contraseña.value,
+            celular         : reg_celular.value,
+            auth_whatsapp   : check_wsp,
+            pais            : reg_pais.value,
+            departamento    : reg_estado_departamento.value,
+            ciudad          : reg_ciudad.value
+        },
+        success: function(response){
+            console.log(response);
+            let jsonString = JSON.stringify(response);
+            let data       = JSON.parse(jsonString);
+            console.log(data);
+            if(data.success){
+                mensaje_confimacion(data.mensaje);
+            }else{
+                if(data.state == 0){
+                    let error_text = "";
+                    for(let error of data.mensaje){
+                        error_text += error;
+                    }
+                    createToastNotify(1,"Error desde el servidor", error_text);
+                }
+                else if(data.state == 1){
+                    let msg_warning = "";
+                    for(let warning of data.mensaje){
+                        msg_warning += warning;
+                    }
+                    createToastNotify(3,"Cuidado",msg_warning)
+                }
+                else if(data.state == 2){
+                    createToastNotify(1,"Error desde el servidor", data.mensaje);
+                }
+                else{
+                    createToastNotify(1,"Error desde el cliente", "Error desconocido");
+                }
+            }
+
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            // Error en la solicitud AJAX
+            console.log('Error en la solicitud');
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
+}
+
+function mensaje_confimacion(mensaje){
+    createToastNotify(0,"Completado con exito", mensaje);
 }
