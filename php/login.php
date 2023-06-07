@@ -1,6 +1,7 @@
 <?php 
     #Importar el archivo de conexion a la bd
     include('PDOconn.php');
+    include('essentials.php');
     #verifica si el método de solicitud es "POST"
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         #Variables provenientes de Ajax en login.js
@@ -38,6 +39,10 @@
 
             if($ban){ 
                 $stmt = $pdo->prepare($consulta);
+                #sanear y validar los datos de entrada
+                $user = filter_input(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
+                $pass = filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_STRING);
+
                 $stmt->bindParam(':valor', $user);
 
                 if ($user_type === 2) 
@@ -50,11 +55,14 @@
 
                 if(count($result) == 1){
                     #Se devolvió 1 fila.
-                    $response['success'] = true;
-                    $response['mensaje'] = "Usuario encontrado en la Base de datos.";
-                    $jsonResponse = json_encode($response);
-                    header('Content-Type: application/json');
-                    exit($jsonResponse);
+                    try{
+                        session_start();
+                        $_SESSION['username'] = $user;
+                        return_Response(true, $result);
+                    }
+                    catch(Exception $e){
+                        return_Response(false, $e);
+                    }
                 }        
                 else if(count($result) == 0)
                     #No se devolvieron filas.
@@ -67,18 +75,10 @@
                     $queryError = "Error desconocido devuelto en la consulta";   
 
                 if($queryError !== "error"){
-                    $response['success'] = false;
-                    $response['mensaje'] = $queryError;
-                    $jsonResponse = json_encode($response);
-                    header('Content-Type: application/json');
-                    exit($jsonResponse);
+                    return_Response(false, $queryError);
                 }
                 else{
-                    $response['success'] = false;
-                    $response['mensaje'] = $queryError;
-                    $jsonResponse = json_encode($response);
-                    header('Content-Type: application/json');
-                    exit($jsonResponse);
+                    return_Response(false, $queryError);
                 }
             }
         }

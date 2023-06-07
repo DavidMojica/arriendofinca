@@ -1,11 +1,7 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
     #Importar el archivo de conexion a la bd
     include('PDOconn.php');
-    require 'mailer/Exception.php';
-    require 'mailer/PHPMailer.php';
-    require 'mailer/SMTP.php';
+    include('essentials.php');
 
     #verifica si el método de solicitud es "POST"
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -179,7 +175,6 @@ use PHPMailer\PHPMailer\SMTP;
             }
         }
 
-        $response = array();
         if(empty($errors) && empty($warnings)){            
             $hash = md5(rand(0,1000));
             $pass_hash = rand(1000,5000);
@@ -194,10 +189,8 @@ use PHPMailer\PHPMailer\SMTP;
                 // utilizamos consultas preparadas con marcadores de posición (:nombre) en lugar de incrustar directamente los val ores en la cadena de consulta. 
                 // Luego, vinculamos los valores a los marcadores de posición utilizando el método bindParam() para asegurarnos de que los valores se pasen de manera segura 
                 // y se eviten problemas de seguridad como la inyección de SQL.
-                    
-                
-                
                 //----Creacion del email de confirmacion-----//
+
                 $para    = $email;
                 $asunto  = "Registro | Verificacion | arriendofinca.com";
                 $mensaje = '
@@ -214,32 +207,7 @@ use PHPMailer\PHPMailer\SMTP;
                 http://localhost/arriendofinca/php/verify.php?email='.$email.'&hash='.$hash.'
                 
                 ';
-
-                $mail = new PHPMailer(true);
-                //Server settings
-                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                $mail->isSMTP();                                            //Send using SMTP
-                $mail->Host       = 'localhost';                     //Set the SMTP server to send through
-                $mail->SMTPAuth   = false;                                   //Enable SMTP authentication
-                $mail->Port       = 25;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-                $mail->SMTPSecure = '';                                     //Leave this empty
-
-                //Recipients
-                $mail->setFrom('noresponder@arriendofinca.com', 'arriendofinca');
-                $mail->addAddress($email);     //Add a recipient
-                $mail->addReplyTo('noresponder@arriendofinca.com', 'Información');
-                $mail->addCC('noresponder@arriendofinca.com');
-                $mail->addBCC('noresponder@arriendofinca.com');
-
-                //Content
-                $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->Subject = $asunto;
-                $mail->Body    = $mensaje;
-                $mail->AltBody = $mensaje;
-
                 try{
-                    $mail->send();
-                 
                     $query = "INSERT INTO tbl_usuario(documento, nombre, tipo_documento, id_municipio_residencia, pass, email, celular, whatsapp, fecha_nacimiento, cantidad_propiedades, indice_confianza, hash, active) VALUES (:documento, :nombre, :tipo_documento, :id_municipio, :pass, :email, :celular, :whatsapp, :fecha_nacimiento, :cantidad_propiedades, :indice_confianza, :hashx, :active)";
                     $stmt = $pdo->prepare($query);
                     $stmt->bindParam(':documento', $documento, PDO::PARAM_INT);
@@ -257,45 +225,25 @@ use PHPMailer\PHPMailer\SMTP;
                     $stmt->bindParam(':active',$active , PDO::PARAM_INT);
                     $stmt->execute();
 
-                    $response['success'] = true;
-                    $response['mensaje'] = "Su cuenta ha sido creada. Por favor verifíquela haciendo click en el enlace de activación que fue enviado a su correo. Las cuentas no verificadas se borran en 1 día.";
+                    return_Response(true, "Su cuenta ha sido creada. Por favor verifíquela haciendo click en el enlace de activación que fue enviado a su correo. Las cuentas no verificadas se borran en 1 día.");
                 }
                 catch(Exception $e){
-                    $response['success'] = false;
-                    $response['mensaje'] = "Hubo un error al enviar el correo de verificación. Por favor, verifique su correo o inténtelo de nuevo más tarde.".$e;
+                    return_Response(false, "Hubo un error al enviar el correo de verificación. Por favor, verifique su correo o inténtelo de nuevo más tarde.".$e);
                 }
-
-                $jsonResponse = json_encode($response);
-                exit($jsonResponse);
             }
             catch(Exception $e){
-                $response['success'] = false;
-                $response['mensaje'] = 'Error al crear la cuenta: ' . $e->getMessage();
-                $jsonResponse = json_encode($response);
-                exit($jsonResponse);
+                return_Response(false,'Error al crear la cuenta: ' . $e->getMessage());
             }           
         }
         #Con errores
         else if(!empty($errors)){
-            $response['success'] =  false;
-            $response['mensaje'] = $errors;
-            $response['state']   = 0;
-            $jsonResponse = json_encode($response);
-            exit($jsonResponse);
+            return_Response_Bad(false, $errors, 0);
         }
         else if(!empty($warnings)){
-            $response['success'] =  false;
-            $response['mensaje'] = $warnings;
-            $response['state']   = 1;
-            $jsonResponse = json_encode($response);
-            exit($jsonResponse);
+            return_Response_Bad(false, $response,1);
         }
         else{
-            $response['success'] =  false;
-            $response['mensaje'] = "Error desconocido del servidor.";
-            $response['state']   = 2;
-            $jsonResponse = json_encode($response);
-            exit($jsonResponse);
+            return_Response_Bad(false,"Error desconocido del servidor.",2);
         }
     }
 ?>

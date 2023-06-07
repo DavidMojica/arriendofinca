@@ -289,10 +289,8 @@ function mandar_servidor(){
             ciudad          : reg_ciudad.value
         },
         success: function(response){
-            console.log(response);
             let jsonString = JSON.stringify(response);
             let data       = JSON.parse(jsonString);
-            console.log(data);
             if(data.success){
                 mensaje_confimacion(data.mensaje);
             }else{

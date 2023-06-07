@@ -1,6 +1,19 @@
 /*-------------------------------------------------------------------
 #create Toast Notify
 --------------------------------------------------------------------*/
+/**
+ * Mostrar una notificacion que emite al usuario un determinado mensaje.
+ * Hay 4 tipos de notificacion:
+ * @param {number} opc 
+ *  0: sucess
+ *  1: error 
+ *  2: info
+ *  3: warning
+ * @param {string} head 
+ * @param {string} msg
+
+ */
+
 function createToastNotify(opc,head,msg){
     switch(opc){
         case 0:{
