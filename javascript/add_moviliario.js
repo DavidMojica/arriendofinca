@@ -1,15 +1,62 @@
 // General y Fotos
-const add_fotos          = document.getElementById('add_fotos');
-const add_tipo           = document.getElementById('add_tipo'); //Tipo de inmueble
-const btn_regis_prop     = document.getElementById('btn_regis_prop');
-const sel_arriendo_venta = document.getElementById('sel_arriendo_venta');
-const form_prop          = document.getElementsByClassName('form_prop');
-const precio             = document.getElementById('precio');
-const direccion          = document.getElementById('direccion');
-const prop_desc          = document.getElementById('prop_description'); 
-const add_pais           = document.getElementById('add_pais');
-const add_departamento   = document.getElementById('add_departamento');
-const add_ciudad         = document.getElementById('add_ciudad');
+const add_fotos           = document.getElementById('add_fotos');
+const add_tipo            = document.getElementById('add_tipo'); //Tipo de inmueble
+const btn_regis_prop      = document.getElementById('btn_regis_prop');
+const sel_arriendo_venta  = document.getElementById('sel_arriendo_venta');
+const form_prop           = document.getElementsByClassName('form_prop');
+const precio              = document.getElementById('precio');
+const direccion           = document.getElementById('direccion');
+const prop_desc           = document.getElementById('prop_description'); 
+const add_pais            = document.getElementById('add_pais');
+const add_departamento    = document.getElementById('add_departamento');
+const add_ciudad          = document.getElementById('add_ciudad');
+const add_area            = document.getElementById('area');
+const add_habitaciones    = document.getElementById('add_habitaciones');
+const add_banos           = document.getElementById('add_banos');
+const add_area_construida = document.getElementById('add_area_construida');
+const area_tp2            = document.getElementById('area_tp2');
+//pasos
+const pasos               = document.getElementsByClassName('add_pasos');
+var cont_pasos            = 0;
+const atras               = document.getElementById('atras');
+const siguiente           = document.getElementById('siguiente');
+
+//----------PASOS------------//
+onload = mostrar_pasos(0);
+
+function mostrar_pasos(num){
+    for(let paso of pasos)
+    paso.style.display = "none";
+
+    cont_pasos += num;  
+    if(cont_pasos<=0) atras.style.display = "none";
+    else atras.style.display = "block";
+
+    if(cont_pasos >= 3) siguiente.style.display = "none";
+    else siguiente.style.display = "block";
+    
+    if(cont_pasos >= 0 && cont_pasos <= 3){
+        pasos[cont_pasos].style.display = "block";
+    }
+    console.log(pasos[cont_pasos])
+}
+
+atras.addEventListener('click', function(){
+    if(cont_pasos > 0 && cont_pasos <= 3){
+        mostrar_pasos(-1);
+    }
+});
+
+siguiente.addEventListener('click', function(){
+    if(cont_pasos < 3 && cont_pasos >= 0){
+        mostrar_pasos(1);
+    }
+});
+
+
+
+
+
 
 // Variables JS
 var pais_activo  = 0;
@@ -20,18 +67,28 @@ var depto_activo = 0;
 //--Pais
 add_pais.addEventListener('change', function(){
     pais_activo = add_pais.value;
-    AJAX_PAIS_CHANGE(add_departamento, add_ciudad, pais_activo)
+    AJAX_PAIS_CHANGE(add_departamento, add_ciudad, pais_activo,'../php/dynamic_cboxes.php')
 });
 
 //--Estado
 add_departamento.addEventListener('change', function(){
     depto_activo = add_departamento.value;
-    AJAX_ESTADO_CHANGE(add_ciudad, depto_activo);
+    AJAX_ESTADO_CHANGE(add_ciudad, depto_activo, '../php/dynamic_cboxes.php');
 });
 
+
+for(let form of form_prop)
+        form.style.display = "none";
+        
 add_tipo.addEventListener('change', function(){
     for(let form of form_prop)
         form.style.display = "none";
+
+    if(add_tipo.value == 1 || add_tipo.value == 3){
+        area_tp2.style.display = "block";
+    }else{
+        area_tp2.style.display = "none";
+    }
 
     try{
         form_prop[add_tipo.value-1].style.display = "block";
@@ -43,18 +100,13 @@ add_tipo.addEventListener('change', function(){
 //--------------------------------------#
 
 btn_regis_prop.addEventListener('click', function(){
-    let result = validaciones_general(add_tipo, precio, direccion, prop_desc);
+    let result = validaciones_general(add_tipo, precio, direccion, prop_desc, add_area, add_banos, add_habitaciones, add_area_construida);
+
     if(!result.auth){
         createToastNotify(1,"Error en el registro de la propiedad", result.mensaje);
     }
     else{
-        let ban_prop = true;
-        switch(add_tipo.value){
-            case 0: ban_prop = validaciones_finca();
-        }
-        if(ban_prop){
-            createToastNotify(3,"Confirmar creación", "Está a punto de crear un nuevo inmueble. Desea proceder?");
-        }
+        createToastNotify(3,"Confirmar creación", "Está a punto de crear un nuevo inmueble. Desea proceder?");
     }
 });
 
@@ -92,6 +144,11 @@ function mensaje_confimacion() {
     formData.append('pais', add_pais.value);
     formData.append('estado', add_departamento.value);
     formData.append('ciudad',add_ciudad);
+    //Nuevos//
+    formData.append('area', add_area.value);
+    formData.append('banos', add_banos.value);
+    formData.append('habitaciones', add_habitaciones.value);
+    formData.append('area_construida', add_area_construida.value);
 
     var files = add_fotos.files;
     for (var i = 0; i < files.length; i++) {
@@ -131,26 +188,4 @@ function mensaje_confimacion() {
             console.log(errorThrown);
         }
     });
-}
-
-//--------------------------------------#
-//Validaciones a cada tipo de propiedad
-//--------------------------------------#
-//Finca
-function validaciones_finca(){
-    const tipo_finca     = document.getElementById('tipo_finca');
-
-    let ban = true;
-    let msg = "";
-
-    if(tipo_finca.value != 1 && tipo_finca.value != 2){
-        ban = false;
-        msg += "El tipo de finca no corresponde a recreo o a produciión";
-    }
-
-    if(!ban){
-        createToastNotify(1,"Error en la informacion de la finca", msg);
-        return false;
-    }
-    else return true;
 }

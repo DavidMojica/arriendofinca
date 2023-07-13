@@ -1,0 +1,338 @@
+@import url('https://rsms.me/inter/inter.css');
+
+:root {
+  --color-light: white;
+  --color-dark: #212121;
+  --color-signal: #4CAF50;
+
+  --color-background: var(--color-light);
+  --color-text: var(--color-dark);
+  --color-accent: var(--color-signal);
+
+  --size-bezel: .5rem;
+  --size-radius: 3em;
+
+  line-height: 1.4;
+
+  font-family: 'Inter', sans-serif;
+  font-size: calc(.6rem + .4vw);
+  color: var(--color-text);
+  background: var(--color-background);
+  font-weight: 300;
+  padding: 0 calc(var(--size-bezel) * 3);
+}
+
+
+#html{
+  /* background: linear-gradient(-45deg, #a77120, #e73c7e, #23a6d5, #23d5ab); */
+  background: linear-gradient(-45deg, #FFCC00, #9932CC, #FF4500, #FFFF00);
+  /* background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA); */
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  background-repeat: no-repeat;
+  transition: 1s;
+  background-size: cover;
+  background-position: center center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+section {
+  height: 100vh;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+#formulary {
+  display: flex;
+  width: 30vw;
+  height: auto;
+  min-width: 650px;
+  min-height: 400px;
+  perspective: 1000px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  transition: max-height 2s;
+}
+
+#div_login{
+  min-width: 550px;
+  min-height: 700px;
+
+}
+
+#div_registro {
+  display: none;
+  width: auto;
+  height: auto;
+
+}
+
+
+h1, h2, h3 {
+  font-weight: 900;
+}
+
+mark {
+  background: var(--color-accent);
+  color: var(--color-text);
+  font-weight: bold;
+  padding: 0 0.2em;
+}
+
+.card {
+  background: var(--color-background);
+  padding: calc(4 * var(--size-bezel));
+  margin-top: calc(4 * var(--size-bezel));
+  border-radius: var(--size-radius);
+  border: 3px solid var(--color-shadow, currentColor);
+  box-shadow: .5rem .5rem 0 var(--color-shadow, currentColor);
+
+  &--inverted {
+    --color-background: var(--color-dark);
+    color: var(--color-light);
+    --color-shadow: var(--color-accent);
+  }
+
+  &--accent {
+    --color-background: var(--color-signal);
+    --color-accent: var(--color-light);
+    color: var(--color-dark);
+  }
+
+  *:first-child {
+    margin-top: 0;
+  }
+}
+
+.l-design-widht {
+  max-width: 40rem;
+  padding: 1rem;
+}
+
+.input {
+  position: relative;
+
+  &__label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: calc(var(--size-bezel) * 0.75) calc(var(--size-bezel) * .5);
+    margin: calc(var(--size-bezel) * 0.75 + 3px) calc(var(--size-bezel) * .5);
+    background: pink;
+    white-space: nowrap;
+    transform: translate(0, 0);
+    transform-origin: 0 0;
+    background: var(--color-background);
+    transition: transform 120ms ease-in;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  &__field {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    border: 3px solid currentColor;
+    padding: calc(var(--size-bezel) * 1.5) var(--size-bezel);
+    color: currentColor;
+    background: transparent;
+    border-radius: var(--size-radius);
+
+    &:focus,
+    &:not(:placeholder-shown) {
+      & + .input__label {
+        transform: translate(.25rem, -65%) scale(.8);
+        color: var(--color-accent);
+      }
+    }
+  }
+}
+
+.button-group {
+  margin-top: calc(var(--size-bezel) * 2.5);
+}
+
+button {
+  color: currentColor;
+  padding: var(--size-bezel) calc(var(--size-bezel) * 2);
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--size-radius);
+  font-weight: 900;
+  cursor: pointer;
+
+  &[type=reset]{
+    background: var(--color-background);
+    font-weight: 200;
+  } 
+}
+
+button + button {
+  margin-left: calc(var(--size-bezel) * 2);
+}
+
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: .5em;
+}
+
+.hidden {
+  display: none;
+}
+
+.formulario {
+  border: 3px solid #ffffff;
+  border-radius: 2em;
+  width: 50%;
+  min-width: 300px;
+  padding: 8px 8px;
+  font-size: 1.1em;
+  font-weight: lighter;
+  margin-bottom: 0.5%;
+  box-sizing: border-box;
+  text-align: center;
+  transition: ease-in-out 1s;
+  background-repeat: no-repeat;
+  background-position: 4px;
+}
+.formulario::placeholder{
+  color: #212121;
+  font-weight: lighter;
+}
+.formulario:focus{
+  transform: scale(.993, .94); 
+  width: 90%;  
+
+  border: 3px solid #ffffff;
+}
+.formulario select {
+  min-height: 50px;
+}
+
+#siguiente{
+  float:right;
+  padding: 1.5em 1.5em 1.5em 1.5em;
+  border-radius: .7em 2em 2em .7em;
+  background-image: url('../images/next.png');
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: 35px;
+  min-width: 122px;
+}
+#atras{
+  float:left;
+  padding: 1.5em 1.5em 2.5em 1.5em;
+  border-radius: 2em .7em .7em 2em;
+  background-image: url('../images/back.png');
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: 25px;
+  min-width: 122px;
+}
+#log_user{
+  background-image: url('../images/icon_user.png');
+  background-size: 24px;
+}
+
+#log_pass{
+  background-image: url('../images/icon_pass.png');
+}
+
+#reg_nombre{
+  background-image: url('../images/icon_id-card.png');
+}
+
+#reg_tipo_documento{
+  background-image: url('../images/icon_cards.png');
+}
+
+#reg_documento{
+  background-image: url('../images/icon_sharp.png');
+}
+
+.reg_item label {
+  font-size: 12px;
+  margin: 1% 0 0 0;
+  padding: 0;
+}
+#reg_fecha{
+  background-image: url('../images/icon_calendar.png');
+}
+
+
+a {
+  color: #212121;
+}
+
+a:visited {
+  color: #212121;
+}
+
+
+img{
+  max-width: 270px;
+  margin: 0;
+  padding: 0 ;
+}
+
+#ref_img{
+  display: block;
+  margin: -30px;
+  padding: 0;
+}
+
+.paso{
+  display: none;
+}
+
+.pagination button{
+    display: inline-block;
+    margin: 1% 0 1% 0;
+}
+
+
+#div_registro img{
+    left: -20px;
+    position: relative;
+}
+
+#btn_login_open{
+  width: 35px;
+  float: left;
+  cursor: pointer;
+}
+
+#reg_btn_registrarme{
+  display: none;
+}
+
+
+/*********ANIMATIONS************/
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+

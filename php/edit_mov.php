@@ -51,80 +51,20 @@ if($ban){
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $id_inmoviliario = trim($_POST['id_inmoviliario']);
-
         $query = "SELECT * FROM tbl_inmueble WHERE id_inmueble = :id_moviliario";
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':id_moviliario', $id_inmoviliario, PDO::PARAM_INT);
-
-        if($stmt->execute()){
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            if(count($result) > 0){
-                $row              = $result[0];
-                $modo             = $row['arriendo_o_venta'] == 1 ? "Arriendo" : "Venta";
-                $precio           = $row['precio'];
-                $direccion        = $row['direccion'];
-                $descripcion      = $row['descripcion'];
-                $id_municipio     = $row['id_municipio_ubicacion'];
-                $id_tipo_inmueble = $row['id_tipo_inmueble'];
-
-                #---Obtener el nombre del tipo de inmueble---#
-                $query = "SELECT * FROM tbl_tipo_inmueble WHERE id_tipo_inmueble = :id_tipo_inmueble";
-                $stmt = $pdo->prepare($query);
-                $stmt->bindParam(':id_tipo_inmueble', $id_tipo_inmueble, PDO::PARAM_INT);
-
-                if($stmt->execute()){
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    if(count($result) > 0){
-                        $row = $result[0];
-                        $nombre_tipo_inmueble = $row['tipo_inmueble'];
-                    }
-                }
-
-                #---Obtener nombres de municipios y ubicacion exacta---#
-
-                $query = "SELECT * FROM tbl_municipio WHERE id_municipio = :id_municipio";
-                $stmt  = $pdo->prepare($query);
-                $stmt->bindParam(':id_municipio', $id_municipio, PDO::PARAM_INT);
-
-                if($stmt->execute()){
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    if(count($result) > 0){
-                        $row = $result[0];
-                        $nombre_municipio = $row['nombre_municipio'];
-                        $id_estado        = $row['id_estado'];
-                        $id_pais          = $row['id_pais'];
-
-                        #obtener nombre del estado
-                        $query = "SELECT * FROM tbl_estado WHERE id_estado = :id_estado";
-                        $stmt = $pdo->prepare($query);
-                        $stmt->bindParam(':id_estado', $id_estado, PDO::PARAM_INT);
-                        
-                        if($stmt->execute()){
-                            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            if(count($result) > 0){
-                                $row = $result[0];
-                                $nombre_estado = $row['nombre_estado'];
-                                $id_estado     = $row['id_estado'];
-
-                                #Obtener el nombre del pais
-                                $query = "SELECT * from tbl_pais WHERE id_pais = :id_pais";
-                                $stmt = $pdo->prepare($query);
-                                $stmt->bindParam(':id_pais', $id_pais, PDO::PARAM_INT);
-
-                                if($stmt->execute()){
-                                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                    if(count($result) > 0){
-                                        $row = $result[0];
-                                        $nombre_pais = $row['nombre_pais'];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        $resultados = get_detalles_propiedad_PDOQUERY($query, $id_inmoviliario);
+        $modo             = $resultados['modo'];
+        $precio           = $resultados['precio'];
+        $direccion        = $resultados['direccion'];
+        $descripcion      = $resultados['descripcion'];
+        $tipo_inmueble    = $resultados['tipo_inmueble'];     
+        $ubicacion        = $resultados['ubicacion'];
+        $nombre_municipio = $ubicacion['nombre_municipio'];
+        $nombre_estado    = $ubicacion['nombre_estado'];
+        $nombre_pais      = $ubicacion['nombre_pais'];
+        $id_estado        = $ubicacion['id_estado'];
+        $id_pais          = $ubicacion['id_pais'];
+            
     }
 }
 ?>
@@ -159,13 +99,13 @@ if($ban){
         <h2>Editar Moviliario</h2>
         <p>ID del inmueble: <b id="id_inmoviliario"><?php echo $id_inmoviliario; ?></b> (no se puede editar el id del inmueble)</p>
         <p>Tipo de inmueble</p>
-        <span>Tipo de inmueble actual: <b><?php echo $nombre_tipo_inmueble ?></b></span>
+        <span>Tipo de inmueble actual: <b><?php echo $tipo_inmueble ?></b></span>
         <select name="edit_tipo_inmueble" id="edit_tipo_inmueble">
             <option value="default">Seleccione una opción...</option>
             <?php
                 $result = get_tipos_inmueble();
                 foreach ($result as $row) {
-                    echo "<option value='" . $row['id_tipo_inmueble'] . "' " . ($row['tipo_inmueble'] == $nombre_tipo_inmueble ? 'selected' : '') . ">" . $row['tipo_inmueble'] . "</option>";
+                    echo "<option value='" . $row['id_tipo_inmueble'] . "' " . ($row['tipo_inmueble'] == $tipo_inmueble ? 'selected' : '') . ">" . $row['tipo_inmueble'] . "</option>";
                 }
             ?>
         </select>
@@ -211,7 +151,7 @@ if($ban){
         <input type="file" name="Añadir fotos" id="Añadir fotos">
         <input type="button" value="Borrar fotos">
 
-        <input type="button" value="Cancelar">
+        <a href="userarea.php"><input type="button" value="Cancelar"></a>
         <input type="button" value="Guardar cambios" id="edit_save">
     </section>
 </body>

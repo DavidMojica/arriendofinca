@@ -1,0 +1,131 @@
+/*Fonts----*/
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap'); /*'Poppins'*/
+
+:root {
+    --bgcolor: #dcdddf;
+  }
+
+.logo {
+    color: white;
+    align-self: center;
+    margin-left: 1.2rem;
+    font-size: 2.5rem;
+}
+
+.logo img {
+    height: 120px;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    max-height: 120px;
+}
+.nav-bar{
+    margin: auto;
+}
+.nav-bar a{
+    color: white;
+    padding: 1.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+.hbt {
+    display: flex;
+    align-items: center;
+}
+#var-icon{
+    display: none;
+}
+
+header {
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    backdrop-filter: blur(5px); 
+    padding: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+}
+.header-right div{
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    header{
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        justify-content: center;
+        text-align: center;
+        position: static;
+    }
+    #var-icon{
+        display: block;
+    }
+    .nav-bar {
+        display: none;
+        position: absolute;
+        top: 3.7rem;
+        left: 0;
+        width: 100%;
+        background-color: var(--bgcolor);
+        text-align: center;
+      }
+      .nav-bar.responsive {
+        display: block;
+      }
+    
+      .nav-bar a {
+        display: block;
+      }
+
+    .logo {
+        display: inline-block;
+        width: fit-content;
+        cursor: pointer;
+    }
+
+    .logo img {
+        max-width: 150px;
+    }
+
+    #div_inicio_sesion,
+    #div_ayuda {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+    .hbt{
+        float: right;
+        display: flex;
+        width: 33.3%;
+    }
+    .header-right {
+        display:inline-flex;
+        width: 100%;
+    }
+    .header-right input[type="button"]{
+        width: 100%;
+    }
+
+    #footer_left,
+     #footer_right {
+         flex-basis: auto;
+         margin-bottom: 0;
+     }
+}
+footer {
+    background-color: #1f1f1f;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    color: #fff;
+ }
+ a{
+    text-decoration: none;
+ }
+

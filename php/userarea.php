@@ -5,15 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../extralibs/ToastNotify/ToastNotify.css">
-    <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
+<link rel="stylesheet" href="../styles/hyf.css">
+<link rel="stylesheet" href="../styles/styles.css">
+<link rel="stylesheet" href="../styles/userarea.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+<script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
     <script src="../javascript/toastNotifyTP1.js" defer></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="../javascript/opts_mov.js"></script>
+    <script src="../javascript/essentials.js" defer></script>
+    <script src="../javascript/opts_mov.js" defer></script>
     <title>Area del usuario | arriendofinca.com</title>
 </head>
 <body>
     <header>
-        
+    <div class="logo">
+        <img src="../images/ArriendoFinca.png" alt="Logo" class="logo_img">
+        </div>
         <!-- Si la sesion no está iniciada, redirige al index. Si está iniciada, crea un botón de cerrar sesión y obtiene el nombre del usuario -->
         <?php
         #Comprobador de inicio de sesión
@@ -21,7 +28,7 @@
             include('PDOconn.php');
             $tp_user = 0;
             if(!isset($_SESSION['username'])){
-                header("Location: ../index.html");
+                header("Location: ../index.php");
                 exit;
             }
             else{
@@ -52,30 +59,27 @@
                     $nombre_usuario = $row['nombre'];
                     $documento = $row['documento'];
                     echo "Bienvenido, $nombre_usuario!";
+    echo '<div class="header_controls">';
+        echo '<a href="../index.php"><input type="button" class="button hbt" value="Buscar popiedad | Volver al home"></a>';
                     echo '<form action="logout.php" method="post">';
-                    echo '<input type="submit" value="Cerrar Sesión">';
-                    echo '</form>';
+            echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
+                    echo '</form> </div>' ;
                 }
                 else{
                     echo 'Error al obtener el nombre del usuario.';
                 }
             }
-    ?>
-
-        <div id="div_logo">
-            <img src="../images/ArriendoFinca.png" alt="Logo" class="logo_largo">
-        </div>
+    ?>  
     </header>
     <div id="midpage">
         <div id="nav_bar">
-            <input type="button" value="- Borrar">
-            <a href="add_moviliario.php"><input type="button" value="+ Añadir"></a>
+        <a href="add_moviliario.php"><input type="button" value="+ Añadir" class="button hbt"></a>
         </div>
-        <h2>Tus inmoviliarios: </h2>
+<h2 id="imv_title">Tus inmoviliarios: </h2>
         <div id="div_inmoviliarios">
             <?php
             include('PDOconn.php');
-
+            include('essentials.php');
             $query = "SELECT * FROM tbl_inmueble WHERE cedula_dueño = :documento";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(':documento', $documento,PDO::PARAM_INT);
@@ -86,9 +90,14 @@
                     foreach($result as $row){
                         ?>
                         <div class="inmoviliario">
-                            <div class="info_inmoviliario"> <p>ID:<b><?php 
-                            $id_inmueble = $row['id_inmueble'];
-                            $id_inmueble ?></b></p>
+                        <div class="info_inmoviliario"> 
+                        <?php   #Obtención de datos
+                                $id_inmueble          = $row['id_inmueble'];
+                                $prop_area            = $row['area'];
+                                $prop_habitaciones    = $row['habitaciones'];
+                                $prop_banos           = $row['banos'];
+                                $prop_area_construida = $row['area_construida'];?>
+
                             <?php include('PDOconn.php');
                                 #Datos a ser consultados por normalizacion
                                 $id_tipo_inmueble = $row['id_tipo_inmueble'];
@@ -99,62 +108,92 @@
                                 $stmt = $pdo->prepare($query);
                                 $stmt->bindParam(':id_tipo_inmueble', $id_tipo_inmueble, PDO::PARAM_INT);
 
-                                if($stmt->execute()){
-                                    $res_tp_inmueble = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    if(count($res_tp_inmueble) > 0){
-                                        $row_tp_inmueble = $res_tp_inmueble[0];
-                                        #Quitar la S al final del tipo de inmueble
-                                        $tipo_inmueble   = $row_tp_inmueble['tipo_inmueble'];
-                                        if(substr($tipo_inmueble, -1) === 's')
-                                            $tipo_inmueble = rtrim($tipo_inmueble, 's');
-                                    } else{
-                                    $tipo_inmueble = "No se obtuvo el tipo inmueble";
-                                    }
-                                } 
+                                $tipo_inmueble = get_tipo_inmueble_PDOQUERY($stmt);
 
                                 #Query ciudad
                                 $query = "SELECT nombre_municipio, id_estado FROM tbl_municipio WHERE id_municipio = :id_municipio";
                                 $stmt = $pdo->prepare($query);
                                 $stmt->bindParam(':id_municipio', $id_municipio, PDO::PARAM_INT);
 
-                                if($stmt->execute()){
-                                    $res_nombre_municipio = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                    if(count($res_nombre_municipio) > 0){
-                                        $row_nombre_municipio = $res_nombre_municipio[0];
-                                        $nombre_municipio     = $row_nombre_municipio['nombre_municipio'];
-                                        $id_estado            = $row_nombre_municipio['id_estado'];
-
-                                        #Query estado
-                                        $query = "SELECT nombre_estado FROM tbl_estado WHERE id_estado = :id_estado";
-                                        $stmt = $pdo->prepare($query);
-                                        $stmt->bindParam(':id_estado', $id_estado, PDO::PARAM_INT);
-
-                                        if($stmt->execute()){
-                                            $res_nombre_estado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                            if(count($res_nombre_estado) > 0){
-                                                $row_nombre_estado = $res_nombre_estado[0];
-                                                $nombre_estado     = $row_nombre_estado['nombre_estado'];
-
-                                                #Imprimimos el resultado
-                                                echo "<p class='info_text'> id:".$id_inmueble." ". $tipo_inmueble. " en <b>". $nombre_municipio ." - ". $nombre_estado. "</b></p>";
-                                            }
-                                        }
-                                    }
+                                $nombres = get_nombres_ubicacion_PDOQUERY($stmt);
+                                if(!empty($nombres)){
+                                    $nombre_municipio = $nombres['nombre_municipio'];
+                                    $nombre_estado    = $nombres['nombre_estado'];
+                                    $nombre_pais      = $nombres['nombre_pais'];
+                                }else{
+                                    $nombre_municipio = "Not obtained";
+                                    $nombre_estado    = "Not obtained";
+                                    $nombre_pais      = "Not obtained";
                                 }
-                            else {
-                                $nombre_municipio = "No se obtuvo el nombre del municipio";
-                            }
+                         echo "<p class='info_text'> ID del inmueble: ".$id_inmueble." <br> ". $tipo_inmueble. " en <b>". $nombre_municipio ." - ". $nombre_estado. " - ".$nombre_pais."</b></p>";
                             ?>
+                            <!-- Imagenes -->
                         <div class="inmoviliario_imgs">
-                            <p>Aqui van las imagenes</p>
+                        <?php
+                        $query = "SELECT imagen FROM tbl_imagenes WHERE id_inmueble = :id_inmueble"; 
+                        $stmt = $pdo->prepare($query);
+                        $stmt->bindParam(':id_inmueble', $id_inmueble, PDO::PARAM_INT);
+                        $stmt->execute();
+                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        if (count($result) > 0) {
+                        echo '<div class="swiper mySwiper">
+                              <div class="swiper-wrapper">';
+
+                        foreach ($result as $row) {
+                            $image_blob = $row['imagen'];
+
+                            // Obtener información sobre la imagen
+                            $image_info = getimagesizefromstring($image_blob);
+                            $mime_type = $image_info['mime'];
+
+                            // Obtener la extensión basada en el tipo MIME
+                            $extension = image_type_to_extension($image_info[2]);
+
+                            // Establecer el encabezado Content-type según la extensión
+                            if ($extension === '.jpg' || $extension === '.jpeg') {
+                            echo "<div class='swiper-slide'><img src='data:image/jpg; base64,".base64_encode($image_blob)."'></div>";
+                            } elseif ($extension === '.png') {
+                            echo "<div class='swiper-slide'><img src='data:image/jpg; base64,".base64_encode($image_blob)."'></div>";
+                            } elseif ($extension === '.gif') {
+                                echo "<div class='swiper-slide'><img src='data:image/jpg; base64,".base64_encode($image_blob)."'></div>";
+                            } elseif ($extension === '.jfif') {
+                            echo "<div class='swiper-slide'><img src='data:image/jpg; base64,".base64_encode($image_blob)."'></div>";
+                            } else {
+                                    echo "La imagen no pudo ser cargada";
+                            }
+                        }
+
+                        echo '<div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                        </div></div>';
+                        } else {
+                            echo "El inmueble no posee imágenes";
+                        }
+                        ?>
                         </div>
+                    <div class="div_extra_info">
+                        <ul id="info_list">
+                        <?php 
+                            if($id_tipo_inmueble != 1 && $id_tipo_inmueble != 3){
+                            echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> ";
+                            }
+                            else{
+                                echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> <li> <span> Área construida (m2): </span> <p> ".$prop_area_construida." </p> </li> ";
+                            }
+                         ?>  
+                        </ul>
+                    </div>
                         <div class="inmoviliario_controls">
                             <form action="edit_mov.php" method="post">
                                 <input type="hidden" name="id_inmoviliario" value="<?php echo $id_inmueble; ?>">
-                                <input type="submit" value="Editar inmoviliario">
+                            <input type="submit" class="button hbt" value="Editar inmueble">
                             </form>
-                            <input type="button" value="Borrar inmoviliario" id="btn_inmoviliario_borrar" onclick="delete_mov(<?php echo $id_inmueble; ?>)">
-                        </div>
+                            <form action="certificacion.php" method="post">
+                                <input type="hidden" name="id_inmoviliario" value="<?php echo $id_inmueble; ?>">
+                                <input type="submit" class="button hbt" value="Certificar inmueble">
+                            </form>
+                    <input type="button" class="button hbt" value="Borrar" id="btn_inmoviliario_borrar" onclick="delete_mov(<?php echo $id_inmueble; ?>)">
+                        </div> </div></div>
                             <?php
                         } 
                     }
@@ -166,8 +205,6 @@
                 <?php
                 }
             ?>
-           
-
         </div>
         <input type="button" value="Atras">
         <input type="button" value="Siguiente">
@@ -185,5 +222,43 @@
             <p>davidmojicav@gmail.com</p>
         </div>
     </footer>
+
+<!-- Initialize Swiper -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+    /****SWIPPER**** */
+document.addEventListener("DOMContentLoaded", function() {
+const swiper = new swiper('.mySwiper', {
+  // Optional parameters
+  direction: 'vertical',
+  loop: true,
+
+  // If we need pagination
+  pagination: {
+    el: '.swiper-pagination',
+  },
+
+  // Navigation arrows
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+
+  // And if we need scrollbar
+  scrollbar: {
+    el: '.swiper-scrollbar',
+  }
+});
+});
+
+function goToPrevStep() {
+    swiper.slidePrev();
+  }
+
+  function goToNextStep() {
+    swiper.slideNext();
+  }
+</script>
+
 </body>
 </html>

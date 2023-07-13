@@ -1,36 +1,292 @@
-/* styles.css */
+/*Fonts----*/
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap'); /*'Poppins'*/
+@import url('https://fonts.googleapis.com/css2?family=Rancho&display=swap');     /*'Rancho'*/
+
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/1/12/Finca.jpg');
+  /* background-image: url('https://www.wallpapertip.com/wmimgs/15-151061_farm-scene-wallpaper-wallpapers-farm-background.jpg'); */
 }
 
-header {
-    background-color: #333;
-    color: #fff;
+
+#midpage {
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+.registrar {
+    text-align: center;
+}
+
+#publicidad {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.busqueda {
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
     padding: 20px;
 }
 
-header h1 {
-    margin: 0;
+.busquedas {
+    margin-bottom: 10px;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.busquedas span {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-nav ul li {
-    display: inline;
-    margin-right: 10px;
+#div_check_certificado,
+#div_check_promocion {
+    display: flex;
+    align-items: center;
 }
 
-nav ul li a {
+#div_check_certificado input,
+#div_check_promocion input {
+    margin-left: 5px;
+}
+
+#div_info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 20px;
+    margin-bottom: 20px;
+}
+
+/*Descriciones points*/
+.points {
+    padding: 10px;
+    border-radius: 2em;
+    text-align: center;
+    justify-content: center;  /*THIS*/
+    align-items: center;      /*THIS*/
+    display: flex;            /*And this: centers everything*/
+    min-height: 230px;
+    min-width: 205px;
+}
+.point_title{
+    font-size: 25px;
+    
+}
+#point1{
+    background-color: #E0F2D8;
+}
+#point2{
+    background-color: #F6E5E3;
+}
+#point3{
+    background-color: #FFF5DA;
+}
+#point4{
+    background-color: #CAD3D2;
+}
+#point5{
+    background-color: #B8F1D8;
+}
+#point6{
+    background-color: #D2F4F9;
+}
+#point7{
+    background-color: #a1a6ca;
+}
+#point8{
+    background-color: #e6e2b4;
+}
+
+@media (max-width: 768px) {
+    #div_info{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .point_title{
+        font-size: 19px;
+    }
+    .points{
+        min-height: auto;
+        min-width: auto;
+
+        width: 90%;
+        height: 90%;
+        overflow: auto;
+    }
+}
+
+
+.it1{
+    display: inline-block;
+    
+}
+
+ .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
     color: #fff;
+    border: none;
     text-decoration: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  /* Estilos al pasar el cursor por encima */
+  .button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Estilos al hacer clic */
+  .button:active {
+    background-color: #3e8e41;
+  }
+
+/* Estilos base del select */
+select {
+    display: inline-block;
+    padding: 10px;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+    position: relative;
+  }
+  
+  /* Estilos al pasar el cursor por encima */
+  select:hover {
+    border-color: #999;
+  }
+  
+  /* Estilos de la línea resaltada */
+  select::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #999;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  /* Estilos de la línea resaltada al hacer hover */
+  .select:hover::after {
+    transform: scaleX(1);
+  }
+
+
+  /* Estilos base del checkbox */
+.checkbox {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+  }
+  
+  .checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  /* Estilos del marcador */
+  .checkbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+  }
+  
+  /* Estilos al pasar el cursor por encima */
+  .checkbox:hover .checkmark {
+    border-color: #999;
+  }
+  
+  /* Estilos cuando el checkbox está marcado */
+  .checkbox input:checked ~ .checkmark {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+  }
+  
+  /* Estilos del marcador (checkmark) */
+  .checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Estilos del marcador (checkmark) cuando está marcado */
+  .checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Estilos del símbolo de chequeo */
+  .checkbox .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+
+  /*Menu desplegable*/
+
+.header-right{
+  margin: 0 150px 0 0;
+}
+.nav .button{
+  width: 150px;
+}
+.nav:hover{
+  cursor: pointer;
+}
+ul, ol{
+  list-style: none;
 }
 
-#hero {
-    background-image: url("hero_image.jpg");
+.nav li a{
+  display: block;
+}
+
+.nav li ul{
+  display: none;
+  position: absolute;
+  min-width: 140px;
+}
+
+.nav li:hover > ul{
+  display: block;
+}
+
+.nav > li {
+  float: left;
+}
+.nav li ul li{
+  position: relative;
+  left: -70px;
+  top:0px;
+}
+
+
+
+.nav img{
+  border: solid 2px black;
+  border-radius: 3em;
+  max-width: 75px;
 }

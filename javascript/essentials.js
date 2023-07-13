@@ -7,7 +7,7 @@
  * @param {string} prop_desc 
  * @returns 
  */
-function validaciones_general(add_tipo, precio, direccion, prop_desc){
+function validaciones_general(add_tipo, precio, direccion, prop_desc, add_area, add_banos, add_habitaciones, add_area_construida){
     const total_tipo_propiedades = 8;
     const regex = /^[0-9]+$/; //Expresión regular para validar que la cadena solo contenga números - documento y numero de celular
     let ban = true;
@@ -51,6 +51,46 @@ function validaciones_general(add_tipo, precio, direccion, prop_desc){
         msg += "Proporcione una información más larga por favor. <br>";
         ban = false;
     }
+    //Validar el area
+    if(add_area.value.trim() === ""){
+        msg += "El campo area es obligatorio. <br>";
+        ban = false;
+    }
+    else if(!regex.test(add_area.value.trim())){
+        msg += "Se coló un carácter no numérico en el campo area. <br>";
+        ban = false;
+    }
+    //validar baños
+    if(add_banos.value.trim() === ""){
+        msg += "El campo baños es obligatorio. <br>";
+        ban = false;
+    }
+    else if(!regex.test(add_banos.value.trim())){
+        msg += "Se coló un carácter no numérico en el campo baños. <br>";
+        ban = false;
+    }
+
+    //validar habitaciones
+    if(add_habitaciones.value.trim() === ""){
+        msg += "El campo habitaciones es obligatorio. <br>";
+        ban = false;
+    }
+    else if(!regex.test(add_habitaciones.value.trim())){
+        msg += "Se coló un carácter no numérico en el campo habitaciones. <br>";
+        ban = false;
+    }
+    //Area construida solamente en tipo 1 o 3
+    if(add_tipo == 1 || add_tipo == 3){
+        if(add_area_construida.value.trim() === ""){
+            msg += "El campo area construida es obligatorio. <br>";
+            ban = false;
+        }
+        else if(!regex.test(add_area_construida.value.trim())){
+            msg += "Se colón un carácter no numérico en el campo area construida. <br>";
+            ban = false;
+        }
+    }
+
     return {auth: ban, mensaje: msg};
 }
 
@@ -61,9 +101,9 @@ function validaciones_general(add_tipo, precio, direccion, prop_desc){
  * @param {Object combobox} add_ciudad 
  * @param {*} pais_activo 
  */
-function AJAX_PAIS_CHANGE(add_departamento,add_ciudad, pais_activo){
+function AJAX_PAIS_CHANGE(add_departamento,add_ciudad, pais_activo, url){
     $.ajax({
-        url: '../php/dynamic_cboxes.php',
+        url: url,
         type: 'POST',
         data: {
           pais_activo: pais_activo,
@@ -108,9 +148,9 @@ function AJAX_PAIS_CHANGE(add_departamento,add_ciudad, pais_activo){
  * @param {Object combobox} add_ciudad 
  * @param {Object combobox} depto_activo 
  */
-function AJAX_ESTADO_CHANGE(add_ciudad, depto_activo){
+function AJAX_ESTADO_CHANGE(add_ciudad, depto_activo, url){
     $.ajax({
-        url: '../php/dynamic_cboxes.php',
+        url: url,
         type: 'POST',
         data: {
           pais_activo: pais_activo,

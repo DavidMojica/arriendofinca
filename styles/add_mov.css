@@ -1,0 +1,85 @@
+body{
+    height: 100vh;
+}
+#datos{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+#cont_buttons{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.add_pasos{
+    text-align: center;
+}
+input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(to left, #95C8D8, #6497B1);
+    color: #fff;
+    font-size: 16px;
+    transition: box-shadow 0.3s;
+    display: block;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    width: 100%;
+  }
+
+  /* Estilos para el input de texto al enfocar */
+  input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px #6497B1;
+  }
+
+  /* Estilos para el select */
+select {
+    width: 200px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(to left, #95C8D8, #6497B1);
+    color: black;
+    font-size: 16px;
+    transition: box-shadow 0.3s;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    width: 50%;
+  }
+
+  /* Estilos para el select al enfocar */
+ select:focus {
+    outline: none;
+    box-shadow: 0 0 5px #FF5F6D;
+  }
+
+  textarea {
+    /* Estilos para el textarea */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: linear-gradient(#f9f9f9, #e3e3e3);
+    padding: 10px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    resize: none; /* Evita que el textarea se pueda cambiar de tamaño */
+    height: 300px;
+    width: 400px;
+  }
+  
+  /* Estilos adicionales cuando el textarea está enfocado */
+  textarea:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px #4a90e2;
+  }
+
+.bnt_n{
+    display: block;
+}
+
+.form_prop{
+    overflow: visible;
+}

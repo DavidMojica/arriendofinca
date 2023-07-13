@@ -28,3 +28,14 @@ function mensaje_confimacion(){
           }
     });
 }
+
+
+const sel_pais = document.getElementById('sel_pais');
+const sel_estado = document.getElementById('sel_estado');
+const sel_ciudad = document.getElementById('sel_ciudad');
+
+
+var pais_activo = 0;
+var depto_activo = 0;
+
+

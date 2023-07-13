@@ -71,6 +71,14 @@
                 #Hacemos una cosa u otra dependiendo del tipo de peticion
                 #------Borrar moviliario-----#
                 if($type == 0){
+                    #Borrar las imagenes del inmueble
+                    $query = "DELETE FROM tbl_imagenes where id_inmueble = :id_inmueble";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->bindParam(':id_inmueble', $id_moviliario, PDO::PARAM_INT);
+                    $stmt->execute();
+
+
+                    #Borrar el inmueble
                     $query = "DELETE FROM tbl_inmueble WHERE id_inmueble = :id_inmueble AND cedula_dueño = :cedula";
                     $stmt = $pdo->prepare($query);
                     $stmt->bindParam(':id_inmueble', $id_moviliario, PDO::PARAM_INT);

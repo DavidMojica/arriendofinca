@@ -1,3 +1,22 @@
+TRIGGERS
+
+DELIMITER //
+CREATE TRIGGER actualizar_id_certificado
+AFTER INSERT ON tbl_certificaciones
+FOR EACH ROW
+BEGIN
+    UPDATE tbl_inmueble
+    SET id_certificado = NEW.id_certificacion
+    WHERE id_inmueble = NEW.id_inmueble;
+END //
+
+
+ALTER TABLE tbl_imagenes
+ADD CONSTRAINT fk_id_inmueble FOREIGN KEY (id_inmueble)
+REFERENCES tbl_inmueble (id_inmueble)
+ON UPDATE CASCADE
+ON DELETE CASCADE;
+
 USE arriendofinca
 --Pais
 CREATE TABLE tbl_pais(

@@ -51,16 +51,22 @@
             $pais             = trim($_POST['pais']);
             $estado           = trim($_POST['estado']);
             $ciudad           = trim($_POST['ciudad']);
+            $area             = trim($_POST['area']);
+            $banos            = trim($_POST['banos']);
+            $habitaciones     = trim($_POST['habitaciones']);
+            $area_construida  = trim($_POST['area_construida']);
             
-            // if (isset($_FILES['files'])) {
-            //     $files            = $_FILES['files'];
-            // } else {
-            //     // Manejar el caso en que no se enviaron archivos
-            // }
+            if (isset($_FILES['files'])) {
+                $imagenes           = $_FILES['files'];
+            }else{
+                $imagenes           = [];
+            } 
+
             #variables de php
             $errors           = [];
             $warnings         = [];
-    
+            $tamanoMaximo = 5242880; // 5 MB en bytes
+
             #comprobar la existencia de la ubicacion registrada
 
             #id_tipo_inmueble
@@ -72,19 +78,6 @@
             if($arriendo_venta != 1 && $arriendo_venta != 2){
                 $errors[] = "Error al seleccionar arriendo o venta. <br>";
             }
-
-            // foreach ($files['tmp_name'] as $key => $tmp_name) {
-            //     $nombreArchivo = $files['name'][$key];
-            //     $rutaArchivo = $tmp_name;
-            
-            //     $contenidoArchivo = file_get_contents($rutaArchivo);
-            
-            //     $query = "INSERT INTO `tbl_imagenes`(`id_inmueble`, `imagen`) VALUES (:id_inmueble, :imagen)";
-            //     $stmt = $pdo->prepare($query);
-            //     $stmt->bindParam(':id_inmueble', $id_inmueble, PDO::PARAM_STR);
-            //     $stmt->bindParam(':imagen', $contenidoArchivo, PDO::PARAM_LOB);
-            //     $stmt->execute();
-            // } 
 
             #precio
             if(empty($precio)){
@@ -116,26 +109,43 @@
             else if(strlen($descripcion) > 250){
                 $errors[] = "La descripción del inmueble debe de ser concisa y no superar los 250 carácteres.  <br>";
             }
+            #Area
+            if(empty($area)){
+                $errors[] = "El campo área es obligatorio (s). <br>";
+            }
+            else if(!ctype_digit($area)){
+                $errors[] = "Se incrustó un dato no numérico en el área (s) <br>";
+            }
+            #Habitaciones
+            if(empty($habitaciones)){
+                $errors[] = "El campo nÚmero de habitaciones es obligatorio (s). <br>";
+            }
+            else if(!ctype_digit($habitaciones)){
+                $errors[] = "Se incrustó un dato no numérico en el nÚmero de habitaciones (s) <br>";
+            }
+            #Baños
+            if(empty($banos)){
+                $errors[] = "El campo nÚmero de baños es obligatorio (s). <br>";
+            }
+            else if(!ctype_digit($banos)){
+                $errors[] = "Se incrustó un dato no numérico en el nÚmero de baños (s) <br>"; 
+            }
 
-            #verificar que las imagenes no pesen mas de 5mb
-            // foreach ($files['tmp_name'] as $key => $tmp_name) {
-            //     $nombreArchivo = $files['name'][$key];
-            //     $tamañoArchivo = $files['size'][$key];
-
-            //     $maxFileSize = 5 * 1024 * 1024; // Tamaño máximo permitido en bytes (5 MB)
-
-            //     if ($tamañoArchivo > $maxFileSize) {
-            //         $errors[] = 'El archivo "' . $nombreArchivo . '" supera el tamaño máximo permitido de 5 MB.';
-            //     } 
-            // }
-
+            if($id_tipo_inmueble == 1 || $id_tipo_inmueble == 3){
+                if(empty($area_construida)){
+                    $errors[] = "El campo área construida es obligatorio (s). <br>";
+                }
+                else if(!ctype_digit($area_construida)){
+                    $errors[] = "Se incrustó un dato no numérico en el área construida (s) <br>";
+                }
+            }
 
             #Procesar a la base de datos y devolucion a ajax en caso de algún error
             $response = array();
             if (empty($errors) && empty($warnings)) {
 
-                $query = "INSERT INTO tbl_inmueble (id_tipo_inmueble, arriendo_o_venta, precio, id_municipio_ubicacion, direccion, descripcion, cedula_dueño, descuento, id_certificado) 
-                        VALUES (:id_tipo_inmueble, :arriendo_o_venta, :precio, :id_municipio_ubicacion, :direccion, :descripcion, :cedula, :descuento, :id_certificado)";
+            $query = "INSERT INTO tbl_inmueble (id_tipo_inmueble, arriendo_o_venta, precio, id_municipio_ubicacion, direccion, descripcion, cedula_dueño, descuento, id_certificado, area, habitaciones, banos, area_construida) 
+        VALUES (:id_tipo_inmueble, :arriendo_o_venta, :precio, :id_municipio_ubicacion, :direccion, :descripcion, :cedula, :descuento, :id_certificado, :area, :habitaciones, :banos, :area_construida)";
 
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(':id_tipo_inmueble', $id_tipo_inmueble, PDO::PARAM_INT);
@@ -147,40 +157,38 @@
                 $stmt->bindParam(':cedula', $documento_usuario, PDO::PARAM_INT);
                 $stmt->bindValue(':descuento', null, PDO::PARAM_NULL);
                 $stmt->bindValue(':id_certificado', null, PDO::PARAM_NULL);
-                if($stmt->execute()){
-                    $id_inmueble = $pdo->lastInsertId();
-                    return_Response(true, "Su inmoviliario ha sido creado con éxito.".$id_inmueble);
-                }else 
-                    return_Response(false,"No se pudo crear el inmobiliario.");
+                $stmt->bindParam(':area', $area, PDO::PARAM_INT);
+                $stmt->bindParam(':habitaciones', $habitaciones, PDO::PARAM_INT);
+                $stmt->bindParam(':banos', $banos, PDO::PARAM_INT);
+                if($id_tipo_inmueble == 1 || $id_tipo_inmueble == 3){
+                    $stmt->bindParam(':area_construida', $area_construida, PDO::PARAM_INT);
+                } else{
+                    $stmt->bindValue(':area_construida', null, PDO::PARAM_NULL);
+                }
+                $stmt->execute();
+
                 
-
-                // if ($stmt->execute()) {
-                //     // Obtener el ID del inmueble recién insertado
-                //     $id_inmueble = $pdo->lastInsertId();
-                //     echo $id_inmueble;
-
-                //     foreach ($files['tmp_name'] as $key => $tmp_name) {
-                //         $nombreArchivo = $files['name'][$key];
-                //         $rutaArchivo = $tmp_name;
-
-                //         $contenidoArchivo = file_get_contents($rutaArchivo);
-
-                //         $query = "INSERT INTO `tbl_imagenes`(`id_inmueble`, `imagen`) VALUES (:id_inmueble, :imagen)";
-                //         $stmt = $pdo->prepare($query);
-                //         $stmt->bindParam(':id_inmueble', $id_inmueble, PDO::PARAM_INT);
-                //         $stmt->bindParam(':imagen', $contenidoArchivo, PDO::PARAM_LOB);
-                //         $stmt->execute();
-                //     }
-
-                //     $response['success'] = true;
-                //     $response['mensaje'] = "Su inmoviliario ha sido creado con éxito.";
-                // } else {
-                //     $errors[] = "No se pudo insertar el registro en la tabla tbl_inmueble";
-                //     $response['success'] = false;
-                //     $response['mensaje'] = $errors;
-                //     $response['state'] = 0;
-                // }
-            
+                $id_inmueble = (int) $pdo->lastInsertId();
+                if(!empty($imagenes)){
+                    foreach ($imagenes['tmp_name'] as $key => $tmp_name) {
+                        $nombreArchivo = $imagenes['name'][$key];
+                        $rutaArchivo = $tmp_name;
+                        
+                        // Verificar el tamaño de la imagen
+                        if (filesize($rutaArchivo) <= $tamanoMaximo) {
+                            $contenidoArchivo = file_get_contents($rutaArchivo);
+                            
+                            $query = "INSERT INTO `tbl_imagenes`(`id_inmueble`, `imagen`) VALUES (:id_inmueble, :imagen)";
+                            $stmt = $pdo->prepare($query);
+                            $stmt->bindParam(':id_inmueble', $id_inmueble, PDO::PARAM_INT);
+                            $stmt->bindParam(':imagen', $contenidoArchivo, PDO::PARAM_LOB);
+                            $stmt->execute();
+                        } 
+                        return_Response(true, "Inmueble creado");
+                    }
+                }else{
+                    return_Response(true, "Inmueble creado sin imágenes");
+                }
             }
             else if(!empty($errors))
                 return_Response_Bad(false, $errors, 0);

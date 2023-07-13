@@ -31,6 +31,6 @@ mejorar los tiempos de respuesta y orden.
 Mié/7-junio/2023
 
 --Proximamente--
---Motor de búsqueda de inmoviliarios
 --Anular el inicio de sesion si tiene la sesion iniciada
+--Motor de búsqueda de inmoviliarios
 --Front End

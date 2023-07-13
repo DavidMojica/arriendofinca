@@ -18,12 +18,12 @@ const id_inmoviliario      = document.getElementById('id_inmoviliario');
 //--------------------------------------#
 edit_pai.addEventListener('change', function(){
     pais_activo = edit_pai.value;
-    AJAX_PAIS_CHANGE(edit_estado, edit_municipio, pais_activo);
+    AJAX_PAIS_CHANGE(edit_estado, edit_municipio, pais_activo, '../php/dynamic_cboxes.php');
 });
 
 edit_estado.addEventListener('change', function(){
     estado_activo = edit_estado.value;
-    AJAX_ESTADO_CHANGE(edit_municipio, estado_activo);
+    AJAX_ESTADO_CHANGE(edit_municipio, estado_activo, '../php/dynamic_cboxes.php');
 });
 
 

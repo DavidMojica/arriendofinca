@@ -4,12 +4,28 @@
 const log_user = document.getElementById('log_user');
 const log_pass = document.getElementById('log_pass');
 const log_btn  = document.getElementById('log_btn');
-
+const btn_reg_open = document.getElementById('btn_reg_open');
+const div_login = document.getElementById('div_login');
+const div_registro = document.getElementById('div_registro');
+const btn_login_open = document.getElementById('btn_login_open');
+const body = document.getElementById('html');
 /*-------------------------------------------------------------------
 #Dom
 --------------------------------------------------------------------*/
 log_btn.addEventListener('click', function(){
     validar_login();
+});
+
+btn_reg_open.addEventListener('click', function(){
+    div_registro.style.display = "block";
+    div_login.style.display = "none";
+    clear_register_items();
+});
+
+btn_login_open.addEventListener('click', function(){
+    div_registro.style.display = "none";
+    div_login.style.display = "block";
+    clear_register_items();
 });
 
 /*-------------------------------------------------------------------
@@ -81,3 +97,4 @@ function mandar_servidor_log(user, pass, user_type){
         }
     });
 }
+
