@@ -19,6 +19,12 @@
     vertical-align: middle;
     max-height: 120px;
 }
+
+.nav{
+    display: grid;
+    place-items: center;
+}
+
 .nav-bar{
     margin: auto;
 }

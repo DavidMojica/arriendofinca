@@ -82,7 +82,7 @@ function mandar_servidor_log(user, pass, user_type){
             let data       = JSON.parse(jsonString);
             console.log(data);
             if(data.success){
-                window.location.href = "../php/userarea.php";
+                window.location.href = "../php/userarea.php?page=1";
             }
             else{
                 createToastNotify(1,"Revise sus datos", data.mensaje);

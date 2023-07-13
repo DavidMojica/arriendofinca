@@ -1,3 +1,12 @@
+/*Fonts----*/
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap'); /*'Poppins'*/
+
+body{
+  font-family: "Poppins",sans-serif;
+}
+header{
+  padding: 0;
+}
 .inmoviliario {
     display: flex;
     flex-direction: column;
@@ -5,15 +14,16 @@
     justify-content: center;
     background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(3px);
-    min-height: 305px;
-    min-width: 420px;
+    min-height: 250px;
+    min-width: 300px;
     padding: 20px;
   }
   
   #div_inmoviliarios {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    grid-template-rows: repeat(auto-fill, minmax(350px, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(250px, 1fr));
     grid-auto-rows: 1fr;
     gap: 1%;
     margin: 2%;
@@ -60,4 +70,23 @@
   }
 li{
   text-align: center;
+}
+#nav_bar {
+  display: flex;
+  align-items: center;
+}
+
+#nav_bar h2 {
+  display: inline-block;
+}
+
+#nav_bar_controls {
+  margin-left: auto;
+}
+
+#pagination{
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  padding: 30px;
 }

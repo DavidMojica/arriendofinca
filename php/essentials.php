@@ -406,4 +406,5 @@ function create_inmoviliario($row, $sel_ciudad){
     echo '</div></div>';
 }
 
+
 ?>

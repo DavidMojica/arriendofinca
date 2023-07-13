@@ -39,7 +39,6 @@
                 <ul>
                 <li><input type="button" value="ayuda" class="button hbt"></li>
                 <?php
-                #Comprobador de inicio de sesión
                     session_start();
                     include('php/PDOconn.php');
                     $tp_user = 0;
