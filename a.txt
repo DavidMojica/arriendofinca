@@ -1,57 +1,121 @@
-<?php
-    #Comprobador de inicio de sesión
-    session_start();
-    include('PDOconn.php');
-    $tp_user = 0;
-    if(!isset($_SESSION['username'])){
-        header("Location: ../index.php");
-        exit;
-    }
-?>
 <!DOCTYPE html>
-<html lang="es" id="html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../extralibs/ToastNotify/ToastNotify.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/hyf.css">
     <link rel="stylesheet" href="../styles/add_mov.css">
-
-    <script src="../json/paises.json"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
     <script src="../javascript/toastNotifyTP1.js" defer></script>
-    <!-- <script src="../javascript/login.js" defer></script> -->
-    <!-- <script src="../javascript/register.js" defer></script> -->
-    <script src="../javascript/essentials.js"></script>
-    <script src="../javascript/add_moviliario.js" defer></script>
+    <script src="../javascript/essentials.js" defer></script>
+    <!-- <script src="../javascript/add_moviliario.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <title>Registrar Propiedad | ArriendoFinca</title>
+    <title>Agregar Moviliario | arriendofinca.com</title>
 </head>
-<body id="body">
+<body>
+<header>
+        <div class="logo">
+            <a href="index.php"><img src="../images/ArriendoFinca.png" alt="Logo" class="logo_img"></a>
+        </div>
+        <a id="menu-icon" class="menu-icon" onclick="onMenuClick()">
+            <i class="fa fa-bars fa-3x" id="var-icon"></i>
+        </a>
+
+        <div id="navigation-bar" class="nav-bar">
+            <a href="#">Contáctenos</a>
+            <a href="#">Sobre nosotros</a>
+            <a href="#">Cotiza tu pagina web</a>
+            <a href="#">Publica tu inmueble</a>
+
+        </div>
+        
+        <div class="header-right">
+            
+            <ul class="nav">
+                <li><img src="../images/icon_user.png" alt="">
+                <ul>
+                <li><input type="button" value="ayuda" class="button hbt"></li>
+                <?php
+                    session_start();
+                    include('../php/PDOconn.php');
+                    $tp_user = 0;
+                    if(!isset($_SESSION['username'])){
+                        echo "<li><a href='../php/loginPage.php'><input type='button' value='Iniciar Sesión' class='button hbt'></a> </li>";
+                    
+                    }
+                    else{
+                        $user = $_SESSION['username'];
+                        if(ctype_digit($user)){
+                            $tp = "documento";
+                            $tp_user = 1;
+                        }
+                        else{
+                            $tp = "email";
+                            $tp_user = 2;
+                        }
+
+                        $query = "SELECT nombre, documento FROM tbl_usuario where $tp = :user";
+                        $stmt = $pdo->prepare($query);
+
+                        if($tp_user == 1){
+                            $stmt->bindParam(':user', $user, PDO::PARAM_INT);
+                        }
+                        else{
+                            $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+                        }
+                        $stmt->execute();
+                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        if(count($result) > 0){
+                            $row = $result[0];
+                            $nombre_usuario = $row['nombre'];
+                            $documento = $row['documento'];
+                            // echo "Bienvenido, $nombre_usuario!";
+                            echo '<li> <form action="../php/logout.php" method="post">';
+                            echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
+                            echo '</form> </li>';
+
+                            echo "<li> <a class='a_ini_sesion' href='../php/userarea.php'><input type='button' class='button hbt' value='Area del usuario'></a> </li>";
+                        }
+                        else{ 
+                            echo 'Error al obtener el nombre del usuario.';
+                        }
+                    }
+            ?>
+                </ul>
+                </li>
+            </ul>
+        </div>
+    </header>
+
     <section>
-        <div id="formulary">
-            <div id="div_registro" class="card card--accent">
+    <div id="div_registro" class="card card--accent">
                 <div>
-                    <a href="userarea.php"><img src="../images/back.png" alt="back.png" id="btn_login_open"></a>
+                    <img src="../images/back.png" alt="back.png" id="btn_login_open">
                 </div>
             
                 <a href="../index.php" id="ref_img"><img src="../images/ArriendoFinca.png" alt="Logo" class="logo_img"></a>
+                <h2>Crea tu cuenta en 4 simples pasos</h2>
                 <form action="" method="" onsubmit="return false">
-                <h2 class="wrap">Inscribe tu propiedad en 4 pasos!</h2>
-                    
-                <div class="f_content">
-                        <div class="paso">
+
+                <div class="div_info_p1">
+                        
+                    <div class="paso">
+                        <p>Registre su inmoviliario en 4 sensillos pasos!</p>
                         <p>Paso 1: Información general del inmueble</p>
                         <div>
                             <span>Mi propiedad es para: </span>
-                            <select name="sel_arriendo_venta" id="sel_arriendo_venta" class="formulario">
+                            <select name="sel_arriendo_venta" id="sel_arriendo_venta">
                                 <option value="1">Arrendar</option>
                                 <option value="2">Vender</option>
                             </select>
                         </div>
                         <div>
                             <span>Tipo de propiedad:     </span>
-                            <select name="add_tipo" id="add_tipo" class="formulario">
+                            <select name="add_tipo" id="add_tipo">
                             <option value="default">Seleccione una opción...</option>
                             <?php
                                 include('essentials.php');
@@ -62,8 +126,9 @@
                             ?>
                             </select>
                         </div>
-                        <input type="text" id="precio" name="precio" placeholder="Precio" class="formulario">
-                        <input type="text" name="direccion" id="direccion" placeholder="Dirección" class="formulario">
+                        <input type="text" id="precio" name="precio" placeholder="Precio" class="custom-input">
+                        <input type="text" name="direccion" id="direccion" placeholder="Dirección" class="custom-input">
+                        
                     </div>
                         
                     <div id="paso_2" class="paso">
@@ -71,8 +136,8 @@
                         <span>Seleccione el pais, estado y municipio del inmueble</span>
                         <div>
                             <span>Pais</span> <br>
-                            <select name="add_pais" id="add_pais" class="formulario">
-                                <option value='default'>Seleccione un país...</option>
+                            <select name="add_pais" id="add_pais">
+                                <option value='defalult'>Seleccione un país...</option>
                                 <?php
                                 $result = get_paises();
                                 foreach($result as $row){
@@ -83,11 +148,11 @@
                         </div>
                         <div>
                             <span>Departamento - Estado</span> <br>
-                            <select name="add_departamento" id="add_departamento" class="formulario" disabled></select>
+                            <select name="add_departamento" id="add_departamento" disabled></select>
                         </div>
                         <div>
                             <span>Municipio</span> <br>
-                            <select name="add_ciudad" class="formulario" id="add_ciudad" disabled></select>
+                            <select name="add_ciudad" id="add_ciudad" disabled></select>
                         </div>
                     </div>
                         
@@ -95,24 +160,24 @@
                         <p>Paso 3: Información adicional del inmueble</p>
                         <div>
                             <span>Area del inmueble (en m2):</span>
-                            <input type="text" id="area" class="formulario">
+                            <input type="text" id="area">
                         </div>
                         <div>
                             <span>Número de Habitaciones:</span>
-                            <input type="text" name="" id="add_habitaciones" class="formulario">
+                            <input type="text" name="" id="add_habitaciones">
                         </div>
                         <div>
                             <span>Número de baños</span>
-                            <input type="text" name="" id="add_banos" class="formulario">
+                            <input type="text" name="" id="add_banos">
                         </div>
                         <div id="area_tp2">
                             <span>Area construida (m2):</span>
-                            <input type="text" name="" id="add_area_construida" class="formulario">
+                            <input type="text" name="" id="add_area_construida">
                         </div>
                         
                         <span>Describa su propiedad</span> <br>
                         <!-- finca -->
-                        <div class="form_prop" >
+                        <div class="form_prop">
                             <h3>Finca</h3>
                             <p>Sugerencia para descripcion: Especifique si la finca es de recreo o de produccion, metros cuadrados, habitaciones, si cuenta con parqueadero, wifi, luz, agua etc.. etc..</p>
                         </div>
@@ -158,29 +223,28 @@
                             <h3>Hotel</h3>
                             <p>Sugerencia para descripcion: Especifique el tamaño aproximado del cuarto, los servicios que el hotel ofrece etc...</p>
                         </div>
-                        <textarea name="prop_description" id="prop_description" class="formulario"></textarea>
+                        <textarea name="prop_description" id="prop_description"></textarea>
                     </div>
 
                     <div id="paso_4" class="paso">
-                    <div class="add_imgs" >
+                        <div class="add_imgs" >
                             <p>Paso 4: Añada imágenes</p>
                             <h3>Suba fotos de la propiedad (que no superen los 5mb):</h3>
                             
-                            <input type="file" name="add_fotos" id="add_fotos" class="upload_fotos" multiple class="formulario">
+                            <input type="file" name="add_fotos" id="add_fotos" class="upload_fotos" multiple>
                             <a href="userarea.php"><input type="button" value="Cancelar"></a>
+                            <input type="button" value="Registrar propiedad" id="btn_regis_prop">
                         </div>
                     </div>
+
                     <div class="pagination">
                         <button id="atras">Atrás</button>
                         <button id="siguiente">Siguiente</button>
-                        <button id="btn_regis_prop">Registrar propiedad</button>
+                        <button id="reg_btn_registrarme">Registrarme</button>
                     </div>
-
-                </div>
-
                 </form>
             </div>
-        </div>
     </section>
+</div>
 </body>
 </html>

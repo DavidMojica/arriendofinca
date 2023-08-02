@@ -52,13 +52,19 @@
             $id_edit_municipio   = trim($_POST['id_edit_municipio']);
             $edit_descripcion    = trim($_POST['edit_descripcion']);
             $id_inmoviliario     = trim($_POST['id_inmoviliario']);
+            $edit_area           = trim($_POST['edit_area']);
+            $edit_habitaciones   = trim($_POST['edit_habitaciones']);
+            $edit_area_construida = trim($_POST['edit_area_construida']);
+            $edit_banos          = trim($_POST['edit_banos']);
 
             
             if($id_edit_municipio != 0){
                 $query = "UPDATE tbl_inmueble SET id_tipo_inmueble = :edit_tipo_inmueble, 
                 arriendo_o_venta = :edit_arriendo_venta, precio = :edit_precio, 
                 id_municipio_ubicacion = :edit_id_municipio, direccion = :edit_direccion, 
-                descripcion = :edit_descripcion WHERE tbl_inmueble.id_inmueble = :id_inmueble
+                descripcion = :edit_descripcion, area = :edit_area, habitaciones = :edit_habitaciones,
+                area_construida = :edit_area_construida, banos = :edit_banos
+                WHERE tbl_inmueble.id_inmueble = :id_inmueble
                 AND cedula_dueño = :documento";
 
                 $stmt = $pdo->prepare($query);
@@ -70,6 +76,11 @@
                 $stmt->bindParam(':edit_id_municipio', $id_edit_municipio, PDO::PARAM_INT);
                 $stmt->bindParam(':id_inmueble', $id_inmoviliario, PDO::PARAM_INT);
                 $stmt->bindParam(':documento', $documento, PDO::PARAM_INT);
+                $stmt->bindParam(':edit_area', $edit_area,PDO::PARAM_INT);
+                $stmt->bindParam(':edit_habitaciones', $edit_habitaciones, PDO::PARAM_INT);
+                $stmt->bindParam(':edit_area_construida',$edit_area_construida, PDO::PARAM_INT);
+                $stmt->bindParam(':edit_banos', $edit_banos, PDO::PARAM_INT);   
+                
                 try {
                     if ($stmt->execute()) {
                         return_Response(true, "Inmueble actualizado");
@@ -90,7 +101,9 @@
                 $query = "UPDATE tbl_inmueble SET id_tipo_inmueble = :edit_tipo_inmueble, 
                 arriendo_o_venta = :edit_arriendo_venta, precio = :edit_precio, 
                 direccion = :edit_direccion, 
-                descripcion = :edit_descripcion WHERE tbl_inmueble.id_inmueble = :id_inmueble 
+                descripcion = :edit_descripcion, area = :edit_area, habitaciones = :edit_habitaciones,
+                area_construida = :edit_area_construida, banos = :edit_banos
+                WHERE tbl_inmueble.id_inmueble = :id_inmueble 
                 AND cedula_dueño = :documento";
                
                $stmt = $pdo->prepare($query);
@@ -101,6 +114,10 @@
                 $stmt->bindParam(':edit_descripcion', $edit_descripcion, PDO::PARAM_STR);
                 $stmt->bindParam(':id_inmueble', $id_inmoviliario, PDO::PARAM_INT);
                 $stmt->bindParam(':documento', $documento, PDO::PARAM_INT);
+                $stmt->bindParam(':edit_area', $edit_area,PDO::PARAM_INT);
+                $stmt->bindParam(':edit_habitaciones', $edit_habitaciones, PDO::PARAM_INT);
+                $stmt->bindParam(':edit_area_construida',$edit_area_construida, PDO::PARAM_INT);
+                $stmt->bindParam(':edit_banos', $edit_banos, PDO::PARAM_INT);   
                 try {
                     if ($stmt->execute()) {
                         return_Response(true, "Inmueble actualizado");
@@ -109,12 +126,13 @@
                     }
                 } catch (PDOException $e) {
                     if ($e->errorInfo[1] === 1452) {
-                        return_Response(false, "Usted ha modificado los valores. <br> Recargue la página y vuelva a llenar el formulario.");
+                        return_Response(false, "Error de restricción de clave externa: " . $e->errorInfo[2]);
                     } else {
-                        return_Response(false, "Error desde el servidor: ");
+                        return_Response(false, "Error desde el servidor: pdo " . $e->getMessage());
                     }
+                
                 } catch (Exception $e) {
-                    return_Response(false, "Error desde el servidor: ");
+                    return_Response(false, $e->getMessage());
                 }
             }
         }

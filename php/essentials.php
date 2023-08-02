@@ -185,6 +185,10 @@ function get_detalles_propiedad_PDOQUERY($query, $id_inmoviliario){
             $descripcion      = $row['descripcion'];
             $id_municipio     = $row['id_municipio_ubicacion'];
             $id_tipo_inmueble = $row['id_tipo_inmueble'];
+            $area             = $row['area'];
+            $habitaciones     = $row['habitaciones'];
+            $banos            = $row['banos'];
+            $area_construida  = $row['area_construida'];
 
             #---Obtener el nombre del tipo de inmueble---#
             $query = "SELECT * FROM tbl_tipo_inmueble WHERE id_tipo_inmueble = :id_tipo_inmueble";
@@ -211,7 +215,11 @@ function get_detalles_propiedad_PDOQUERY($query, $id_inmoviliario){
                 'direccion'     => $direccion,
                 'descripcion'   => $descripcion,
                 'tipo_inmueble' => $nombre_tipo_inmueble,
-                'ubicacion'     => get_nombres_ubicacion_PDOQUERY($stmt)
+                'ubicacion'     => get_nombres_ubicacion_PDOQUERY($stmt),
+                'area'          => $area,
+                'habitaciones'  => $habitaciones,
+                'banos'         => $banos,
+                'area_construida' => $area_construida
             ); 
         }
         else return array(
@@ -220,7 +228,11 @@ function get_detalles_propiedad_PDOQUERY($query, $id_inmoviliario){
             'direccion'     => "No se pudo obtener",
             'descripcion'   => "No se pudo obtener",
             'tipo_inmueble' => "No se pudo obtener",
-            'ubicacion'     => get_nombres_ubicacion_PDOQUERY($stmt)
+            'ubicacion'     => get_nombres_ubicacion_PDOQUERY($stmt),
+            'area'          => "No se pudo obtener",
+            'habitaciones'  => "No se pudo obtener",
+            'banos'         => "No se pudo obtener",
+            'area_construida' => "No se pudo obtener"
         ); 
     }
     else return array(
@@ -229,7 +241,11 @@ function get_detalles_propiedad_PDOQUERY($query, $id_inmoviliario){
         'direccion'     => "No se pudo obtener",
         'descripcion'   => "No se pudo obtener",
         'tipo_inmueble' => "No se pudo obtener",
-        'ubicacion'     => get_nombres_ubicacion_PDOQUERY($stmt)
+        'ubicacion'     => get_nombres_ubicacion_PDOQUERY($stmt),
+        'area'          => "No se pudo obtener",
+        'habitaciones'  => "No se pudo obtener",
+        'banos'         => "No se pudo obtener",
+        'area_construida' => "No se pudo obtener"
     ); 
 }
 
@@ -385,14 +401,14 @@ function create_inmoviliario($row, $sel_ciudad){
     #Details
     ?>
     <div class="div_extra_info">
-        <ul id="info_list">
+        <ul class="info_list">
         <?php 
             $prop_area_construida = (strlen($prop_area_construida)>0) ? $prop_area_construida : "No especificado";
             if($id_tipo_inmueble != 1 && $id_tipo_inmueble != 3){
             echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> ";
             }
             else{
-                echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> <li> <span> Área construida (m2): </span> <p> ".$prop_area_construida." </p> </li> ";
+                echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Área construida (m2): </span> <p> ".$prop_area_construida." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li>  ";
             }
         ?>  
         </ul>

@@ -25,6 +25,8 @@
     place-items: center;
 }
 
+
+
 .nav-bar{
     margin: auto;
 }
@@ -65,7 +67,10 @@ header {
         gap: 10px;
         justify-content: center;
         text-align: center;
-        position: static;
+        position: relative  ;
+    }
+    .header-right{
+        margin: 0;
     }
     #var-icon{
         display: block;
@@ -78,9 +83,11 @@ header {
         width: 100%;
         background-color: var(--bgcolor);
         text-align: center;
+        z-index: 150;
       }
       .nav-bar.responsive {
         display: block;
+        z-index: 150;
       }
     
       .nav-bar a {
@@ -96,7 +103,9 @@ header {
     .logo img {
         max-width: 150px;
     }
-
+    #navigation-bar{
+        z-index: 200;
+    }
     #div_inicio_sesion,
     #div_ayuda {
         display: block;

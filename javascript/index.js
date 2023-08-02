@@ -2,7 +2,6 @@ const sel_pais = document.getElementById('sel_pais');
 const sel_estado = document.getElementById('sel_estado');
 const sel_ciudad = document.getElementById('sel_ciudad');
 
-
 var pais_activo = 0;
 var depto_activo = 0;
 
@@ -21,9 +20,3 @@ sel_estado.addEventListener('change', function(){
     AJAX_ESTADO_CHANGE(sel_ciudad, depto_activo, 'php/dynamic_cboxes.php');
 });
 
-function onMenuClick() {
-    var navbar = document.getElementById("navigation-bar");
-    var responsive_class_name = "responsive";
-
-    navbar.classList.toggle(responsive_class_name);
-}

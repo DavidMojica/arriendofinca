@@ -102,6 +102,7 @@ body {
 }
 
 @media (max-width: 768px) {
+  
     #div_info{
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -117,6 +118,9 @@ body {
         width: 90%;
         height: 90%;
         overflow: auto;
+    }
+    #clicker{
+      z-index: 150;
     }
 }
 
@@ -286,7 +290,39 @@ ul, ol{
 
 
 .nav img{
-  border: solid 2px black;
+  border: solid 2px rgb(255, 255, 255);
   border-radius: 3em;
   max-width: 75px;
+}
+
+.username{
+  color: white;
+  font-weight: 700;
+  font-size: larger;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.swiper-wrapper{
+  max-width: 350px;
 }

@@ -23,19 +23,17 @@
         <a id="menu-icon" class="menu-icon" onclick="onMenuClick()">
             <i class="fa fa-bars fa-3x" id="var-icon"></i>
         </a>
-
         <div id="navigation-bar" class="nav-bar">
-            <a href="#">Contáctenos</a>
-            <a href="#">Sobre nosotros</a>
-            <a href="#">Cotiza tu pagina web</a>
-            <a href="#">Publica tu inmueble</a>
-
+            <a href="#" class="button">Contáctenos</a>
+            <a href="#" class="button">Sobre nosotros</a>
+            <a href="#" class="button">Cotiza tu pagina web</a>
+            <a href="#" class="button">Publica tu inmueble</a>
         </div>
         
         <div class="header-right">
             
             <ul class="nav">
-                <li><img src="images/icon_user.png" alt="">
+                <li id="clicker"><img src="images/icon_user.png" alt="" >
                 <ul>
                 <li><input type="button" value="ayuda" class="button hbt"></li>
                 <?php
@@ -101,19 +99,19 @@
         <nav class="busqueda" id="busqueda">
             <div class="registrar">
             </div> 
-            <form action="php/val_busqueda.php" method="POST">
+            <form action="php/search.php?page=1&s_page=1" method="GET" id="search_form">
                 <h2>Busca tu inmueble ideal</h2>
                 <div id="busquedas_1">
                     <div id="div_select" class="busquedas it1">
                         <span>Busco para</span>
-                        <select name="sel_arriendo_venta" id="sel_arriendo_venta">
+                        <select name="av" id="sel_arriendo_venta">
                             <option value="1">Arrendar</option>
                             <option value="2">Comprar</option>
                         </select>
                     </div>
                     <div id="div_categoria" class="busquedas it1">
                         <span>Categoría</span>
-                        <select name="sel_categoria" id="sel_categoria">
+                        <select name="categoria" id="sel_categoria">
                             <option value="1">Fincas</option>
                             <option value="2">Cabañas</option>
                             <option value="3">Lotes</option>
@@ -129,7 +127,7 @@
                 <div class="busquedas2">
                     <p><b>Seleccione la ubicacion del inmueble</b></p>
                     <div id="div_pais" class="busquedas it1">
-                        <select name="sel_pais" id="sel_pais">
+                        <select name="pais" id="sel_pais">
                             <option value="default">Seleccione un pais...</option>        
                             <?php
                                 include('php/essentials.php');
@@ -141,12 +139,12 @@
                         </select>
                     </div>
                     <div id="div_estado" class="busquedas it1">
-                        <select name="sel_estado" id="sel_estado" disabled>
+                        <select name="estado" id="sel_estado" disabled>
                             <option value="default">Seleccione un departamento...</option>
                         </select>
                     </div>
                     <div id="div_ciudad" class="busquedas it1" disabled>
-                        <select name="sel_ciudad" id="sel_ciudad" disabled>
+                        <select name="ciudad" id="sel_ciudad" disabled>
                         <option value="default">Seleccione una ciudad...</option>
                         </select>
                     </div>
@@ -159,14 +157,10 @@
                         <span>Buscar sólo inmuebles certificados por arriendofinca.com</span>
                     </label>
                 </div>
-                <!-- <div id="div_check_promocion" class="busquedas">
-                    <label class="checkbox">
-                        <input type="checkbox" name="chk_promocion" id="chk_promocion">
-                        <span class="checkmark"></span>
-                        <span>Buscar sólo promociones</span>
-                    </label>
-                </div> -->
-                <a href="php/val_busqueda.php"><input type="submit" value="Buscar" class="button"> </a>
+                <input type="hidden" name="page" value="1">
+                <input type="hidden" name="s_page" value="1">
+
+                <input type="submit" value="Buscar" class="button">
             </form>
         </nav>
         <div id="div_info">

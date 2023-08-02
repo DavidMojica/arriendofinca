@@ -5,11 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../extralibs/ToastNotify/ToastNotify.css">
-<link rel="stylesheet" href="../styles/hyf.css">
-<link rel="stylesheet" href="../styles/styles.css">
-<link rel="stylesheet" href="../styles/userarea.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-<script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
+    <link rel="stylesheet" href="../styles/hyf.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/userarea.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
     <script src="../javascript/toastNotifyTP1.js" defer></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="../javascript/essentials.js" defer></script>
@@ -22,7 +23,18 @@
         <img src="../images/ArriendoFinca.png" alt="Logo" class="logo_img">
         </div>
         <!-- Si la sesion no está iniciada, redirige al index. Si está iniciada, crea un botón de cerrar sesión y obtiene el nombre del usuario -->
-        
+        <div>
+            <a id="menu-icon" class="menu-icon" onclick="onMenuClick()">
+                <i class="fa fa-bars fa-3x" id="var-icon"></i>
+            </a>
+            <div id="navigation-bar" class="nav-bar">
+                <a href="#" class="button">Contáctenos</a>
+                <a href="#" class="button">Sobre nosotros</a>
+                <a href="#" class="button">Cotiza tu pagina web</a>
+                <a href="#" class="button">Publica tu inmueble</a>
+            </div>
+        </div>
+
         <div class="header-right">
             <ul class="nav">
                 <li><img src="../images/icon_user.png" alt="">
@@ -58,6 +70,8 @@
                                 }
                                 $stmt->execute();
                                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                 
+
 
                                 if(count($result) > 0){
                                     #Obtencion de datos
@@ -78,41 +92,191 @@
                         
                     </ul>
                 </li>
-                <?php echo '<li> <p>'. $nombre_usuario .'</p> </li>'; ?>
+                <?php echo '<li> <p class="username">'. $nombre_usuario .'</p> </li>'; ?>
             </ul>
         </div>
+        
+
             
     </header>
     <div id="midpage">
         <div id="nav_bar">
             <h2 id="imv_title">Tus inmoviliarios: </h2>
             <div id="nav_bar_controls">
-                <a href="add_moviliario.php"><input type="button" value="+ Añadir" class="button hbt"></a>
-                <input type="button" value="Filtrar" class="button hbt">
+                <ul class="nav">
+                    <li><a href="add_moviliario.php"><input type="button" value="+ Añadir" class="button hbt"></a></li>
+                    <li><a href="userarea.php"><input type="button" value="Borrar filtros" class="button hbt"></a></li>
+                    <li><input type="button" value="Filtrar" class="button hbt">
+                        <ul>
+                            <div id="filter_div">
+                                <h3>Filtrar</h3>
+                                <form action="userarea.php" method="GET">
+                                    <select name="f_tipo" id="filter_tipo">
+                                        <option value="null">Tipo inmoviliario...</option>
+                                        <option value="1">Fincas</option>
+                                        <option value="2">Cabañas</option>
+                                        <option value="3">Lotes</option>
+                                        <option value="4">Casas</option>
+                                        <option value="5">Apartamentos</option>
+                                        <option value="6">Oficinas</option>
+                                        <option value="7">Consultorios</option>
+                                        <option value="8">Hotel</option>
+                                    </select>
+
+                                    <select name="f_aov" id="filter_tipo">
+                                        <option value="null">Tipo transaccion...</option>
+                                        <option value="1">Arriendo</option>
+                                        <option value="2">Venta</option>
+                                    </select>
+
+                                    <div id="div_filter_lugar">
+                                        <div id="div_pais" class="busquedas it1">
+                                            <select name="f_pais" id="sel_pais">
+                                                <option value="null">Seleccione un pais...</option>        
+                                                <?php
+                                                include_once('essentials.php');
+                                                    $result = get_paises();
+                                                    foreach($result as $row){
+                                                        echo "<option value='".$row['id_pais']."'>".$row['nombre_pais']."</option>";
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div id="div_estado" class="busquedas it1">
+                                            <select name="f_estado" id="sel_estado" disabled>
+                                                <option value="null">Seleccione un departamento...</option>
+                                            </select>
+                                        </div>
+                                        <div id="div_ciudad" class="busquedas it1" disabled>
+                                            <select name="f_ciudad" id="sel_ciudad" disabled>
+                                            <option value="null">Seleccione una ciudad...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    
+                                    <input type="text" name="f_id" id="" placeholder="ID del inmueble">
+                                    
+                                    <br>
+                                    <div id="div_check_certificado" class="busquedas">
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="chk_certificados" id="chk_certificados">
+                                        <span class="checkmark"></span>
+                                        <span>Sólo inmuebles certificados</span>
+                                    </label>
+                                    <div>
+                                    <input type="submit" value="Filtrar" class="button">
+
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
 
         <div id="div_inmoviliarios">
             <?php
             include('PDOconn.php');
-            include('essentials.php');
             #Cantidad de items que se desea aparecer por pagina
             $numero_items_por_pagina = 9;
+            $filter_complement = "";
+            $join_complement   = "";
+            $f_tipo = "";
+            $f_aov  = "";
+            
+            $f_pais = "";
+            $f_estado = "";
+            $f_ciudad = "";
+            $f_id     = "";
+
+            if(isset($_GET['f_tipo']) && $_GET['f_tipo'] !== 'null'){
+                 
+                $f_tipo = $_GET['f_tipo'];
+                $filter_complement .= " AND id_tipo_inmueble = :f_tipo ";
+            }
+            
+            if(isset($_GET['f_aov']) && $_GET['f_aov'] !== 'null'){
+                 
+                $f_aov         = $_GET['f_aov'];
+                $filter_complement .= " AND arriendo_o_venta = :f_aov ";
+            }
+            
+            // if(isset($_GET['f_pais']) && $_GET['f_pais'] !== 'null'){
+            //      
+            //     $f_pais        = $_GET['f_pais'];
+            // }
+            
+            // if(isset($_GET['f_estado']) && $_GET['f_estado'] !== 'null'){
+            //      
+            //     $f_estado        = $_GET['f_estado'];
+            // }
+
+            if(isset($_GET['f_ciudad']) && $_GET['f_ciudad'] !== 'null'){
+                 
+                $f_ciudad        = $_GET['f_ciudad'];
+                $filter_complement .= " AND id_municipio_ubicacion = :f_ciudad ";
+            }
+
+            if(isset($_GET['f_id']) && $_GET['f_id'] !== ''){
+                 
+                $f_id        = $_GET['f_id'];
+                $filter_complement .= " AND id_inmueble = :f_id ";
+            }
+
+            if(isset($_GET['chk_certificados']) && $_GET['chk_certificados'] == 'on'){
+                 
+                $chk_certificados       = $_GET['chk_certificados'];
+                $filter_complement .= " AND id_certificado IS NOT NULL ";
+            }
+
+            
             // Obtener el número de página actual
             $page   = isset($_GET['page']) ? $_GET['page'] : 1; #pagina actual
             $offset = ($page - 1) * $numero_items_por_pagina;
-            $total_query = "SELECT * FROM tbl_inmueble WHERE cedula_dueño = :documento";
+            $total_query = "SELECT * FROM tbl_inmueble WHERE cedula_dueño = :documento". $filter_complement ."";
             $t_stmt = $pdo->prepare($total_query);
             $t_stmt->bindParam(':documento', $documento,PDO::PARAM_INT);
+            if($f_tipo !== ""){
+                $t_stmt->bindParam(':f_tipo', $f_tipo, PDO::PARAM_INT);
+            }
+            if($f_aov !== ""){
+                $t_stmt->bindParam(':f_aov',$f_aov,PDO::PARAM_INT);
+            }
+            if($f_ciudad !== ""){
+                $t_stmt->bindParam(':f_ciudad',$f_ciudad,PDO::PARAM_INT);
+            }
+            if($f_id !== ""){
+                $t_stmt->bindParam(':f_id',$f_id,PDO::PARAM_INT);
+            }
             $t_stmt->execute();
             $numero_resultados = $t_stmt->rowCount();
 
+
+
             if($page > 0){
-                $query = "SELECT * FROM tbl_inmueble WHERE cedula_dueño = :documento LIMIT :offset, :lim";
+                $query = "SELECT * FROM tbl_inmueble WHERE cedula_dueño = :documento ". $filter_complement ." LIMIT :offset, :lim";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(':documento', $documento,PDO::PARAM_INT);
                 $stmt->bindParam(':offset',$offset, PDO::PARAM_INT);
                 $stmt->bindParam(':lim',$numero_items_por_pagina, PDO::PARAM_INT);
+                if($f_tipo !== ""){
+                    $stmt->bindParam(':f_tipo', $f_tipo, PDO::PARAM_INT);
+                }
+                if($f_aov !== ""){
+                    $stmt->bindParam(':f_aov',$f_aov,PDO::PARAM_INT);
+                }
+                if($f_ciudad !== ""){
+                    $stmt->bindParam(':f_ciudad',$f_ciudad,PDO::PARAM_INT);
+                }
+                if($f_id !== ""){
+                    $stmt->bindParam(':f_id',$f_id,PDO::PARAM_INT);
+                }
+                
+
+
                 if($stmt->execute()){
                     if($stmt->rowCount() > 0){
                         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -194,37 +358,27 @@
                                         echo "La imagen no pudo ser cargada";
                                 }
                             }
-                            echo '<div class="swiper-button-prev"></div>
+                            echo '</div><div class="swiper-button-prev"></div>
                             <div class="swiper-button-next"></div>
-                            </div></div>';
+                            </div>';
                             } else {
                                 echo "El inmueble no posee imágenes";
                             }
                             ?>
-                            </div>
-                        <div class="div_extra_info">
-                            <ul id="info_list">
-                            <?php 
-                                if($id_tipo_inmueble != 1 && $id_tipo_inmueble != 3){
-                                echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> ";
-                                }
-                                else{
-                                    echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> <li> <span> Área construida (m2): </span> <p> ".$prop_area_construida." </p> </li> ";
-                                }
-                            ?>  
-                            </ul>
-                        </div>
+                            </div> <!--end imgs-->
                             <div class="inmoviliario_controls">
+                                <input type="button" value="Detalles" class="button">
                                 <form action="edit_mov.php" method="post">
                                     <input type="hidden" name="id_inmoviliario" value="<?php echo $id_inmueble; ?>">
-                                <input type="submit" class="button hbt" value="Editar inmueble">
+                                <input type="submit" class="button hbt" value="Editar">
                                 </form>
-                                <form action="certificacion.php" method="post">
+                                <!-- <form action="certificacion.php" method="post">
                                     <input type="hidden" name="id_inmoviliario" value="<?php echo $id_inmueble; ?>">
-                                    <input type="submit" class="button hbt" value="Certificar inmueble">
-                                </form>
-                        <input type="button" class="button hbt" value="Borrar" id="btn_inmoviliario_borrar" onclick="delete_mov(<?php echo $id_inmueble; ?>)">
-                            </div> </div></div>
+                                    <input type="submit" class="button hbt" value="Certificar">
+                                </form> -->
+                                <input type="button" class="button hbt" value="Borrar" id="btn_inmoviliario_borrar" onclick="delete_mov(<?php echo $id_inmueble; ?>)">
+                            </div> 
+                        </div></div>
                                 <?php
                             } 
                         }
@@ -287,42 +441,7 @@
         </div>
     </footer>
 
-<!-- Initialize Swiper -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-<script>
-    /****SWIPPER**** */
-document.addEventListener("DOMContentLoaded", function() {
-const swiper = new swiper('.mySwiper', {
-  // Optional parameters
-  direction: 'vertical',
-  loop: true,
 
-  // If we need pagination
-  pagination: {
-    el: '.swiper-pagination',
-  },
-
-  // Navigation arrows
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-
-  // And if we need scrollbar
-  scrollbar: {
-    el: '.swiper-scrollbar',
-  }
-});
-});
-
-function goToPrevStep() {
-    swiper.slidePrev();
-  }
-
-  function goToNextStep() {
-    swiper.slideNext();
-  }
-</script>
 
 </body>
 </html>

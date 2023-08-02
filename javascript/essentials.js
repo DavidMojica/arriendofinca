@@ -186,3 +186,11 @@ function AJAX_ESTADO_CHANGE(add_ciudad, depto_activo, url){
         }
     });
 }
+
+
+function onMenuClick() {
+    var navbar = document.getElementById("navigation-bar");
+    var responsive_class_name = "responsive";
+
+    navbar.classList.toggle(responsive_class_name);
+}

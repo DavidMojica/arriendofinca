@@ -25,8 +25,8 @@
 
 #html{
   /* background: linear-gradient(-45deg, #a77120, #e73c7e, #23a6d5, #23d5ab); */
-  background: linear-gradient(-45deg, #FFCC00, #9932CC, #FF4500, #FFFF00);
-  /* background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA); */
+  /* background: linear-gradient(-45deg, #FFCC00, #9932CC, #FF4500, #FFFF00); */
+  background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA);
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;
 	height: 100vh;
@@ -245,7 +245,7 @@ button + button {
   min-width: 122px;
 }
 #log_user{
-  background-image: url('../images/icon_user.png');
+  background-image: url('../images/icon_user_old.png');
   background-size: 24px;
 }
 
@@ -319,6 +319,43 @@ img{
 
 #reg_btn_registrarme{
   display: none;
+}
+
+@media (max-width: 768px) {
+  #html{
+    background: none;
+    overflow: hidden;
+  }
+  .card{
+    height: 100vh;
+    width: 100vw;
+    border: none;
+    box-shadow: none;
+  }
+  #formulary{
+    height: 100vh;
+  }
+  #div_login{
+    height: 100vh;
+    width: 100vw;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #div_registro{
+    height: 100vh;
+    width: 100vw;
+  }
+  #ref_img{
+    margin-bottom: 10dvw;
+  }
+  .button{
+    padding: 100px;
+  }
+  .wrap{
+    word-wrap: break-word;
+  }
 }
 
 

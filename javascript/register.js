@@ -57,16 +57,7 @@ atras.addEventListener('click', function(){
     }
 });
 
-siguiente.addEventListener('click', function(){
-    if(cont_pasos ==0)
-        validar_pasos(cont_pasos);
-    else if(cont_pasos == 1)
-        validar_pasos(cont_pasos);
-    else if(cont_pasos == 2)
-        validar_pasos(cont_pasos);
-    else if(cont_pasos == 3)
-        validar_pasos(cont_pasos);
-});
+
 
 function changeCard() {
     var card1 = document.getElementById("div_login");

@@ -3,22 +3,48 @@
 
 body{
   font-family: "Poppins",sans-serif;
+  /* background: linear-gradient(-45deg, #a77120, #e73c7e, #23a6d5, #23d5ab); */
+  background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
 }
 header{
   padding: 0;
 }
 .inmoviliario {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(3px);
-    min-height: 250px;
-    min-width: 300px;
-    padding: 20px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgb(251,245,248);
+  min-height: 250px;
+  min-width: 300px;
+  border-radius: 3em;
+  border: solid 3px #333;
+  padding: 15px;
+}
+.inmoviliario:hover{
+  box-shadow: 2px 2px 2px 2px;
+}
+.inmoviliario .button{
+  border-radius: 2em;
+  margin: 1%;
+
+}
+.logo_img{
+  margin-left: 50%;
+}
   
+.button{
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  width: 108px;
+}
   #div_inmoviliarios {
     display: grid;
     /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
@@ -45,9 +71,8 @@ header{
   }
   
   .inmoviliario_controls {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
   }
   
   .header_controls{
@@ -70,15 +95,19 @@ header{
   }
 li{
   text-align: center;
+  margin: 5px 0px 5px 0px;
 }
 #nav_bar {
   display: flex;
   align-items: center;
+  z-index: 50;
+  position: relative;
 }
 
 #nav_bar h2 {
   display: inline-block;
 }
+
 
 #nav_bar_controls {
   margin-left: auto;
@@ -89,4 +118,74 @@ li{
   justify-content:center;
   align-items: center;
   padding: 30px;
+}
+
+#filter_div{
+  position: relative;
+  box-shadow: 2px 0 2px black;
+  right: 180px;
+  padding: 3em;
+  border-radius: 1em 2em 1em 2em;
+  background-color: #DADADA;
+}
+
+
+@media (max-width: 768px) {
+  #div_inmoviliarios{
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  header{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    justify-content: center;
+    text-align: center;
+    position: relative  ;
+    width: 117%;
+  }
+  #menu-icon{
+    position: relative;
+    top: 75px;
+    left: 18px;
+  }
+
+  footer{
+    width: 105%;
+  }
+  .header-right{
+    margin: 0;
+  }
+  .logo img{
+    position: relative;
+    left: -60px;
+  }
+  .nav-bar.responsive {
+    display: block;
+    z-index: 150;
+  }
+
+  .nav-bar a {
+    display: block;
+  }
+  .menu-icon{
+    margin-top: 20%;
+  }
+}
+
+
+/*********ANIMATIONS************/
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
