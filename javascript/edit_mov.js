@@ -11,17 +11,18 @@ const edit_descripcion     = document.getElementById('edit_descripcion');
 const btn_edit_municipio   = document.getElementById('btn_edit_municipio');
 const div_edit_location    = document.getElementById('div_edit_location');
 const confirm_new_location = document.getElementById('confirm_new_location');
-const id_inmoviliario      = document.getElementById('id_inmoviliario');
 const edit_area            = document.getElementById('edit_area');
 const edit_habitaciones    = document.getElementById('edit_habitaciones');
 const edit_area_construida = document.getElementById('edit_area_construida');
 const edit_banos           = document.getElementById('edit_banos');
+const edit_add_fotos       = document.getElementById('edit_add_fotos');
+
 
 //--------------------------------------#
 //Dynamic combobox - change
 //--------------------------------------#
 edit_pais.addEventListener('change', function(){
-    pais_activo = edit_pai.value;
+    pais_activo = edit_pais.value;
     AJAX_PAIS_CHANGE(edit_estado, edit_municipio, pais_activo, '../php/dynamic_cboxes.php');
 });
 
@@ -30,6 +31,23 @@ edit_estado.addEventListener('change', function(){
     AJAX_ESTADO_CHANGE(edit_municipio, estado_activo, '../php/dynamic_cboxes.php');
 });
 
+//--------------------------------------#
+// DOM -- Verificar que ningún archivo pese más de 5mb.
+//--------------------------------------#
+edit_add_fotos.addEventListener('change', function(){
+    var files = edit_add_fotos.files;
+
+    var maxSize = 5 * 1024 * 1024; // 5 MB en bytes
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+
+        if (file.size > maxSize) {
+            alert(`El archivo ${file.name} excede el límite de tamaño (5Mb).`);
+            add_fotos.value = '';
+            return;
+        }
+    }
+})
 
 
 //--------------------------------------#
@@ -84,48 +102,54 @@ function borrar_imagen(id_imagen){
     })
 }
 
-edit_save.addEventListener('click', function(){
+function save(id_inmoviliario){
     let result = validaciones_general(edit_tipo_inmueble, edit_precio, edit_direccion, edit_descripcion,edit_area, edit_banos, edit_habitaciones, edit_area_construida);
-    let id_edit_municipio = 0;
-    console.log(id_inmoviliario.innerHTML);
+    if(result.auth){
 
-    // Verifica que el usuario confirme el cambio de la ubicacion del inmueble.
+    var formData = new FormData();
+    formData.append('edit_tipo_inmueble', edit_tipo_inmueble.value);
+    formData.append('edit_arriendo_venta', edit_arriendo_venta.value);
+    formData.append('edit_precio',edit_precio.value);
+    formData.append('edit_direccion',edit_direccion.value);
     if(confirm_new_location.checked){
-        id_edit_municipio = edit_municipio.value;
+        formData.append('id_edit_municipio', edit_municipio.value);
+        console.log(edit_municipio.value);
     }
-        if(result.auth){
-        $.ajax({
-            url: '../php/save.php',
-            type: 'POST',
-            data: {
-                edit_tipo_inmueble : edit_tipo_inmueble.value,
-                edit_arriendo_venta: edit_arriendo_venta.value,
-                edit_precio        : edit_precio.value,
-                edit_direccion     : edit_direccion.value,
-                id_edit_municipio  : id_edit_municipio,
-                edit_descripcion   : edit_descripcion.value,
-                id_inmoviliario    : id_inmoviliario.innerHTML,
-                edit_area          : edit_area.value,
-                edit_habitaciones  : edit_habitaciones.value,
-                edit_area_construida : edit_area_construida.value,
-                edit_banos         : edit_banos.value
-            },
-            success: function(response){
-                if(response.success){
-                    window.location.href = "../php/userarea.php";
-                }
-                else{
-                    createToastNotify(1,"Error al ejecutar la actualizacion", response.mensaje);
-                }
-            },
-            error: function(jqXHR, errorLog, NTXH){
-                console.log(jqXHR)
-                console.log(errorLog)
-                console.log(NTXH)
+    formData.append('edit_descripcion',edit_descripcion.value);
+    formData.append('id_inmoviliario', id_inmoviliario);
+    formData.append('edit_area',edit_area.value);
+    formData.append('edit_habitaciones',edit_habitaciones.value);
+    formData.append('edit_area_construida',edit_area_construida.value);
+    formData.append('edit_banos',edit_banos.value);
+    
+    var files = edit_add_fotos.files;
+    for (var i = 0; i < files.length; i++) {
+        formData.append('files[]', files[i]);
+    }
+
+    $.ajax({
+        url: '../php/save.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response){
+            if(response.success){
+                window.location.href = "../php/userarea.php";
             }
-        });
+            else{
+                createToastNotify(1,"Error al ejecutar la actualizacion", response.mensaje);
+            }
+        },
+        error: function (jqXHR, errorLog, errorThrown) {
+            console.log(jqXHR);
+            console.log(errorLog);
+            console.log(errorThrown);
+        }
+    });
     }
     else{
         createToastNotify(1,"Error en la edicion de la propiedad", result.mensaje);
     }
-});
+}
+

@@ -194,3 +194,33 @@ function onMenuClick() {
 
     navbar.classList.toggle(responsive_class_name);
 }
+
+function set_bgcolors(inmoviliario){
+    let inputHidden = inmoviliario.querySelector('.color');
+    console.log(inputHidden);
+    let color = inputHidden.value;
+    console.log(color);
+    inmoviliario.style.backgroundColor = color;
+}
+
+
+function modifyBorders(items, mn, mx, medida){
+    let l1 = getRandomInt(mn,mx), l2 = getRandomInt(mn,mx), l3 = getRandomInt(mn,mx), l4= getRandomInt(mn,mx);
+    for(let item of items){
+        item.style.transition = '2s';
+        item.style.borderRadius = `${l1}${medida} ${l2}${medida} ${l3}${medida} ${l4}${medida}`;
+    }
+}
+
+// ---------ARROWS------------ //
+/**
+ * Obtienes un número aleatorio entre el minimo (incluido) y el maximo (no incluido).
+ * @param {number} min 
+ * @param {number} max 
+ * @returns {number}
+ */
+var getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);       
+}

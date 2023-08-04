@@ -47,6 +47,7 @@ else{
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="../styles/hyf.css">
     <link rel="stylesheet" href="../styles/edit_mov.css">
+    <link rel="icon" href="images/ArriendoFincaOld.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
@@ -147,13 +148,19 @@ else{
     </header>
 
     <section>
+        <div class="publicidad">
+
+        </div>
+
+        <div>
         <div class="card">
         <h2>Editar Moviliario</h2>
         <p>ID del inmueble: <b id="id_inmoviliario"><?php echo $id_inmoviliario; ?></b> (no se puede editar el id del inmueble)</p>
         <hr>
-        <div class="editable">
+        <div class="grid_doble">
+            
             <label for="edit_tipo_inmueble">Tipo de inmueble: </label>
-            <select name="edit_tipo_inmueble" id="edit_tipo_inmueble">
+            <select name="edit_tipo_inmueble" id="edit_tipo_inmueble" class="formulario">
                 <option value="default">Seleccione una opción...</option>
                 <?php
                     $result = get_tipos_inmueble();
@@ -162,25 +169,22 @@ else{
                     }
                 ?>
             </select>
-        </div>
-        <div class="editable">
+            
             <label for="edit_arriendo_venta">Tipo de gestion</label>
-            <select name="edit_arriendo_venta" id="edit_arriendo_venta">
+            <select name="edit_arriendo_venta" id="edit_arriendo_venta" class="formulario">
                 <option value="1" <?php echo ($modo == "Arriendo") ? 'selected' : ''; ?>>Arriendo</option>
                 <option value="2" <?php echo ($modo == "Venta") ? 'selected' : ''; ?>>Venta</option>
             </select>
-            <br>
-        </div>
-        <div class="editable">
             <label for="edit_precio">Precio: </label>
-            <input type="text" name="edit_precio" id="edit_precio" value="<?php echo $precio ?>"> 
+            <input type="text" name="edit_precio" id="edit_precio" class="formulario" value="<?php echo $precio ?>"> 
+
         </div>
         <hr>
         <input type="button" value="Cambiar municipio de ubicación" id="btn_edit_municipio" class="button">
         <div id="div_edit_location">
             <p>Ubicacion actual:</p>
             <p><?php echo $nombre_municipio ?> - <?php echo $nombre_estado ?> -<?php  echo $nombre_pais?></p>
-            <select name="edit_pais" id="edit_pais" disabled>
+            <select name="edit_pais" id="edit_pais" disabled class="formulario">
                 <option value="default">Seleccione un país...</option>
                 <?php
                 $result = get_paises();
@@ -190,11 +194,11 @@ else{
                 ?>
             </select><br>
 
-            <select name="edit_estado" id="edit_estado" disabled>
+            <select name="edit_estado" id="edit_estado" disabled class="formulario" class="formulario">
                 <option value='default'>Seleccione un estado...</option>
             </select><br>
 
-            <select name="edit_municipio" id="edit_municipio" disabled>
+            <select name="edit_municipio" id="edit_municipio" disabled class="formulario" class="formulario">
                 <option value="default">Seleccione un municipio...</option>
             </select><br>
 
@@ -203,28 +207,28 @@ else{
         </div>
         <hr>
         <p>Detalles del inmueble</p>
-        <div id="div_details">
+        <div class="grid_doble">
             <span>Area (mts2)</span>
-            <input type="text" name="edit_area" id="edit_area" value="<?php echo $area ?>"> 
+            <input type="text" name="edit_area" id="edit_area" class="formulario" value="<?php echo $area ?>"> 
             <?php   
                 if($tipo_inmueble != 1 && $tipo_inmueble != 3){
                     echo '<span>Area construida (mts2)</span>
-                    <input type="text" name="edit_area_construida" id="edit_area_construida" value="'. $area_construida .'"> ';
+                    <input type="text" name="edit_area_construida" class="formulario" id="edit_area_construida" value="'. $area_construida .'"> ';
                 }
             ?>
             <span>Habitaciones</span>
-            <input type="text" name="edit_habitaciones" id="edit_habitaciones" value="<?php echo $habitaciones ?>">
+            <input type="text" name="edit_habitaciones" id="edit_habitaciones" class="formulario" value="<?php echo $habitaciones ?>">
             
             <span>Baños</span>
-            <input type="text" name="edit_banos" id="edit_banos" value="<?php echo $banos ?>">
+            <input type="text" name="edit_banos" id="edit_banos" class="formulario" value="<?php echo $banos ?>">
+            <p>Dirección</p>
+            <input type="text" name="edit_direccion" id="edit_direccion" class="formulario" value="<?php echo $direccion ?>">
 
         </div>
-        <hr>
-        <p>Dirección</p>
-        <input type="text" name="edit_direccion" id="edit_direccion" value="<?php echo $direccion ?>">
+
         <hr>
         <p>Descripción del inmueble</p>
-        <textarea name="edit_descripcion" id="edit_descripcion"><?php echo $descripcion ?></textarea>
+        <textarea name="edit_descripcion" class="formulario" id="edit_descripcion"><?php echo $descripcion ?></textarea>
         <hr>
         <h3>Imágenes</h3>
          <!-- Imagenes -->
@@ -286,10 +290,15 @@ else{
         </div> <!--end imgs-->
         
         <p>Añadir fotos</p>
-        <input type="file" name="Añadir fotos" id="Añadir fotos">
+        <input type="file" name="edit_add_fotos" id="edit_add_fotos" multiple>
         <hr>
         <a href="userarea.php"><input type="button" value="Cancelar" class="button"></a>
-        <input type="button" value="Guardar cambios" id="edit_save" class="button">
+        <input type="button" value="Guardar cambios" id="edit_save" class="button" onclick="save(<?php echo $id_inmoviliario ?>)">
+        </div>
+        </div>
+
+        <div class="publicidad">
+
         </div>
     </section>
     <footer>

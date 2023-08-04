@@ -8,29 +8,31 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-  background: #ff6600;
+    background: url('https://images.alphacoders.com/837/837181.jpg');
+    background-size: 150% 150%;
+    animation: gradient 165s ease infinite;
+    height: 100vh;
 
 }
 
 .busquedas{
     display:  grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2%;
+    grid-template-columns: 1fr 1fr;
+    gap: 1%;
     
 }
-#midpage{
-  margin: 20px auto;
-  max-width: 1200px;
-  padding: 0 20px;
-  min-height: 60vh;
+
+h2, h3{
+  color: #3A3F87;
+  text-shadow: 2px 2px 3px #c7c7c7;
 }
+ /* cafe bonito 967f70  verde */
 
 .inmoviliario{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(3px);
   min-height: 305px;
   min-width: 420px;
@@ -64,6 +66,20 @@ body {
 #imv_title{
   color: white;
 }
+.mid_top{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 14px 0 14px 0;
+}
+
+#back_btn{
+  border-radius: 2em 7px 7px 2em;
+  background-image: url('../images/icon_double_left.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position-x: 5%;
+  padding: 4dvh 7dvw;
+}
 
 .info_list{
   list-style: none;
@@ -76,17 +92,43 @@ li{
 text-align: center;
 }
 
+.info_hidden{
+  display: none;
+}
 
+.info_hidden.mostrar{
+  display: block;
+}
 .btn_contactar{
   width: 100%;
   height: 40px;
-  background-color: rgba(255, 255, 255, 0.0);
-  backdrop-filter: blur(3px);
+  margin-top: .5%;
+  margin-bottom: .5%;
 }
 .btn_contactar:hover{
   cursor: pointer;
 }
+.results_div{
+  text-align: center;
+}
 
+.div_certificado{
+  background-color: gold;
+  padding: 10px;
+  border-radius: 1.5em;
+  background-image: url(../images/icon_star.png);
+  background-size: 42px;
+  border: 4px #fff dotted;
+}
+.text_certificado{
+  color: #fff;
+  text-shadow: #333 2px 2px;
+
+}
+
+.pagination{
+  margin: 3.5%;
+}
 
 @media (max-width: 768px){
   .busquedas{
@@ -99,6 +141,21 @@ text-align: center;
     padding: 3em;
   }
 
+}
+
+
+/*********ANIMATIONS************/
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 

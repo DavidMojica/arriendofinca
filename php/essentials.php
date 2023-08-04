@@ -297,7 +297,10 @@ function comprobar_sesion_valida($ses){
     );
 }
 
-function create_inmoviliario($row, $sel_ciudad){
+/**
+ * Construye gráficamente el inmoviliario.
+ */
+function create_inmoviliario($row){
     include('PDOconn.php');
     echo "<div class='inmoviliario'>";
     #obtención de datos
@@ -311,6 +314,8 @@ function create_inmoviliario($row, $sel_ciudad){
     $prop_habitaciones    = $row['habitaciones'];
     $prop_banos           = $row['banos'];
     $prop_area_construida = $row['area_construida'];
+    $cedula_dueno         = $row['cedula_dueño'];
+    $certificado          = $row['id_certificado'];
 
     $query = "SELECT tipo_inmueble FROM tbl_tipo_inmueble WHERE id_tipo_inmueble = :id_tipo_inmueble";
     $stmt = $pdo->prepare($query);
@@ -343,7 +348,10 @@ function create_inmoviliario($row, $sel_ciudad){
     
     // Crear un div para cada fila
     echo '<div class="resultado">';
-    echo '<h3>'. $tipo_inmueble .' en '.$tipo_aov .'</h3>';
+    if($certificado !== null){
+        echo '<div class="div_certificado"><h3 class="text_certificado">INMUEBLE CERTIFICADO</h3></div>';
+    }
+    echo '<h3>'. strtoupper($tipo_inmueble) .' EN '.strtoupper($tipo_aov)  .'</h3>';
     #imagenes
     echo "<div class='inmoviliario_imgs'>";
             
@@ -380,9 +388,9 @@ function create_inmoviliario($row, $sel_ciudad){
         }
     }
 
-    echo '<div class="swiper-button-prev"></div>
+    echo '</div><div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
-    </div></div>';
+    </div>';
     } else {
         echo "El inmueble no posee imágenes";
     }
@@ -395,31 +403,75 @@ function create_inmoviliario($row, $sel_ciudad){
         echo '<p>Precio de venta: ' . $precio . '</p>';
 
     #Ubicacion
-    echo '<p>Municipio de Ubicación: ' . $nombre_municipio . ' - '.$nombre_estado.' - '. $nombre_pais.'</p>';
+    echo '<p>Municipio: ' . $nombre_municipio . ' - '.$nombre_estado.' - '. $nombre_pais.'</p>';
     
-    
-    #Details
     ?>
-    <div class="div_extra_info">
-        <ul class="info_list">
-        <?php 
-            $prop_area_construida = (strlen($prop_area_construida)>0) ? $prop_area_construida : "No especificado";
-            if($id_tipo_inmueble != 1 && $id_tipo_inmueble != 3){
-            echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> ";
-            }
-            else{
-                echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Área construida (m2): </span> <p> ".$prop_area_construida." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li>  ";
-            }
-        ?>  
-        </ul>
-    </div>
+    <div class="info_hidden">
+        <div class="div_extra_info">
+            <ul class="info_list">
+            <?php 
 
-    <?php
+                $prop_area_construida = (strlen($prop_area_construida)>0) ? $prop_area_construida : "No especificado";
+                if($id_tipo_inmueble != 1 && $id_tipo_inmueble != 3){
+                echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li> ";
+                }
+                else{
+                    echo  "<li> <span> Área (m2): </span> <p> ".$prop_area." </p> </li> <li> <span> Área construida (m2): </span> <p> ".$prop_area_construida." </p> </li> <li> <span> Habitaciones:  </span> <p>".$prop_habitaciones." </p> </li>   <li> <span> Baños: </span> <p> ".$prop_banos." </p> </li>  ";
+                }
+            ?>  
+            </ul>
+        </div>
 
-    #echo '<p>Dirección: ' . $direccion . '</p>';
-    #echo '<p>Descripción: ' . $descripcion . '</p>';
-    echo '<input type="button" value="Contactar" class="btn_contactar">';
-    echo '</div></div>';
+        <?php
+        $query = "SELECT email, celular, whatsapp FROM tbl_usuario WHERE documento = :cedula_dueno";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':cedula_dueno', $cedula_dueno, PDO::PARAM_INT);
+
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if(count($result) > 0){
+            $result = $result[0];
+            $whatsapp = $result['whatsapp'];
+            $celular  = $result['celular'];
+            $email    = $result['email'];
+        }
+
+        echo '<p>Dirección: ' . $direccion . '</p>';
+        echo '<p>Descripción: ' . $descripcion . '</p>';
+
+        if($whatsapp == 1){
+            echo '<input type="button" value="Contactar al correo" class="btn_contactar button" onclick="copyEmail(\'' . $email . '\')">';        /* Con mensaje predefinido */
+            echo '<a href="https://api.whatsapp.com/send?phone=+57'. $celular .'&text=Hola, Necesito mas informacion sobre tu '. $tipo_inmueble .' en '. $tipo_aov .' en arriendofinca.com! (ID del inmueble: '. $id_inmueble .')" target = "_BLANK"><input type="button" value="Contactar al WhatsApp" class="btn_contactar button"></a>';
+            
+        } else{
+            echo '<input type="button" value="Contactar al correo" class="btn_contactar button" onclick="copyEmail(\'' . $email . '\')">';    }
+            
+            echo '</div></div>';
+            echo '<input type="button" value="Mostrar detalles" class="btn_expandir button">';    
+            $color = "#fff";
+            if($id_tipo_inmueble == 1)
+                $color = "#E0F2D8";
+            else if($id_tipo_inmueble == 2)
+                $color = "#F6E5E3";
+            else if($id_tipo_inmueble == 3)
+                $color = "#FFF5DA";
+            else if($id_tipo_inmueble == 4)
+                $color = "#CAD3D2";
+            else if($id_tipo_inmueble == 5)
+                $color = "#B8F1D8";
+            else if($id_tipo_inmueble == 6)
+                $color = "#D2F4F9";
+            else if($id_tipo_inmueble == 7)
+                $color = "#a1a6ca";
+            else if ($id_tipo_inmueble == 8)
+                $color = "#e6e2b4";
+            
+            
+            echo '<input type="hidden" value="'. $color .'" class="color">';
+    
+            echo '</div>';
+    
 }
 
 

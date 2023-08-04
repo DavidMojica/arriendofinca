@@ -1,4 +1,24 @@
 var id_moviliario_var = 0;
+var inmoviliarios = document.getElementsByClassName('inmoviliario');
+
+for(let inmoviliario of inmoviliarios){
+    set_bgcolors(inmoviliario);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var btn_expandir = document.querySelectorAll('.btn_expandir');
+
+    btn_expandir.forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var itemContenedor = this.parentElement;
+            var detalles = itemContenedor.querySelector(".info_hidden");
+            detalles.classList.toggle("mostrar");
+            this.textContent = detalles.classList.contains("mostrar") ? "Ocultar detalles" : "Mostrar detalles";
+        })
+    });
+});
+
+
 function delete_mov(id_moviliario){
     id_moviliario_var = id_moviliario;
     createToastNotify(3,"Borrar un inmoviliario","Está a punto de borrar un inmoviliario ¿Está seguro?");

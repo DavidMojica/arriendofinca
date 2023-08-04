@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../styles/hyf.css">
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="../styles/userarea.css">
+    <link rel="icon" href="images/ArriendoFincaOld.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
@@ -20,7 +21,7 @@
 <body>
     <header>
     <div class="logo">
-        <img src="../images/ArriendoFinca.png" alt="Logo" class="logo_img">
+        <a href="../index.php"><img src="../images/ArriendoFinca.png" alt="Logo" class="logo_img"></a>
         </div>
         <!-- Si la sesion no está iniciada, redirige al index. Si está iniciada, crea un botón de cerrar sesión y obtiene el nombre del usuario -->
         <div>
@@ -28,10 +29,10 @@
                 <i class="fa fa-bars fa-3x" id="var-icon"></i>
             </a>
             <div id="navigation-bar" class="nav-bar">
-                <a href="#" class="button">Contáctenos</a>
+                <!-- <a href="#" class="button">Contáctenos</a>
                 <a href="#" class="button">Sobre nosotros</a>
                 <a href="#" class="button">Cotiza tu pagina web</a>
-                <a href="#" class="button">Publica tu inmueble</a>
+                <a href="#" class="button">Publica tu inmueble</a> -->
             </div>
         </div>
 
@@ -39,7 +40,6 @@
             <ul class="nav">
                 <li><img src="../images/icon_user.png" alt="">
                     <ul class="sub_nav">
-                        <li><input type="button" value="ayuda" class="button hbt"></li>
                         <?php
                             session_start();
                             include('PDOconn.php');
@@ -80,7 +80,7 @@
                                     $documento = $row['documento'];
                                 echo '<li><a href="../index.php"><input type="button" class="button hbt" value="Volver al Home"></a></li>';
                                 echo '<li><a href="#"><input type="button" value="Editar perfil" class="button hbt"></a></li>';
-                                echo '<li> <form action="php/logout.php" method="post">';
+                                echo '<li> <form action="logout.php" method="post">';
                                 echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
                                 echo '</form> </li>';
                                 }
@@ -92,7 +92,13 @@
                         
                     </ul>
                 </li>
-                <?php echo '<li> <p class="username">'. $nombre_usuario .'</p> </li>'; ?>
+                <?php 
+                if(!isset($_SESSION['username'])){
+                    echo '<li> <p class="username">Usuario anónimo</p> </li>';
+                }else{
+                    echo '<li> <p class="username">'. $nombre_usuario .'</p> </li>';
+                }
+                ?>
             </ul>
         </div>
         
@@ -100,6 +106,11 @@
             
     </header>
     <div id="midpage">
+        <div class="publicidad">
+
+        </div>
+
+        <div>
         <div id="nav_bar">
             <h2 id="imv_title">Tus inmoviliarios: </h2>
             <div id="nav_bar_controls">
@@ -203,16 +214,6 @@
                 $f_aov         = $_GET['f_aov'];
                 $filter_complement .= " AND arriendo_o_venta = :f_aov ";
             }
-            
-            // if(isset($_GET['f_pais']) && $_GET['f_pais'] !== 'null'){
-            //      
-            //     $f_pais        = $_GET['f_pais'];
-            // }
-            
-            // if(isset($_GET['f_estado']) && $_GET['f_estado'] !== 'null'){
-            //      
-            //     $f_estado        = $_GET['f_estado'];
-            // }
 
             if(isset($_GET['f_ciudad']) && $_GET['f_ciudad'] !== 'null'){
                  
@@ -292,7 +293,10 @@
                                     $prop_area            = $row['area'];
                                     $prop_habitaciones    = $row['habitaciones'];
                                     $prop_banos           = $row['banos'];
-                                    $prop_area_construida = $row['area_construida'];?>
+                                    $prop_area_construida = $row['area_construida'];
+                                    $descripcion          = $row['descripcion'];
+                                    
+                            ?>
 
                                 <?php include('PDOconn.php');
                                     #Datos a ser consultados por normalizacion
@@ -366,20 +370,56 @@
                             }
                             ?>
                             </div> <!--end imgs-->
-                            <div class="inmoviliario_controls">
-                                <input type="button" value="Detalles" class="button">
-                                <form action="edit_mov.php" method="post">
-                                    <input type="hidden" name="id_inmoviliario" value="<?php echo $id_inmueble; ?>">
-                                <input type="submit" class="button hbt" value="Editar">
-                                </form>
-                                <!-- <form action="certificacion.php" method="post">
-                                    <input type="hidden" name="id_inmoviliario" value="<?php echo $id_inmueble; ?>">
-                                    <input type="submit" class="button hbt" value="Certificar">
-                                </form> -->
-                                <input type="button" class="button hbt" value="Borrar" id="btn_inmoviliario_borrar" onclick="delete_mov(<?php echo $id_inmueble; ?>)">
-                            </div> 
-                        </div></div>
-                                <?php
+                            <?php  
+                            echo '<div class="info_hidden">';
+                            
+                                echo "<span>Descripcion:</span> <p>". $descripcion ."</p>";
+                                echo '<ul class="grid_list info_list">';
+                                    $prop_area_construida = (strlen($prop_area_construida)>0) ? $prop_area_construida : "No especificado";
+                                    if($id_tipo_inmueble != 1 && $id_tipo_inmueble != 3){
+                                        echo  "<li> <span> Área (m2): </span>  </li> <p> ".$prop_area." </p> <li> <span> Habitaciones:  </span>  </li> <p>".$prop_habitaciones." </p> <li> <span> Baños: </span> </li> <p> ".$prop_banos." </p>";
+                                    }
+                                    else{
+                                        echo  "<li> <span> Área (m2): </span>  </li> <p> ".$prop_area." </p> <li> <span> Área construida (m2): </span> </li> <p> ".$prop_area_construida." </p> <li> <span> Habitaciones:  </span>  </li> <p>".$prop_habitaciones." </p> <li> <span> Baños: </span> </li>  <p> ".$prop_banos." </p> ";
+                                    }
+                                    echo '<li><form action="edit_mov.php" method="post">
+                                              <input type="hidden" name="id_inmoviliario" value="'.$id_inmueble.'">
+                                              <input type="submit" class="button_2 hbt" value="Editar">
+                                        </form></li>';
+                                        echo '<li><input type="button" class="button_2 hbt" value="Borrar" id="btn_inmoviliario_borrar" onclick="delete_mov('.$id_inmueble.')"></li>';
+                                        echo '</ul>';
+                                        echo '</div>';
+                                        ?>
+                                
+                            </div>
+                            <?php 
+                                $color = "#fff";
+                                if($id_tipo_inmueble == 1)
+                                    $color = "#E0F2D8";
+                                else if($id_tipo_inmueble == 2)
+                                    $color = "#F6E5E3";
+                                else if($id_tipo_inmueble == 3)
+                                    $color = "#FFF5DA";
+                                else if($id_tipo_inmueble == 4)
+                                    $color = "#CAD3D2";
+                                else if($id_tipo_inmueble == 5)
+                                    $color = "#B8F1D8";
+                                else if($id_tipo_inmueble == 6)
+                                    $color = "#D2F4F9";
+                                else if($id_tipo_inmueble == 7)
+                                    $color = "#a1a6ca";
+                                else if ($id_tipo_inmueble == 8)
+                                    $color = "#e6e2b4";
+                                
+                                echo '<input type="hidden" value="'. $color .'" class="color">';
+                            ?>
+                            
+                            <input type="button" value="Detalles" class="button_2 btn_expandir">
+                             
+                            
+
+                    </div>
+                    <?php
                             } 
                         }
                         else{
@@ -389,13 +429,11 @@
                     else{
                         echo "<div> <h2>No se encontraron más resultados...</h2> </div>";
                     }
-                    ?></div> </div>
+                    ?></div> 
                 
             <?php
             } #if execute
-            ?>
-            <div id="pagination"> 
-                <?php #SISTEMA DE PAGINACIÓN
+            echo '<div id="pagination"> ';
                     $num_paginas = ceil($numero_resultados / $numero_items_por_pagina);
                     $visibleLinks = 5;
                     $halfVisibleLinks = floor($visibleLinks / 2);
@@ -417,29 +455,35 @@
                             echo "<a href='userarea.php?page=$num_paginas'> <input type='button' value='Última &raquo;' class='button'> </a>";
                         }
                     }                  
-                ?>
-            </div>
-        <?php
+                
+            echo '</div>';
+        
             } //if page > 0
             else{
                 echo "<div> <h2>Número de página inválido</h2> </div>";
             }
             ?>
+        
+            <footer>
+            <div id="footer_left">
+                <h4>William Montoya</h4>
+                <b>Gerente</b>
+                <p><b>Celular: </b>3006159008</p>
+                <p>Info@arriendofinca.com</p>   
+            </div>
+            <div id="footer_right">
+                <h4>David Mojica</h4>
+                <b>Co-Gerente - Desarrollador</b>
+                <p>davidmojicav@gmail.com</p>
+            </div>
+            </footer>
+        </div>
+
+        <div class="publicidad">
+
         </div>
     </div>
-    <footer>
-        <div id="footer_left">
-            <h4>William Montoya</h4>
-            <b>Gerente</b>
-            <p><b>Celular: </b>3006159008</p>
-            <p>Info@arriendofinca.com</p>   
-        </div>
-        <div id="footer_right">
-            <h4>David Mojica</h4>
-            <b>Co-Gerente - Desarrollador</b>
-            <p>davidmojicav@gmail.com</p>
-        </div>
-    </footer>
+    
 
 
 

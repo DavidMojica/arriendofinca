@@ -25,8 +25,9 @@ var cont_pasos           = 0;
 const atras              = document.getElementById('atras');
 const siguiente          = document.getElementById('siguiente');
 //misc
-let colorAprobado = "#90EE90";
+let colorAprobado    = "#90EE90";
 let colorDesaprobado = "#FF6961";
+let initial_color    = "#daeee5";
 
 onload = mostrar_pasos(0);
 
@@ -57,6 +58,16 @@ atras.addEventListener('click', function(){
     }
 });
 
+siguiente.addEventListener('click', function(){
+    if(cont_pasos ==0)
+        validar_pasos(cont_pasos);
+    else if(cont_pasos == 1)
+        validar_pasos(cont_pasos);
+    else if(cont_pasos == 2)
+        validar_pasos(cont_pasos);
+    else if(cont_pasos == 3)
+        validar_pasos(cont_pasos);
+});
 
 
 function changeCard() {
@@ -350,7 +361,7 @@ function validar_paso_1(ban, msg){
 }
 
 function naturalizeColors(objects){
-    for(item of objects) item.style.backgroundColor = "initial";
+    for(item of objects) item.style.backgroundColor = initial_color;
 }
 
 function validar_paso_2(ban, msg){

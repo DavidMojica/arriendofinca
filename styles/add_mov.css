@@ -3,9 +3,10 @@
 @import url('https://rsms.me/inter/inter.css');
 
 #html{
-  background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
+  /* background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA); */
+  background: url('https://fondosmil.com/fondo/60032.jpg');
+  background-size: 150% 150%;
+  animation: gradient 165s ease infinite;
   margin: 0;
   padding: 0;
 }
@@ -45,6 +46,14 @@ section {
   justify-content: center;
   display: flex;
   align-items: center;
+}
+
+h2, h3{
+  color: #3A3F87;
+  text-shadow: 2px 2px 3px #999;
+}
+.logo_img{
+  margin: 4%;
 }
 
 #formulary {
@@ -153,9 +162,9 @@ mark {
 }
 
 button {
-  color: currentColor;
+  color: white;
   padding: var(--size-bezel) calc(var(--size-bezel) * 2);
-  background: var(--color-accent);
+  background: #3A3F87;
   border: none;
   border-radius: var(--size-radius);
   font-weight: 900;
@@ -214,43 +223,78 @@ button + button {
 
 #siguiente{
   float:right;
-  padding: 1.5em 1.5em 1.5em 1.5em;
-  border-radius: .7em 2em 2em .7em;
+  padding: 20px;
+  border-radius: 1em 2em 2em 1em;
   background-image: url('../images/next.png');
   background-position: right;
   background-repeat: no-repeat;
   background-size: 35px;
   min-width: 122px;
+  position: relative;
+  top: 10px;
 }
 #atras{
   float:left;
-  padding: 1.5em 1.5em 2.5em 1.5em;
-  border-radius: 2em .7em .7em 2em;
+  padding:20px;
+  border-radius: 2em 1em 1em 2em;
   background-image: url('../images/back.png');
   background-position: left;
   background-repeat: no-repeat;
   background-size: 25px;
   min-width: 122px;
+  position: relative;
+  top: 10px;
 }
-#log_user{
-  background-image: url('../images/icon_user.png');
+#sel_arriendo_venta{
+  background-image: url('../images/icon_house.png');
+}
+
+#add_tipo{
+  background-image: url('../images/icon_scroll.png');
+}
+
+#precio{
+  background-image: url('../images/icon_precio.png');
+}
+
+#direccion{
+  background-image: url('../images/icon_adress.png');
+}
+
+#add_pais{
+  background-image: url('../images/icon_country.png');
+}
+
+#add_departamento{
+  background-image: url('../images/icon_state.png');
+}
+
+#add_ciudad{
+  background-image: url('../images/icon_city.png');
+}
+
+#area{
+  background-image: url('../images/icon_m2.jpg');
   background-size: 24px;
 }
 
-#log_pass{
-  background-image: url('../images/icon_pass.png');
+#add_habitaciones{
+  background-image: url('../images/icon_bedroom.png');
 }
 
-#reg_nombre{
-  background-image: url('../images/icon_id-card.png');
+#add_banos{
+  background-image: url('../images/icon_bathroom.png');
 }
 
-#reg_tipo_documento{
-  background-image: url('../images/icon_cards.png');
+#add_area_construida{
+  background-image: url('../images/icon_m2.jpg');
+  background-size: 24px;
 }
 
-#reg_documento{
-  background-image: url('../images/icon_sharp.png');
+
+.double_grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .reg_item label {
@@ -307,6 +351,14 @@ img{
 
 #reg_btn_registrarme{
   display: none;
+}
+#btn_regis_prop{
+  display: none;
+  position: relative;
+  left: 120px;
+  top:10px;
+  padding: 20px;
+  border-radius: 1em 2em 2em 1em;
 }
 @media (max-width: 768px) {
   #html{

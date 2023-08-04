@@ -26,9 +26,9 @@
 #html{
   /* background: linear-gradient(-45deg, #a77120, #e73c7e, #23a6d5, #23d5ab); */
   /* background: linear-gradient(-45deg, #FFCC00, #9932CC, #FF4500, #FFFF00); */
-  background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
+  background: url('https://fondosmil.com/fondo/58444.jpg');
+	background-size: 150% 150%;
+	animation: gradient 165s ease-in-out infinite;
 	height: 100vh;
   margin: 0;
   padding: 0;
@@ -52,6 +52,11 @@ section {
   align-items: center;
 }
 
+h2, h3{
+  color: #3A3F87;
+  text-shadow: 2px 2px 3px #999;
+}
+
 #formulary {
   display: flex;
   width: 30vw;
@@ -63,7 +68,6 @@ section {
   justify-content: center;
   align-items: center;
   text-align: center;
-  overflow: hidden;
   transition: max-height 2s;
 }
 
@@ -77,7 +81,6 @@ section {
   display: none;
   width: auto;
   height: auto;
-
 }
 
 
@@ -166,9 +169,9 @@ mark {
 }
 
 button {
-  color: currentColor;
+  color: white;
   padding: var(--size-bezel) calc(var(--size-bezel) * 2);
-  background: var(--color-accent);
+  background: #3A3F87;
   border: none;
   border-radius: var(--size-radius);
   font-weight: 900;
@@ -209,6 +212,7 @@ button + button {
   transition: ease-in-out 1s;
   background-repeat: no-repeat;
   background-position: 4px;
+  background-color: #D2F4F9;
 }
 .formulario::placeholder{
   color: #212121;
@@ -226,23 +230,27 @@ button + button {
 
 #siguiente{
   float:right;
-  padding: 1.5em 1.5em 1.5em 1.5em;
-  border-radius: .7em 2em 2em .7em;
+  padding: 20px;
+  border-radius: 1em 2em 2em 1em;
   background-image: url('../images/next.png');
   background-position: right;
   background-repeat: no-repeat;
   background-size: 35px;
   min-width: 122px;
+  position: relative;
+  top: 10px;
 }
 #atras{
   float:left;
-  padding: 1.5em 1.5em 2.5em 1.5em;
-  border-radius: 2em .7em .7em 2em;
+  padding:20px;
+  border-radius: 2em 1em 1em 2em;
   background-image: url('../images/back.png');
   background-position: left;
   background-repeat: no-repeat;
   background-size: 25px;
   min-width: 122px;
+  position: relative;
+  top: 10px;
 }
 #log_user{
   background-image: url('../images/icon_user_old.png');
@@ -255,6 +263,7 @@ button + button {
 
 #reg_nombre{
   background-image: url('../images/icon_id-card.png');
+  background-position: 20px;
 }
 
 #reg_tipo_documento{
@@ -274,7 +283,33 @@ button + button {
   background-image: url('../images/icon_calendar.png');
 }
 
+#reg_contraseña{ 
+  background-image: url('../images/icon_pass.png');
+}
 
+#reg_conf_contraseña{
+  background-image: url('../images/icon_pass_conf.png');
+}
+
+#reg_email{
+  background-image: url('../images/icon_mail.png');
+}
+
+#reg_celular{
+  background-image: url('../images/icon_smartphone.png');
+}
+
+#reg_pais{
+  background-image: url('../images/icon_country.png');
+}
+
+#reg_estado_departamento{
+  background-image: url('../images/icon_state.png');
+}
+
+#reg_ciudad{
+  background-image: url('../images/icon_city.png');
+}
 a {
   color: #212121;
 }
@@ -283,6 +318,9 @@ a:visited {
   color: #212121;
 }
 
+.logo_img{
+  margin: 4%;
+}
 
 img{
   max-width: 270px;
@@ -319,6 +357,11 @@ img{
 
 #reg_btn_registrarme{
   display: none;
+  position: relative;
+  left: 83px;
+  top:10px;
+  padding: 20px;
+  border-radius: 1em 2em 2em 1em;
 }
 
 @media (max-width: 768px) {
@@ -355,6 +398,24 @@ img{
   }
   .wrap{
     word-wrap: break-word;
+  }
+  #siguiente{
+    position: relative;
+    top: 7vh;
+    right: 8vw;
+  }
+
+  #atras{
+    position: relative;
+    top: 7vh;
+    left: 8vw;
+    padding: 20px;
+  }
+  #reg_btn_registrarme{
+    position: relative;
+    top: 7vh;
+    right: 8vw;
+    padding: 20px;
   }
 }
 

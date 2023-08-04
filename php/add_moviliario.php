@@ -4,7 +4,7 @@
     include('PDOconn.php');
     $tp_user = 0;
     if(!isset($_SESSION['username'])){
-        header("Location: ../index.php");
+        header("Location: loginPage.php");
         exit;
     }
 ?>
@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../extralibs/ToastNotify/ToastNotify.css">
     <link rel="stylesheet" href="../styles/add_mov.css">
-
+    <link rel="icon" href="images/ArriendoFincaOld.png">
     <script src="../json/paises.json"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
     <script src="../javascript/toastNotifyTP1.js" defer></script>
@@ -93,21 +93,23 @@
                         
                     <div id="paso_3" class="paso">
                         <p>Paso 3: Información adicional del inmueble</p>
-                        <div>
+                        <div class="double_grid">
+                            
                             <span>Area del inmueble (en m2):</span>
                             <input type="text" id="area" class="formulario">
-                        </div>
-                        <div>
+                        
+                        
                             <span>Número de Habitaciones:</span>
                             <input type="text" name="" id="add_habitaciones" class="formulario">
-                        </div>
-                        <div>
+                        
+                        
                             <span>Número de baños</span>
                             <input type="text" name="" id="add_banos" class="formulario">
-                        </div>
-                        <div id="area_tp2">
+                        
+                        
                             <span>Area construida (m2):</span>
                             <input type="text" name="" id="add_area_construida" class="formulario">
+                        
                         </div>
                         
                         <span>Describa su propiedad</span> <br>

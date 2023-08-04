@@ -13,17 +13,22 @@ body {
 
 #midpage {
     margin: 20px auto;
-    max-width: 1200px;
     padding: 0 20px;
+    display: grid;
+    grid-template-columns: .2fr 0.8fr .2fr;
+    gap: 20px;
+}
+
+.publicidad{
+  background-color: transparent;
+  height: 100vh;
+  text-align: center;
+  margin-bottom: 20px;
+  min-width: 200px;
 }
 
 .registrar {
-    text-align: center;
-}
-
-#publicidad {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
 }
 
 .busqueda {
@@ -31,6 +36,7 @@ body {
     background-color: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(4px);
     padding: 20px;
+    border-radius: 2em;
 }
 
 .busquedas {
@@ -53,6 +59,8 @@ body {
 #div_check_promocion input {
     margin-left: 5px;
 }
+
+
 
 #div_info {
     display: grid;
@@ -137,7 +145,7 @@ body {
     color: #fff;
     border: none;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: 0.3s ease all;
     cursor: pointer;
     text-align: center;
   }
@@ -145,6 +153,7 @@ body {
   /* Estilos al pasar el cursor por encima */
   .button:hover {
     background-color: #45a049;
+    border-radius: 10px;
   }
   
   /* Estilos al hacer clic */
@@ -152,6 +161,8 @@ body {
     background-color: #3e8e41;
   }
 
+
+  
 /* Estilos base del select */
 select {
     display: inline-block;

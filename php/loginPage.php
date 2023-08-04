@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../extralibs/ToastNotify/ToastNotify.css">
     <link rel="stylesheet" href="../styles/login.css">
-
+    <link rel="icon" href="images/ArriendoFincaOld.png">
     <script src="../json/paises.json"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
     <script src="../javascript/toastNotifyTP1.js" defer></script>
@@ -98,11 +98,11 @@
                         </div>
                         
                         <div class="reg_item">
-                            <p><input type="checkbox" name="check_whatsapp" id="check_whatsapp"> Quiero que mis clientes me contacten a WhatsApp con este mismo número.</p>  
-                            <select name="reg_indicativo" id="reg_indicativo" class="formulario" disabled> <!--Se le pondrá indicativo al pais que seleccionen-->
-                                <option value="default" class="formulario">Seleccione su país...</option>
-                            </select> 
-                            <input type="text" name="reg_celular" id="reg_celular" class="formulario" disabled placeholder="Número celular">
+                            <select name="reg_indicativo" id="reg_indicativo" class="formulario" > <!--Se le pondrá indicativo al pais que seleccionen-->
+                            <option value="default" class="formulario">Seleccione su país...</option>
+                        </select> 
+                        <input type="text" name="reg_celular" id="reg_celular" class="formulario"  placeholder="Número celular">
+                        <p><input type="checkbox" name="check_whatsapp" id="check_whatsapp"> Quiero que mis clientes me contacten a WhatsApp con este mismo número.</p>  
                         </div>
                     </div>
 

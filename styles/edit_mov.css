@@ -1,7 +1,7 @@
 body{
-    background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
+    background: url('https://cdn.agendasonidocaracol.mx/Upload/50d18bf26ce5564e1a6868b68e58a7d31cf5.jpg');
+    background-size: 150% 150%;
+	animation: gradient 165s ease infinite;
     margin: 0;
     padding: 0;   
 }
@@ -10,9 +10,7 @@ section{
     display: flex;
     justify-content: center;
 }
-header{
-    padding: 0;
-}
+
 .card{
     background: #fff;
     border-radius: 20px;
@@ -32,11 +30,42 @@ header{
     margin: 10px 0px 10px 0px;
 }
 
-#div_details{
+.grid_doble{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3px;
 }
+
+.formulario {
+    border: 3px solid #ffffff;
+    border-radius: 2em;
+    width: 50%;
+    min-width: 300px;
+    padding: 8px 8px;
+    font-size: 1.1em;
+    font-weight: lighter;
+    margin-bottom: 0.5%;
+    box-sizing: border-box;
+    text-align: center;
+    transition: ease-in-out 1s;
+    background-repeat: no-repeat;
+    background-position: 4px;
+    background-color: #D2F4F9;
+  }
+  .formulario::placeholder{
+    color: #212121;
+    font-weight: lighter;
+  }
+  .formulario:focus{
+    transform: scale(.993, .94); 
+    width: 90%;  
+  
+    border: 3px solid #ffffff;
+  }
+  .formulario select {
+    min-height: 50px;
+  }
+
 
 /*********ANIMATIONS************/
 

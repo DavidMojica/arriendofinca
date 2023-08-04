@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/hyf.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="images/ArriendoFincaOld.png">
     <script src="extralibs/ToastNotify/ToastNotify.js" defer></script>
     <script src="javascript/toastNotifyTP1.js" defer></script>
     <script src="javascript/essentials.js" defer></script>
@@ -24,10 +25,10 @@
             <i class="fa fa-bars fa-3x" id="var-icon"></i>
         </a>
         <div id="navigation-bar" class="nav-bar">
-            <a href="#" class="button">Contáctenos</a>
-            <a href="#" class="button">Sobre nosotros</a>
-            <a href="#" class="button">Cotiza tu pagina web</a>
-            <a href="#" class="button">Publica tu inmueble</a>
+            <a href="#" >Contáctenos</a>
+            <a href="#" >Sobre nosotros</a>
+            <a href="#" >Cotiza tu pagina web</a>
+            <a href="#" >Publica tu inmueble</a>
         </div>
         
         <div class="header-right">
@@ -35,14 +36,12 @@
             <ul class="nav">
                 <li id="clicker"><img src="images/icon_user.png" alt="" >
                 <ul>
-                <li><input type="button" value="ayuda" class="button hbt"></li>
                 <?php
                     session_start();
                     include('php/PDOconn.php');
                     $tp_user = 0;
                     if(!isset($_SESSION['username'])){
                         echo "<li><a href='php/loginPage.php'><input type='button' value='Iniciar Sesión' class='button hbt'></a> </li>";
-                    
                     }
                     else{
                         $user = $_SESSION['username'];
@@ -72,7 +71,7 @@
                             $nombre_usuario = $row['nombre'];
                             $documento = $row['documento'];
                             // echo "Bienvenido, $nombre_usuario!";
-                            echo '<li> <form action="php/logout.php" method="post">';
+                            echo '<li> <form action="php/i_logout.php" method="post">';
                             echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
                             echo '</form> </li>';
 
@@ -85,6 +84,13 @@
             ?>
                 </ul>
                 </li>
+                <?php 
+                if(!isset($_SESSION['username'])){
+                    echo '<li> <p class="username">Usuario anónimo</p> </li>';
+                }else{
+                    echo '<li> <p class="username">'. $nombre_usuario .'</p> </li>';
+                }
+                ?>
             </ul>
         </div>
     </header>
@@ -93,13 +99,14 @@
 
     <div id="midpage">
                
-        <div id="publicidad">
-            <p>Aquí va la publicidad</p>
+        <div class="publicidad">
         </div>
+        
+        <div>
         <nav class="busqueda" id="busqueda">
             <div class="registrar">
             </div> 
-            <form action="php/search.php?page=1&s_page=1" method="GET" id="search_form">
+            <form action="php/search.php?page=1&s_page=1" method="GET" id="search_form" onsubmit="return checkValues()">
                 <h2>Busca tu inmueble ideal</h2>
                 <div id="busquedas_1">
                     <div id="div_select" class="busquedas it1">
@@ -163,23 +170,27 @@
                 <input type="submit" value="Buscar" class="button">
             </form>
         </nav>
+
+        
+        
+
+
         <div id="div_info">
             <div class="points" id="point1">
-                <p class="point_text"><b class="point_title"> Tu finca gratis en internet! </b> <br><br><b>Registre y publique su finca facil y rápido <a href="php/userarea.php">aqui</a></b></p>
+                <p class="point_text"><b class="point_title"> Tu finca gratis en internet! </b> <br><br><b>Registre y publique su finca facil y rápido <a href="php/add_moviliario.php">aqui</a></b></p>
             </div>
             <div class="points" id="point2">
-                <p class="point_text"><b class="point_title">¿No ves tu país, estado o ciudad?</b> <br><br><b>Mándanos un correo <a href="#">aquí</a> o a info@arriendofinca.com <br>
+                <p class="point_text"><b class="point_title">¿No ves tu país, estado o ciudad?</b> <br><br><b>Manda un correo a info@arriendofinca.com <br>
                 Confirmaremos tu información y pronto estará disponible :)</b></p>
             </div>
             <div class="points" id="point3">
-                <p class="point_text"> <b class="point_title">¿Ya eres usuario?</b> <br><br> <b>Ingresa <a href="#">aquí</a></b></p>
+                <p class="point_text"> <b class="point_title">¿Ya eres usuario?</b> <br><br> <b>Ingresa <a href="php/loginPage.php">aquí</a></b></p>
             </div>
             <div class="points" id="point4">
-                <p class="point_text"><b class="point_title"> Amplia variedad </b> <br><br><b>Consigue las mejores fincas a tus medidas, con excelentes precios <br>
-                Mira las promociones <a href="#">aquí</a></b></p>
+                <p class="point_text"><b class="point_title"> Amplia variedad </b> <br><br><b>Consigue las mejores fincas a tus medidas, con excelentes precios</b>
             </div>
             <div class="points" id="point5">
-                <p class="pont_text"> <b class="point_title"> Los inmoviliarios certificados se venden hasta un 50% más rápido </b> <br><br> <b>Certifica tu inmueble <a href="#">aquí</a> </b></p>
+                <p class="pont_text"> <b class="point_title"> Los inmoviliarios certificados se venden hasta un 50% más rápido </b></p>
             </div>
             <div class="points" id="point6">
                 <p class="point_text"><b class="point_title"> Sé tu propio administrador </b> <br><br> <b>Da a conocer tu inmoviliario rápidamente</b></p>
@@ -205,6 +216,10 @@
                 <p>davidmojicav@gmail.com</p>
             </div>
         </footer>
+        </div>
+
+        <div class="publicidad">
+        </div>
     </div>
 </body>
 </html>
