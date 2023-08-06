@@ -1,78 +1,70 @@
-/*  Create --
- *********************************************************
- *                                                       *
- *                         --                            *
- *                       : || :                          *
- *                         ||                            *
- *                         ||                            *
- *                         ||                            *
- *                     . - || - .                        *
- *                    (    ||    )                       *
- *                     ) ( || ) (                        *
- *                    /    ||    \                       *
- *                   (     ||     )                      *
- *                    \    --    /                       *
- *                     \ ______ /                        *
- *                                                       *
- *                                                       *
- *                                                       *
- *                                                       *
- *                                                       *
- *                                                       *
- *********************************************************
- */
+// Función para cargar el CSS de Font Awesome y definir el constructor de las notificaciones.
 !(function () {
-  var e =
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css",
-    t = "link";
-  let o;
-  (o = document.createElement(t)),
-    "script" == t ? (o.src = e) : ((o.href = e), (o.rel = "stylesheet")),
-    document.head.appendChild(o);
-  let s = document.createElement("ul");
-  document.body.insertBefore(s, null),
-    (s.className = "notytoast"),
-    (window.ToastNotify = class e {
-      constructor(e, t) {
-        let o = (e) => {
-            e.classList.add("hide"),
-              e.timeoutId && clearTimeout(e.timeoutId),
-              setTimeout(() => e.remove(), 500);
-          },
-          s = [
-            { tipo: "success", icons: "fa-circle-check", color: "#0d8a28" },
-            { tipo: "error", icons: "fa-circle-xmark", color: "#bb2525" },
-            {
-              tipo: "warning",
-              icons: "fa-triangle-exclamation",
-              color: "#E9BD0C",
-            },
-            { tipo: "info", icons: "fa-circle-info", color: "#3498DB" },
-          ].find((t) => t.tipo == e),
-          i = document.querySelector(".notytoast"),
-          a = document.createElement("li");
-        (a.className = "toastflo " + e),
-          (a.innerHTML =
-            '<div class="column"><i class="fa-solid ' +
-            s.icons +
-            '"></i><div><b>' +
-            t.head.toUpperCase() +
-            "</b><br><span>" +
-            t.msg +
-            '</span></div></div><i class="fa-solid fa-xmark" onclick="ToastRemove(this.parentElement)"></i>'),
-          i.appendChild(a),
-          void 0 != t.timer
-            ? (document.documentElement.style.setProperty(
-                "--tiempo",
-                t.timer / 1e3 + "s"
-              ),
-              (a.timeoutId = setTimeout(() => o(a), t.timer)))
-            : document.documentElement.style.setProperty("--tiempo", "0s");
+  var fontAwesomeCSS =
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css";
+  var elementType = "link";
+  let element;
+  (element = document.createElement(elementType)),
+    elementType === "script"
+      ? (element.src = fontAwesomeCSS)
+      : ((element.href = fontAwesomeCSS), (element.rel = "stylesheet")),
+    document.head.appendChild(element);
+
+  // Crear un elemento ul en el cuerpo del documento para contener las notificaciones.
+  let notificationContainer = document.createElement("ul");
+  document.body.insertBefore(notificationContainer, null);
+  notificationContainer.className = "notytoast";
+
+  // Constructor de las notificaciones emergentes (toasts).
+  window.ToastNotify = class ToastNotify {
+    constructor(type, options) {
+      let removeToast = (toast) => {
+        toast.classList.add("hide");
+        toast.timeoutId && clearTimeout(toast.timeoutId);
+        setTimeout(() => toast.remove(), 500);
+      };
+
+      // Definir los estilos y datos correspondientes a cada tipo de notificación.
+      let toastStyles = [
+        { type: "success", iconClass: "fa-circle-check", backgroundColor: "#0d8a28" },
+        { type: "error", iconClass: "fa-circle-xmark", backgroundColor: "#bb2525" },
+        { type: "warning", iconClass: "fa-triangle-exclamation", backgroundColor: "#E9BD0C" },
+        { type: "info", iconClass: "fa-circle-info", backgroundColor: "#3498DB" },
+      ];
+
+      let toastData = toastStyles.find((t) => t.type == type);
+
+      // Crear el elemento li que representa la notificación.
+      let notificationList = document.querySelector(".notytoast");
+      let toastElement = document.createElement("li");
+      toastElement.className = "toastflo " + type;
+      toastElement.innerHTML =
+        '<div class="column"><i class="fa-solid ' +
+        toastData.iconClass +
+        '"></i><div><b>' +
+        options.head.toUpperCase() +
+        "</b><br><span>" +
+        options.msg +
+        '</span></div></div><i class="fa-solid fa-xmark" onclick="ToastRemove(this.parentElement)"></i>';
+      notificationList.appendChild(toastElement);
+
+      // Configurar el tiempo de duración de la notificación si se especifica en las opciones.
+      if (options.timer !== undefined) {
+        document.documentElement.style.setProperty(
+          "--tiempo",
+          options.timer / 1000 + "s"
+        );
+        toastElement.timeoutId = setTimeout(() => removeToast(toastElement), options.timer);
+      } else {
+        document.documentElement.style.setProperty("--tiempo", "0s");
       }
-    });
+    }
+  };
 })();
-const ToastRemove = (e) => {
-  e.classList.add("hide"),
-    e.timeoutId && clearTimeout(e.timeoutId),
-    setTimeout(() => e.remove(), 500);
+
+// Función para remover una notificación al hacer clic en el botón de cerrar (x).
+const ToastRemove = (toastElement) => {
+  toastElement.classList.add("hide");
+  toastElement.timeoutId && clearTimeout(toastElement.timeoutId);
+  setTimeout(() => toastElement.remove(), 500);
 };

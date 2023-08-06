@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../extralibs/ToastNotify/ToastNotify.css">
     <link rel="stylesheet" href="../styles/add_mov.css">
-    <link rel="icon" href="images/ArriendoFincaOld.png">
+    <link rel="icon" href="../images/ArriendoFincaOld.png">
     <script src="../json/paises.json"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
     <script src="../javascript/toastNotifyTP1.js" defer></script>

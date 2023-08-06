@@ -1,7 +1,8 @@
-/*Fonts----*/
+/* Fuentes y Estilos Globales */
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap'); /*'Poppins'*/
 @import url('https://rsms.me/inter/inter.css');
 
+/* Estilos globales para el html y body */
 #html{
   /* background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA); */
   background: url('https://fondosmil.com/fondo/60032.jpg');

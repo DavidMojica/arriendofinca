@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../styles/hyf.css">
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="../styles/userarea.css">
-    <link rel="icon" href="images/ArriendoFincaOld.png">
+    <link rel="icon" href="../images/ArriendoFincaOld.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>
@@ -79,7 +79,7 @@
                                     $nombre_usuario = $row['nombre'];
                                     $documento = $row['documento'];
                                 echo '<li><a href="../index.php"><input type="button" class="button hbt" value="Volver al Home"></a></li>';
-                                echo '<li><a href="#"><input type="button" value="Editar perfil" class="button hbt"></a></li>';
+                                #echo '<li><a href="#"><input type="button" value="Editar perfil" class="button hbt"></a></li>';
                                 echo '<li> <form action="logout.php" method="post">';
                                 echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
                                 echo '</form> </li>';
@@ -394,6 +394,7 @@
                             </div>
                             <?php 
                                 $color = "#fff";
+
                                 if($id_tipo_inmueble == 1)
                                     $color = "#E0F2D8";
                                 else if($id_tipo_inmueble == 2)
@@ -410,7 +411,14 @@
                                     $color = "#a1a6ca";
                                 else if ($id_tipo_inmueble == 8)
                                     $color = "#e6e2b4";
-                                
+                                else if($id_tipo_inmueble == 9)
+                                    $color = "#7d9599";
+                                else if($id_tipo_inmueble == 10)
+                                    $color = "#8a7d99";
+                                else if ($id_tipo_inmueble == 11)
+                                    $color == "#99967d";
+                                else $color = "#fff";
+
                                 echo '<input type="hidden" value="'. $color .'" class="color">';
                             ?>
                             
@@ -423,11 +431,11 @@
                             } 
                         }
                         else{
-                            echo "Usted no posee propiedades registradas";
+                            echo "<h2>Usted no posee propiedades registradas</h2>";
                         }
                     } # $stmt->rowCount() > 0
                     else{
-                        echo "<div> <h2>No se encontraron más resultados...</h2> </div>";
+                        echo "<div> <h2 class='non_results'>No se encontraron más resultados...</h2> </div>";
                     }
                     ?></div> 
                 
@@ -474,6 +482,7 @@
             <div id="footer_right">
                 <h4>David Mojica</h4>
                 <b>Co-Gerente - Desarrollador</b>
+                <p><b>Celular: </b>3054356930</p>
                 <p>davidmojicav@gmail.com</p>
             </div>
             </footer>

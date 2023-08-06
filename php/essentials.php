@@ -72,7 +72,10 @@ function get_tipo_inmueble_PDOQUERY($stmt){
             $row_tp_inmueble = $res_tp_inmueble[0];
             #Quitar la S al final del tipo de inmueble
             $tipo_inmueble   = $row_tp_inmueble['tipo_inmueble'];
-            if(substr($tipo_inmueble, -1) === 's')
+            if(substr($tipo_inmueble, -3)== "les" || substr($tipo_inmueble, -3) == "nes"){
+                $tipo_inmueble = rtrim($tipo_inmueble, "es");
+            }
+            else if(substr($tipo_inmueble, -1) === 's')
                 $tipo_inmueble = rtrim($tipo_inmueble, 's');
         } else{
         $tipo_inmueble = "No se obtuvo el tipo inmueble";
@@ -450,22 +453,30 @@ function create_inmoviliario($row){
             echo '</div></div>';
             echo '<input type="button" value="Mostrar detalles" class="btn_expandir button">';    
             $color = "#fff";
-            if($id_tipo_inmueble == 1)
-                $color = "#E0F2D8";
-            else if($id_tipo_inmueble == 2)
-                $color = "#F6E5E3";
-            else if($id_tipo_inmueble == 3)
-                $color = "#FFF5DA";
-            else if($id_tipo_inmueble == 4)
-                $color = "#CAD3D2";
-            else if($id_tipo_inmueble == 5)
-                $color = "#B8F1D8";
-            else if($id_tipo_inmueble == 6)
-                $color = "#D2F4F9";
-            else if($id_tipo_inmueble == 7)
-                $color = "#a1a6ca";
-            else if ($id_tipo_inmueble == 8)
-                $color = "#e6e2b4";
+            
+
+            // if($id_tipo_inmueble == 1)
+            //     $color = "#E0F2D8";
+            // else if($id_tipo_inmueble == 2)
+            //     $color = "#F6E5E3";
+            // else if($id_tipo_inmueble == 3)
+            //     $color = "#FFF5DA";
+            // else if($id_tipo_inmueble == 4)
+            //     $color = "#CAD3D2";
+            // else if($id_tipo_inmueble == 5)
+            //     $color = "#B8F1D8";
+            // else if($id_tipo_inmueble == 6)
+            //     $color = "#D2F4F9";
+            // else if($id_tipo_inmueble == 7)
+            //     $color = "#a1a6ca";
+            // else if ($id_tipo_inmueble == 8)
+            //     $color = "#e6e2b4";
+            // else if ($id_tipo_inmueble == 9)
+            //     $color = "#000";
+            // else if($id_tipo_inmueble == 10)
+            //     $color = "";
+            // else if($id_tipo_inmueble == 11)
+            //     $color = "";
             
             
             echo '<input type="hidden" value="'. $color .'" class="color">';

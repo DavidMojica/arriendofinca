@@ -37,7 +37,7 @@
     <link rel="stylesheet" href="../styles/hyf.css">
     <link rel="stylesheet" href="../styles/search.css">
     <link rel="stylesheet" href="../extralibs/ToastNotify/ToastNotify.css">
-    <link rel="icon" href="images/ArriendoFincaOld.png">
+    <link rel="icon" href="../images/ArriendoFincaOld.png">
   <!-- Link Swiper's CSS -->
   <!-- Swiper JS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
@@ -220,7 +220,7 @@
                 if($page > 0){
                     if(is_array($s_result) && count($s_result) > 0){
                         foreach($s_result as $row){
-                            create_inmoviliario($row, $sel_ciudad);
+                            create_inmoviliario($row);
                         }
                     } else{
                         echo $error_2;
@@ -281,6 +281,24 @@
                     $res_estado = $result[0];
                     $id_estado = $res_estado['id_estado'];
 
+                    $sim_query = "SELECT * FROM tbl_inmueble
+                    WHERE id_tipo_inmueble = :id_tipo_inmueble 
+                    and arriendo_o_venta != :sel_arriendo_venta and id_municipio_ubicacion = :mpio";
+
+                    $stmt = $pdo->prepare($sim_query);
+                    $stmt->bindParam(':id_tipo_inmueble', $sel_categoria, PDO::PARAM_INT);
+                    $stmt->bindParam(':sel_arriendo_venta', $sel_arriendo_venta, PDO::PARAM_INT);
+                    $stmt->bindParam(':mpio', $sel_ciudad, PDO::PARAM_INT);
+
+                    $stmt->execute();
+                    $s_numero_resultados = $stmt->rowCount();
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);    
+                    if($s_numero_resultados > 0 ){
+                        foreach($result as $row){
+                            create_inmoviliario($row);
+                        }
+                    }
+
                     $t_query = "SELECT * FROM tbl_inmueble 
                     LEFT JOIN tbl_municipio ON tbl_inmueble.id_municipio_ubicacion = tbl_municipio.id_municipio WHERE id_tipo_inmueble = :id_tipo_inmueble 
                     and tbl_municipio.id_estado = :id_estado and id_municipio_ubicacion != :id_dif_mpio";
@@ -291,7 +309,7 @@
                     $stmt->bindParam(':id_dif_mpio', $sel_ciudad, PDO::PARAM_INT);
 
                     $stmt->execute();
-                    $s_numero_resultados = $stmt->rowCount();
+                    $s_numero_resultados += $stmt->rowCount();
                     
                     $query = "SELECT * FROM tbl_inmueble 
                     LEFT JOIN tbl_municipio ON tbl_inmueble.id_municipio_ubicacion = tbl_municipio.id_municipio WHERE id_tipo_inmueble = :id_tipo_inmueble 
@@ -318,9 +336,9 @@
                             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);    
                             if($s_numero_resultados > 0 ){
                                 foreach($result as $row){
-                                    create_inmoviliario($row, $sel_ciudad);
+                                    create_inmoviliario($row);
                                 }
-                            }else{
+                            }else if($s_numero_resultados == 0){
                                 echo $error_2;
                             }
                         }
@@ -365,6 +383,7 @@
                 <div id="footer_right">
                     <h4>David Mojica</h4>
                     <b>Co-Gerente - Desarrollador</b>
+                    <p><b>Celular: </b>3197750000</p>
                     <p>davidmojicav@gmail.com</p>
                 </div>
             </footer>

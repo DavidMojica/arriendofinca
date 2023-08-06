@@ -7,7 +7,7 @@ body{
   /* background: linear-gradient(-45deg, #B5CC94, #B3D0E1, #F7B98B, #DADADA); */
   background: url('https://www.xtrafondos.com/wallpapers/paisaje-de-montanas-en-bosque-con-rio-6094.jpg');
   background-size: 200% 200%;
-  animation: gradient 165s ease infinite;
+  animation: gradient 265s ease infinite;
   height: 100vh;
 }
 .inmoviliario {
@@ -111,7 +111,9 @@ body{
   }
 
 
-
+.non_results{
+  color: white;
+}
 
 
 .grid_list{

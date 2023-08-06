@@ -1,14 +1,18 @@
 /**
- * Función que valida las propidades generales de cada inmueble del lado del cliente.
+ * Función que valida las propiedades generales de cada inmueble del lado del cliente.
  * 
- * @param {number} add_tipo 
- * @param {number} precio 
- * @param {string} direccion 
- * @param {string} prop_desc 
- * @returns 
+ * @param {number} add_tipo            - El tipo de propiedad seleccionado.
+ * @param {number} precio              - El precio del inmueble.
+ * @param {string} direccion           - La dirección del inmueble.
+ * @param {string} prop_desc           - La descripción del inmueble.
+ * @param {number} add_area            - El área del inmueble.
+ * @param {number} add_banos           - La cantidad de baños del inmueble.
+ * @param {number} add_habitaciones    - La cantidad de habitaciones del inmueble.
+ * @param {number} add_area_construida - El área construida del inmueble.
+ * @returns {Object} - Un objeto con las propiedades "auth" que indica si la validación fue exitosa y "mensaje" que contiene mensajes de error en caso de que la validación falle.
  */
 function validaciones_general(add_tipo, precio, direccion, prop_desc, add_area, add_banos, add_habitaciones, add_area_construida){
-    const total_tipo_propiedades = 8;
+    const total_tipo_propiedades = 11;
     const regex = /^[0-9]+$/; //Expresión regular para validar que la cadena solo contenga números - documento y numero de celular
     let ban = true;
     let msg = "";
@@ -22,6 +26,7 @@ function validaciones_general(add_tipo, precio, direccion, prop_desc, add_area, 
         ban = false;
         msg += "Por favor especifique el tipo de propiedad. <br>";
     }
+
     //Validar que precio sea un numero.
     if(precio.value.trim() === ""){
         msg += "El campo precio es obligatorio. <br>";
@@ -95,11 +100,13 @@ function validaciones_general(add_tipo, precio, direccion, prop_desc, add_area, 
 }
 
 /**
- * Esta funcion se encarga de obtener y dibujar los departamentos en el combobox departamentos
+ * Esta función se encarga de obtener y dibujar los departamentos en el combobox departamentos
  * dependiendo del país seleccionado.
- * @param {Object combobox} add_departamento 
- * @param {Object combobox} add_ciudad 
- * @param {*} pais_activo 
+ * 
+ * @param {Object} add_departamento - Combobox para mostrar los departamentos.
+ * @param {Object} add_ciudad       - Combobox para mostrar las ciudades.
+ * @param {*} pais_activo           - El país seleccionado.
+ * @param {string} url              - La URL para realizar la consulta AJAX.
  */
 function AJAX_PAIS_CHANGE(add_departamento,add_ciudad, pais_activo, url){
     $.ajax({
@@ -145,8 +152,10 @@ function AJAX_PAIS_CHANGE(add_departamento,add_ciudad, pais_activo, url){
 /**
  * Esta función se encarga de obtener y dibujar los municipios en el combobox municipios
  * dependiendo del estado seleccionado.
- * @param {Object combobox} add_ciudad 
- * @param {Object combobox} depto_activo 
+ * 
+ * @param {Object} add_ciudad - Combobox para mostrar las ciudades.
+ * @param {Object} depto_activo - El departamento seleccionado.
+ * @param {string} url - La URL para realizar la consulta AJAX.
  */
 function AJAX_ESTADO_CHANGE(add_ciudad, depto_activo, url){
     $.ajax({
@@ -214,10 +223,12 @@ function modifyBorders(items, mn, mx, medida){
 
 // ---------ARROWS------------ //
 /**
- * Obtienes un número aleatorio entre el minimo (incluido) y el maximo (no incluido).
- * @param {number} min 
- * @param {number} max 
- * @returns {number}
+/**
+ * Obtiene un número aleatorio entre el mínimo (incluido) y el máximo (no incluido).
+ * 
+ * @param {number} min - Valor mínimo del rango.
+ * @param {number} max - Valor máximo del rango.
+ * @returns {number}   - Número aleatorio generado.
  */
 var getRandomInt = (min, max) => {
     min = Math.ceil(min);

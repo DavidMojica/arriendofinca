@@ -1,4 +1,4 @@
-// General y Fotos
+// Variables globales para la sección General y Fotos
 const add_fotos           = document.getElementById('add_fotos');
 const add_tipo            = document.getElementById('add_tipo'); //Tipo de inmueble
 const btn_regis_prop      = document.getElementById('btn_regis_prop');
@@ -17,27 +17,31 @@ const add_area_construida = document.getElementById('add_area_construida');
 const area_tp2            = document.getElementById('area_tp2');
 const btn_register        = document.getElementById('btn_regis_prop');
 
-//pasos
+// Variables y elementos de la sección de Pasos
 const pasos               = document.getElementsByClassName('paso');
 var cont_pasos            = 0;
 const atras               = document.getElementById('atras');
 const siguiente           = document.getElementById('siguiente');
-//misc
-let colorAprobado = "#90EE90";
+
+// Variables misceláneas
+let colorAprobado    = "#90EE90";
 let colorDesaprobado = "#FF6961";
-let initialColor    = "powderblue";
-var regex = /^[0-9]+$/; //Expresión regular para validar que la cadena solo contenga números - documento y numero de celular
+let initialColor     = "powderblue";
+var regex            = /^[0-9]+$/; //Expresión regular para validar que la cadena solo contenga números - documento y numero de celular
 let expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //expresion para verificar que el email tenga la estructura: xxxxxxxx@xxxx.xxx
 
 
 //----------PASOS------------//
+// Inicialización de la sección de Pasos
 onload = mostrar_pasos(0);
 
+// Mostrar los pasos
 function mostrar_pasos(num){
-
+    // Ocultar todos los pasos
     for(let paso of pasos)
-    paso.style.display = "none";
+        paso.style.display = "none";
 
+     // Control de botones 'Atrás' y 'Siguiente'
     cont_pasos += num;  
     if(cont_pasos<=0) atras.style.display = "none";
     else atras.style.display = "inline-block";
@@ -45,6 +49,7 @@ function mostrar_pasos(num){
     if(cont_pasos >= 3) siguiente.style.display = "none";
     else siguiente.style.display = "inline-block";
     
+    // Mostrar el paso actual
     if(cont_pasos >= 0 && cont_pasos <= 3){
         pasos[cont_pasos].style.display = "inline-block";
 
@@ -54,6 +59,7 @@ function mostrar_pasos(num){
     console.log(pasos[cont_pasos])
 }
 
+// Evento de clic para el botón 'Siguiente'
 siguiente.addEventListener('click', function(){
     if(cont_pasos ==0)
         validar_pasos(cont_pasos);
@@ -65,17 +71,17 @@ siguiente.addEventListener('click', function(){
         validar_pasos(cont_pasos);
 });
 
-
+// Evento de clic para el botón 'Atrás'
 atras.addEventListener('click', function(){
     if(cont_pasos > 0 && cont_pasos <= 3){
         mostrar_pasos(-1);
     }
 });
 
+// Validación de los pasos
 function validar_pasos(paso){
-    //Mensaje que usaremos en caso de que algún campo sea inválido.
-    let msg = "";
-    let ban = true;
+    let msg = "";   // Mensaje para campos inválidos
+    let ban = true; // Bandera para verificar validez de campos
 
     let func_list = [validar_paso_1, validar_paso_2, validar_paso_3];
     let result = func_list[paso](ban,msg);
@@ -90,6 +96,7 @@ function validar_pasos(paso){
     else createToastNotify(1, "Error al momento de registrarse", msg + "error");
 }
 
+// Evento de clic para el botón de registro
 btn_register.addEventListener('click', function(){
     if(cont_pasos === 3){
         createToastNotify(3,"Confirmar creación", "Está a punto de crear un nuevo inmueble. Desea proceder?");

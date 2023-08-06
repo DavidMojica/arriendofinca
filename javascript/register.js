@@ -1,6 +1,7 @@
 /*-------------------------------------------------------------------
 #Global variables
 --------------------------------------------------------------------*/
+// Obtenemos referencias a varios elementos del DOM por su ID
 const btn_register        = document.getElementById("reg_btn_registrarme");
 const reg_nombre          = document.getElementById("reg_nombre");
 const reg_documento       = document.getElementById("reg_documento");
@@ -27,16 +28,19 @@ const siguiente          = document.getElementById('siguiente');
 //misc
 let colorAprobado    = "#90EE90";
 let colorDesaprobado = "#FF6961";
-let initial_color    = "#daeee5";
+let initial_color    = "#D2F4F9";
 
+// La función 'mostrar_pasos' se encarga de mostrar y ocultar los pasos del registro en función del avance del usuario
 onload = mostrar_pasos(0);
 
 function mostrar_pasos(num){
-
+    // Ocultar todos los pasos
     for(let paso of pasos)
     paso.style.display = "none";
 
+     // Incrementar o decrementar el contador de pasos
     cont_pasos += num;  
+    // Mostrar u ocultar los botones de navegación según el paso actual
     if(cont_pasos<=0) atras.style.display = "none";
     else atras.style.display = "inline-block";
 
@@ -49,15 +53,16 @@ function mostrar_pasos(num){
     if(cont_pasos==3) btn_register.style.display = "inline-block";
     else btn_register.style.display              = "none";
     }
-    console.log(pasos[cont_pasos])
 }
 
+// Agregar un evento 'click' al botón 'Atrás'
 atras.addEventListener('click', function(){
     if(cont_pasos > 0 && cont_pasos <= 3){
         mostrar_pasos(-1);
     }
 });
 
+// Agregar un evento 'click' al botón 'Siguiente'
 siguiente.addEventListener('click', function(){
     if(cont_pasos ==0)
         validar_pasos(cont_pasos);
@@ -68,24 +73,6 @@ siguiente.addEventListener('click', function(){
     else if(cont_pasos == 3)
         validar_pasos(cont_pasos);
 });
-
-
-function changeCard() {
-    var card1 = document.getElementById("div_login");
-    var card2 = document.getElementById("div_registro");
-    
-    div_login.style.animation = "flipCard 1s";
-    div_registro.style.animation = "flipCard 1s";
-    
-    setTimeout(function() {
-      div_login.style.animation = "";
-      div_registro.style.animation = "";
-      
-      div_login.style.display = "none";
-      div_registro.style.display = "block";
-    }, 1000);
-  }
-
 
 function validar_pasos(paso){
     //Mensaje que usaremos en caso de que algún campo sea inválido.
@@ -151,6 +138,7 @@ btn_register.addEventListener('click', function(){
     }
 });
 
+//Funcion para limpiar los campos del registro.
 function clear_register_items(){
     reg_nombre.value          = "";
     reg_tipo_documento.value  = "1";
@@ -160,7 +148,7 @@ function clear_register_items(){
     reg_conf_contraseña.value = "";
     reg_email.value           = "";
     reg_indicativo.value      = "default";
-    reg_celular.value         = "Número celular";
+    reg_celular.value         = "";
     check_whatsapp.checked    = false;
     reg_pais.value            = "default";
     reg_estado_departamento.value = "default";
@@ -169,9 +157,6 @@ function clear_register_items(){
     reg_ciudad.disabled       = true;
     cont_pasos                = 0;
 }
-
-
-
 
 /*-------------------------------------------------------------------
 #De archivos JSON a listas y DOM.

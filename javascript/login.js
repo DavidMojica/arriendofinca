@@ -1,6 +1,7 @@
 /*-------------------------------------------------------------------
 #Global variables
 --------------------------------------------------------------------*/
+//Elementos del DOM que se utilizan en la funcionalidad de inicio de sesión y registro.
 const log_user = document.getElementById('log_user');
 const log_pass = document.getElementById('log_pass');
 const log_btn  = document.getElementById('log_btn');
@@ -10,8 +11,9 @@ const div_registro = document.getElementById('div_registro');
 const btn_login_open = document.getElementById('btn_login_open');
 const body = document.getElementById('html');
 /*-------------------------------------------------------------------
-#Dom
+#Dom Event Listeners
 --------------------------------------------------------------------*/
+//Agregar los eventos click a los botones y elementos necesarios en el DOM.
 log_btn.addEventListener('click', function(){
     validar_login();
 });
@@ -31,6 +33,7 @@ btn_login_open.addEventListener('click', function(){
 /*-------------------------------------------------------------------
 #Functions
 --------------------------------------------------------------------*/
+//Realiza la validación de los campos de inicio de sesión y maneja el envío de datos al servidor.
 function validar_login(){
     let msg = "";
     let ban = true;
@@ -67,7 +70,12 @@ function validar_login(){
         mandar_servidor_log(user, pass, user_type);
     }
 }
-
+/**
+*Envía los datos de inicio de sesión al servidor mediante una solicitud AJAX.
+*@param {string} user - Usuario (email o documento)
+*@param {string} pass - Contraseña del usuario
+*@param {number} user_type - Tipo de usuario (1: correo, 2: documento)
+*/
 function mandar_servidor_log(user, pass, user_type){
     $.ajax({
         url: '../php/login.php',

@@ -123,8 +123,9 @@
 
         #Check whatsapp
         if($auth_whatsapp == 1 && strlen($celular) == 0){
-                $warnings[] = "Marcó la casilla de whatsApp sin haber proporcionado un número <br>Pulsa X para regresar e ingresar un número. <br>Pulsa continuar para ignorar este mensaje.";
-        }
+                $warnings[] = "n";
+                $w_response = "Marcó la casilla de whatsApp sin haber proporcionado un número <br>Por favor vuelve al paso 3 e ingresa un número o desmarca la casilla de autorizar whatsapp.";
+            }
 
         #Parse fecha de nacimiento
         $fecha_nacimiento = date('Y-m-d', strtotime($fecha_nacimiento));
@@ -240,7 +241,7 @@
             return_Response_Bad(false, $errors, 0);
         }
         else if(!empty($warnings)){
-            return_Response_Bad(false, $response,1);
+            return_Response_Bad(false, $w_response, 0);
         }
         else{
             return_Response_Bad(false,"Error desconocido del servidor.",2);

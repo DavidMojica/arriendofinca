@@ -47,7 +47,7 @@ else{
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="../styles/hyf.css">
     <link rel="stylesheet" href="../styles/edit_mov.css">
-    <link rel="icon" href="images/ArriendoFincaOld.png">
+    <link rel="icon" href="../images/ArriendoFincaOld.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script src="../extralibs/ToastNotify/ToastNotify.js" defer></script>

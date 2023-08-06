@@ -1,4 +1,35 @@
 TRIGGERS
+DELIMITER //
+
+CREATE TRIGGER tr_update_usuario_cantidad_propiedades_delete
+AFTER DELETE ON tbl_inmueble
+FOR EACH ROW
+BEGIN
+    -- Contar la cantidad de propiedades del usuario y actualizar ese valor
+    UPDATE tbl_usuario
+    SET cantidad_propiedades = cantidad_propiedades - 1
+    WHERE tbl_usuario.documento = OLD.cedula_dueño;
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER tr_update_usuario_cantidad_propiedades
+AFTER INSERT ON tbl_inmueble
+FOR EACH ROW
+BEGIN
+     -- Contar la cantidad de propiedades del usuario y actualizar ese valor
+    UPDATE tbl_usuario
+    SET cantidad_propiedades = (
+        SELECT COUNT(*) 
+        FROM tbl_inmueble 
+        WHERE cedula_dueño = NEW.cedula_dueño
+    )
+    WHERE tbl_usuario.documento = NEW.cedula_dueño;
+END;
+//
 
 DELIMITER //
 CREATE TRIGGER actualizar_id_certificado

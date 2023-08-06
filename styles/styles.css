@@ -1,7 +1,8 @@
-/*Fonts----*/
-@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap'); /*'Poppins'*/
-@import url('https://fonts.googleapis.com/css2?family=Rancho&display=swap');     /*'Rancho'*/
+/* Fuentes */
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap'); /* 'Poppins' */
+@import url('https://fonts.googleapis.com/css2?family=Rancho&display=swap'); /* 'Rancho' */
 
+/* Estilos generales del cuerpo del documento */
 body {
     margin: 0;
     padding: 0;
@@ -10,7 +11,7 @@ body {
   /* background-image: url('https://www.wallpapertip.com/wmimgs/15-151061_farm-scene-wallpaper-wallpapers-farm-background.jpg'); */
 }
 
-
+/* Estilos del contenido principal */
 #midpage {
     margin: 20px auto;
     padding: 0 20px;
@@ -19,26 +20,31 @@ body {
     gap: 20px;
 }
 
+/* Estilos de la sección de publicidad */
 .publicidad{
   background-color: transparent;
-  height: 100vh;
+  /* height: 100vh; */
   text-align: center;
   margin-bottom: 20px;
   min-width: 200px;
 }
 
+/* Estilos de la sección de registro */
 .registrar {
   text-align: center;
 }
 
+/* Estilos de la sección de búsqueda */
 .busqueda {
     margin-bottom: 20px;
+    color: #99967d;
     background-color: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(4px);
     padding: 20px;
     border-radius: 2em;
 }
 
+/* Estilos para los elementos de búsqueda */
 .busquedas {
     margin-bottom: 10px;
 }
@@ -60,8 +66,7 @@ body {
     margin-left: 5px;
 }
 
-
-
+/* Estilos para los puntos y promociones */
 #div_info {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -109,8 +114,9 @@ body {
     background-color: #e6e2b4;
 }
 
+
+/* Estilos para dispositivos con un ancho máximo de 768px */
 @media (max-width: 768px) {
-  
     #div_info{
         display: grid;
         grid-template-columns: 1fr 1fr;
