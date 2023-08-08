@@ -52,6 +52,8 @@ header {
     justify-content: space-between;
     position: sticky;
     top: 0;
+    width: 100%;
+
 }
 .header-right div{
     display: inline-block;
@@ -128,6 +130,11 @@ header {
          flex-basis: auto;
          margin-bottom: 0;
      }
+     .publicidad{
+        min-width: 0;
+        width: 10px;
+     }
+
 }
 footer {
     background-color: #1f1f1f;

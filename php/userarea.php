@@ -473,18 +473,28 @@
             ?>
         
             <footer>
-            <div id="footer_left">
-                <h4>William Montoya</h4>
-                <b>Gerente</b>
-                <p><b>Celular: </b>3006159008</p>
-                <p>Info@arriendofinca.com</p>   
-            </div>
-            <div id="footer_right">
-                <h4>David Mojica</h4>
-                <b>Co-Gerente - Desarrollador</b>
-                <p><b>Celular: </b>3054356930</p>
-                <p>davidmojicav@gmail.com</p>
-            </div>
+                <!-- Sección Izquierda del Pie de Página -->
+                <div id="footer_left">
+                    <h4>William Montoya</h4>
+                    <b>Gerente</b>
+                    <p><b>Celular: </b>3006159008</p>
+                    <p>Info@arriendofinca.com</p>   
+                </div>
+                <div>
+                    <h4>SOMOS EMPRESA DE DESARROLLO</h4>
+                    <p>Cotice sus sitios web con nosotros <br>
+                       Solicite informacion en cualquiera <br>
+                       los correos dados.
+                    </p>
+                </div>
+
+                <!-- Sección Derecha del Pie de Página -->
+                <div id="footer_right">
+                    <h4>David Mojica</h4>
+                    <b>Cogerente - Desarrollador</b>
+                    <p><a href="http://davidmojica.42web.io/"><b>Visita mi sitio aqui!</b></a></p>
+                    <p>davidmojicav@gmail.com</p>
+                </div>
             </footer>
         </div>
 

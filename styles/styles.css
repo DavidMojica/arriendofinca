@@ -37,7 +37,7 @@ body {
 /* Estilos de la sección de búsqueda */
 .busqueda {
     margin-bottom: 20px;
-    color: #99967d;
+    color: #000000;
     background-color: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(4px);
     padding: 20px;
@@ -69,7 +69,7 @@ body {
 /* Estilos para los puntos y promociones */
 #div_info {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
     margin-bottom: 20px;
 }
@@ -82,13 +82,13 @@ body {
     justify-content: center;  /*THIS*/
     align-items: center;      /*THIS*/
     display: flex;            /*And this: centers everything*/
-    min-height: 230px;
+    min-height: 200px;
     min-width: 205px;
 }
 .point_title{
-    font-size: 25px;
-    
+    font-size: 22px;
 }
+
 #point1{
     background-color: #E0F2D8;
 }
@@ -119,14 +119,14 @@ body {
 @media (max-width: 768px) {
     #div_info{
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 10px;
     }
     .point_title{
         font-size: 19px;
     }
     .points{
-        min-height: auto;
+        min-height: 200px;
         min-width: auto;
 
         width: 90%;
@@ -136,6 +136,7 @@ body {
     #clicker{
       z-index: 150;
     }
+
 }
 
 

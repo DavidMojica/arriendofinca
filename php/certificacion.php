@@ -25,7 +25,6 @@
             $id_pais          = $ubicacion['id_pais'];
         }
     }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
