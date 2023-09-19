@@ -184,8 +184,8 @@
                             $stmt->bindParam(':imagen', $contenidoArchivo, PDO::PARAM_LOB);
                             $stmt->execute();
                         } 
-                        return_Response(true, "Inmueble creado");
                     }
+                    return_Response(true, "Inmueble creado");
                 }else{
                     return_Response(true, "Inmueble creado sin imágenes");
                 }

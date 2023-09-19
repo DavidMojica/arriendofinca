@@ -89,6 +89,7 @@ function borrar_imagen(id_imagen){
             console.log(response);
             if(response.success){
                 createToastNotify(0, "Exito", "Foto borrada correctamente");
+                location.reload();
             }
             else{
                 createToastNotify(1, "Error", response.mensaje)

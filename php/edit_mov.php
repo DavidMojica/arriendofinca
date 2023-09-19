@@ -130,7 +130,7 @@ else{
                                     $documento = $row['documento'];
                                 echo '<li><a href="../index.php"><input type="button" class="button hbt" value="Volver al Home"></a></li>';
                                 echo '<li><a href="#"><input type="button" value="Editar perfil" class="button hbt"></a></li>';
-                                echo '<li> <form action="php/logout.php" method="post">';
+                                echo '<li> <form action="logout.php" method="post">';
                                 echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
                                 echo '</form> </li>';
                                 }
@@ -306,7 +306,7 @@ else{
                 <h4>William Montoya</h4>
                 <b>Gerente</b>
                 <p><b>Celular: </b>3006159008</p>
-                <p>Info@arriendofinca.com</p>   
+                <p>Arriendofinca@gmail.com</p>   
             </div>
             <div id="footer_right">
                 <h4>David Mojica</h4>

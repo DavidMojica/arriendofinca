@@ -379,7 +379,7 @@
                     <h4>William Montoya</h4>
                     <b>Gerente</b>
                     <p><b>Celular: </b>3006159008</p>
-                    <p>Info@arriendofinca.com</p>   
+                    <p>Arriendofinca@gmail.com</p>   
                 </div>
                 <div>
                     <h4>SOMOS EMPRESA DE DESARROLLO</h4>
@@ -393,7 +393,7 @@
                 <div id="footer_right">
                     <h4>David Mojica</h4>
                     <b>Cogerente - Desarrollador</b>
-                    <p><a href="http://davidmojica.42web.io/"><b>Visita mi sitio aqui!</b></a></p>
+                    <p><a href="http://davidmojica.42web.io/" target="_blank"><b>Visita mi sitio aqui!</b></a></p>
                     <p>davidmojicav@gmail.com</p>
                 </div>
             </footer>
@@ -404,3 +404,5 @@
     </div>
 </body>
 </html>
+
+<!-- finca el tambo nariño arr-->

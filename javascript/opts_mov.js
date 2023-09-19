@@ -71,10 +71,3 @@ sel_estado.addEventListener('change', function(){
     AJAX_ESTADO_CHANGE(sel_ciudad, depto_activo, '../php/dynamic_cboxes.php');
 });
 
-// Configuración de la biblioteca Swiper para el slider
-var swiper = new Swiper(".mySwiper", {
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-});

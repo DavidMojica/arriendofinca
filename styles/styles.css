@@ -344,3 +344,37 @@ ul, ol{
 .swiper-wrapper{
   max-width: 350px;
 }
+
+
+/* Estilos para la ventana modal */
+.modalContainer{
+  display: none;
+  position: fixed;
+  z-index: 10;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.modalContainer .modalcontent{
+  background-color: #282b29;
+  margin: auto;
+  padding: 25px;
+  border: 1px solid purple;
+  width: 60%;
+}
+
+.modalContainer .close{
+  color: red;
+  float: right;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.modalContainer .close:hover, close:focus{
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}

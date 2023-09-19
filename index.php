@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio | ArriendoFinca</title>
-    
+
     <!-- Hojas de Estilo CSS Externas -->
     <link rel="stylesheet" href="extralibs/ToastNotify/ToastNotify.css">
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/hyf.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
     <!-- Icono de la Página -->
     <link rel="icon" href="images/ArriendoFincaOld.png">
 
@@ -22,6 +23,7 @@
     <script src="javascript/index.js" defer></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
+
 <body>
     <header>
         <!-- Logo -->
@@ -45,63 +47,59 @@
         <!-- Área del Usuario -->
         <div class="header-right">
             <ul class="nav">
-                <li id="clicker"><img src="images/icon_user.png" alt="" >
-                <ul>
-                <?php
-                // Código PHP para el área del usuario
-                    session_start();
-                    include('php/PDOconn.php');
-                    $tp_user = 0;
-                    if(!isset($_SESSION['username'])){
-                        echo "<li><a href='php/loginPage.php'><input type='button' value='Iniciar Sesión' class='button hbt'></a> </li>";
-                    }
-                    else{
-                        $user = $_SESSION['username'];
-                        if(ctype_digit($user)){
-                            $tp = "documento";
-                            $tp_user = 1;
-                        }
-                        else{
-                            $tp = "email";
-                            $tp_user = 2;
-                        }
+                <li id="clicker"><img src="images/icon_user.png" alt="">
+                    <ul>
+                        <?php
+                        // Código PHP para el área del usuario
+                        session_start();
+                        include('php/PDOconn.php');
+                        $tp_user = 0;
+                        if (!isset($_SESSION['username'])) {
+                            echo "<li><a href='php/loginPage.php'><input type='button' value='Iniciar Sesión' class='button hbt'></a> </li>";
+                        } else {
+                            $user = $_SESSION['username'];
+                            if (ctype_digit($user)) {
+                                $tp = "documento";
+                                $tp_user = 1;
+                            } else {
+                                $tp = "email";
+                                $tp_user = 2;
+                            }
 
-                        $query = "SELECT nombre, documento FROM tbl_usuario where $tp = :user";
-                        $stmt = $pdo->prepare($query);
+                            $query = "SELECT nombre, documento FROM tbl_usuario where $tp = :user";
+                            $stmt = $pdo->prepare($query);
 
-                        if($tp_user == 1){
-                            $stmt->bindParam(':user', $user, PDO::PARAM_INT);
-                        }
-                        else{
-                            $stmt->bindParam(':user', $user, PDO::PARAM_STR);
-                        }
-                        $stmt->execute();
-                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            if ($tp_user == 1) {
+                                $stmt->bindParam(':user', $user, PDO::PARAM_INT);
+                            } else {
+                                $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+                            }
+                            $stmt->execute();
+                            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                        if(count($result) > 0){
-                            $row = $result[0];
-                            $nombre_usuario = $row['nombre'];
-                            $documento = $row['documento'];
-                            // echo "Bienvenido, $nombre_usuario!";
-                            echo '<li> <form action="php/i_logout.php" method="post">';
-                            echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
-                            echo '</form> </li>';
+                            if (count($result) > 0) {
+                                $row = $result[0];
+                                $nombre_usuario = $row['nombre'];
+                                $documento = $row['documento'];
+                                // echo "Bienvenido, $nombre_usuario!";
+                                echo '<li> <form action="php/i_logout.php" method="post">';
+                                echo '<input type="submit" value="Cerrar Sesión" class="button hbt">';
+                                echo '</form> </li>';
 
-                            echo "<li> <a class='a_ini_sesion' href='php/userarea.php'><input type='button' class='button hbt' value='Area del usuario'></a> </li>";
+                                echo "<li> <a class='a_ini_sesion' href='php/userarea.php'><input type='button' class='button hbt' value='Area del usuario'></a> </li>";
+                            } else {
+                                echo 'Error al obtener el nombre del usuario.';
+                            }
                         }
-                        else{ 
-                            echo 'Error al obtener el nombre del usuario.';
-                        }
-                    }
-                ?>
-                </ul>
+                        ?>
+                    </ul>
                 </li>
-                <?php 
+                <?php
                 // Código PHP para mostrar el nombre de usuario
-                if(!isset($_SESSION['username']))
+                if (!isset($_SESSION['username']))
                     echo '<li> <p class="username">Usuario anónimo</p> </li>';
                 else
-                    echo '<li> <p class="username">'. $nombre_usuario .'</p> </li>';
+                    echo '<li> <p class="username">' . $nombre_usuario . '</p> </li>';
                 ?>
             </ul>
         </div>
@@ -112,7 +110,7 @@
         <div class="publicidad">
             <!-- Contenido de Publicidad (si aplica) -->
         </div>
-        
+
         <div>
             <!-- Navegación de Búsqueda -->
             <nav class="busqueda" id="busqueda">
@@ -125,7 +123,7 @@
                         <div id="div_select" class="busquedas it1">
                             <span>Busco para</span>
                             <select name="av" id="sel_arriendo_venta">
-                                 <!-- Opciones para Arrendar/Comprar -->
+                                <!-- Opciones para Arrendar/Comprar -->
                                 <option value="1">Arrendar</option>
                                 <option value="2">Comprar</option>
                             </select>
@@ -149,19 +147,19 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <!-- Criterios de Búsqueda Adicionales -->
                     <div class="busquedas2">
                         <p><b>Seleccione la ubicacion del inmueble</b></p>
                         <!-- Listas desplegables para País, Estado y Ciudad (Rellenadas con PHP) -->
                         <div id="div_pais" class="busquedas it1">
                             <select name="pais" id="sel_pais">
-                                <option value="default">Seleccione un pais...</option>        
+                                <option value="default">Seleccione un pais...</option>
                                 <?php
-                                    include('php/essentials.php');
-                                    $result = get_paises();
-                                    foreach($result as $row)
-                                        echo "<option value='".$row['id_pais']."'>".$row['nombre_pais']."</option>";   
+                                include('php/essentials.php');
+                                $result = get_paises();
+                                foreach ($result as $row)
+                                    echo "<option value='" . $row['id_pais'] . "'>" . $row['nombre_pais'] . "</option>";
                                 ?>
                             </select>
                         </div>
@@ -172,15 +170,15 @@
                         </div>
                         <div id="div_ciudad" class="busquedas it1" disabled>
                             <select name="ciudad" id="sel_ciudad" disabled>
-                            <option value="default">Seleccione una ciudad...</option>
+                                <option value="default">Seleccione una ciudad...</option>
                             </select>
                         </div>
                     </div>
-                    
-                     <!-- Casilla para Propiedades Certificadas -->
+
+                    <!-- Casilla para Propiedades Certificadas -->
                     <div id="div_check_certificado" class="busquedas">
                         <label class="checkbox">
-                             <!-- Casilla para Propiedades Certificadas -->
+                            <!-- Casilla para Propiedades Certificadas -->
                             <input type="checkbox" name="chk_certificados" id="chk_certificados">
                             <span class="checkmark"></span>
                             <span>Buscar sólo inmuebles certificados por arriendofinca.com</span>
@@ -204,7 +202,7 @@
                 </div>
                 <div class="points" id="point2">
                     <p class="point_text"><b class="point_title">¿No ves tu país, estado o ciudad?</b> <br><br><b>Manda un correo a info@arriendofinca.com <br>
-                    Confirmaremos tu información y pronto estará disponible :)</b></p>
+                            Confirmaremos tu información y pronto estará disponible :)</b></p>
                 </div>
                 <div class="points" id="point3">
                     <p class="point_text"> <b class="point_title">¿Ya eres usuario?</b> <br><br> <b>Ingresa <a href="php/loginPage.php">aquí</a></b></p>
@@ -221,7 +219,7 @@
                 <div class="points" id="point7">
                     <p class="point_text"><b class="point_title"> No alquiles a ciegas </b> <br><br> <b>Los inmuebles certificados por arriendofinca están totalmente comprobados :)</b></p>
                 </div>
-                <div class="points" id="point8"> 
+                <div class="points" id="point8">
                     <p class="point_text"> <b class="point_title"> 0 Restricciones </b> <br><br> <b>Publica tus inmuebles sin preocupaciones, nosotros no limitamos tu cantidad de anuncios :)</b></p>
                 </div>
             </div>
@@ -233,13 +231,13 @@
                     <h4>William Montoya</h4>
                     <b>Gerente</b>
                     <p><b>Celular: </b>3006159008</p>
-                    <p>Info@arriendofinca.com</p>   
+                    <p>Arriendofinca@gmail.com</p>
                 </div>
                 <div>
                     <h4>SOMOS EMPRESA DE DESARROLLO</h4>
                     <p>Cotice sus sitios web con nosotros <br>
-                       Solicite informacion en cualquiera <br>
-                       los correos dados.
+                        Solicite informacion en cualquiera <br>
+                        los correos dados.
                     </p>
                 </div>
 
@@ -247,7 +245,7 @@
                 <div id="footer_right">
                     <h4>David Mojica</h4>
                     <b>Cogerente - Desarrollador</b>
-                    <p><a href="http://davidmojica.42web.io/"><b>Visita mi sitio aqui!</b></a></p>
+                    <p><a href="http://davidmojica.42web.io/" target="_blank"><b>Visita mi sitio aqui!</b></a></p>
                     <p>davidmojicav@gmail.com</p>
                 </div>
             </footer>
@@ -259,4 +257,5 @@
         </div>
     </div>
 </body>
+
 </html>

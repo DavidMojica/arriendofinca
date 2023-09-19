@@ -1,9 +1,10 @@
 body{
     background: url('https://cdn.agendasonidocaracol.mx/Upload/50d18bf26ce5564e1a6868b68e58a7d31cf5.jpg');
     background-size: 150% 150%;
-	animation: gradient 165s ease infinite;
+	  animation: gradient 165s ease infinite;
     margin: 0;
-    padding: 0;   
+    padding: 0; 
+    overflow-x: hidden;  
 }
 section{
     text-align: center;
