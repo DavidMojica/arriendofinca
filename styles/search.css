@@ -129,6 +129,10 @@ text-align: center;
 .pagination{
   margin: 3.5%;
 }
+.sub_info_grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
 
 @media (max-width: 768px){
   .busquedas{
@@ -140,7 +144,6 @@ text-align: center;
     min-width: 220px;
     padding: 3em;
   }
-
 }
 
 

@@ -439,8 +439,11 @@ function create_inmoviliario($row){
             $celular  = $result['celular'];
             $email    = $result['email'];
         }
-
         echo '<p>Dirección: ' . $direccion . '</p>';
+        echo '<div class="sub_info_grid">';
+        echo '<p>Correo: ' . $email . '</p>';
+        if($celular != "") echo '<p>Celular: ' . $celular . '</p>';
+        echo '</div>';
         echo '<p>Descripción: ' . $descripcion . '</p>';
 
         if($whatsapp == 1){
